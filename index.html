@@ -356,15 +356,30 @@
         <div class="card">
             <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
                 Щоденна Ціль
-                <button class="quick-coef-btn" style="padding:4px 8px; font-size:11px; flex: 0 0 auto; margin:0;" onclick="syncDailyGoal()">🔄 Синхронізувати</button>
+                <button class="quick-coef-btn" style="padding:4px 8px; font-size:11px; flex: 0 0 auto; margin:0;" onclick="setCustomDailyGoal()">✏️ Свій план</button>
             </div>
             <div class="input-block" style="border-bottom:none; padding: 0;">
-                <div class="input-header" style="margin-bottom:6px;"><span>Ціль на сьогодні: <strong id="brand-daily-goal-val" style="font-size: 16px; color: var(--accent-blue);">0</strong></span></div>
-                <div class="slider-container" style="margin-bottom:16px;"><input type="range" id="set-daily-goal" min="1" max="100" step="1" value="12" oninput="updateDailyGoalSlider(this.value)"></div>
+                <div class="input-header" style="margin-bottom:6px;">
+                    <span>Ціль на сьогодні: <strong id="brand-daily-goal-val" style="font-size: 16px; color: var(--accent-blue);">0</strong> <span id="brand-daily-goal-auto-badge" style="font-size: 10px; color: var(--text-muted); font-weight: 700;">(авто)</span></span>
+                    <button id="brand-daily-goal-reset-btn" onclick="resetDailyGoalToAuto()" style="display:none; background: none; border: none; color: var(--accent-blue); font-size: 11px; font-weight: 700; cursor: pointer; padding: 2px 6px;">↺ Авто</button>
+                </div>
                 <div class="input-header" style="margin-bottom:8px;"><span>Виконано сьогодні:</span><div class="counter"><button class="btn-counter" style="color:var(--accent-danger); font-size:14px;" onclick="resetDailyDone()">🔄</button><button class="btn-counter" onclick="changeDailyDone(-1)">-</button><input type="number" enterkeyhint="done" class="counter-value" id="inp-daily-done" value="0" oninput="manualDailyDoneInput()"><button class="btn-counter" onclick="changeDailyDone(1)">+</button></div></div>
             </div>
             <div class="progress-container"><div class="progress-bar" id="brand-daily-progress" style="background: var(--accent-blue);"></div></div>
-            <div style="margin-top: 10px; font-size: 13px; line-height: 1.5; color: var(--text-muted);">Прогрес: <strong id="brand-daily-pct" style="color:var(--text-color);">0%</strong><br>Темп: <strong id="brand-perday-required" style="color:var(--uklon-green)">0 зам/день</strong><br><br><span id="brand-daily-comment" style="font-weight: 700; color:var(--text-color);"></span></div>
+
+            <div class="stat-tile-grid" style="margin-top: 12px; margin-bottom: 0;">
+                <div class="stat-tile" style="grid-column: span 1;">
+                    <div class="stat-tile-icon ib-blue">🎯</div>
+                    <div class="stat-tile-value" id="brand-daily-remain">0</div>
+                    <div class="stat-tile-label">Залишилось сьогодні</div>
+                </div>
+                <div class="stat-tile" style="grid-column: span 2;">
+                    <div class="stat-tile-icon ib-green">📅</div>
+                    <div class="stat-tile-value" id="brand-perday-required" style="color: var(--uklon-green);">0 /день</div>
+                    <div class="stat-tile-label">Темп на наступні дні</div>
+                </div>
+            </div>
+            <div style="margin-top: 10px; font-size: 12px; line-height: 1.5; color: var(--text-muted); text-align: center;"><span id="brand-daily-comment" style="font-weight: 700; color:var(--text-color);"></span></div>
         </div>
     </div>
 
@@ -682,7 +697,7 @@
 
         const defaultTariffs = { standard: { name: 'Стандарт', icon: '🚕', minPrice: 90, minKm: 1.6, perKmCity: 16.30, perKmOut: 16.80, perMin: 3.50, stopPrice: 10 }, comfort: { name: 'Комфорт', icon: '🛋️', minPrice: 95, minKm: 1.6, perKmCity: 17.80, perKmOut: 18.50, perMin: 4.00, stopPrice: 15 }, business: { name: 'Бізнес', icon: '🎩', minPrice: 112, minKm: 1.8, perKmCity: 18.60, perKmOut: 19.20, perMin: 5.00, stopPrice: 15 }, intercity: { name: 'За місто', icon: '🛣️', minPrice: 100, minKm: 1.5, perKmCity: 30.00, perKmOut: 40.00, perMin: 4.00, stopPrice: 15 } };
         const defaultExpenses = { comm: 17, type: 'gas', cons: 14, price: 41.9, amort: 0, workMode: 'solo', rentVal: 30, splitPct: 10 };
-        const defaultGoals = { dailyGoal: 12, dailyDone: 0 };
+        const defaultGoals = { dailyGoal: 12, dailyDone: 0, dailyGoalOverride: null };
         const defaultBranding = { done: 0, target: 700, days: 0 };
         const defaultDailyCash = { orders: 0, gross: 0, comm: 0, fuel: 0, extraExp: 0, rent: 0, net: 0, totalKm: 0, date: new Date().toLocaleDateString(), history: [], totalCash: 0, totalCard: 0, shiftActive: false, shiftStart: null, shiftHours: 0 };
 
@@ -823,7 +838,7 @@
                 if(document.getElementById('strat-min')) document.getElementById('strat-min').value = strat.min || 25;
 
                 document.getElementById('set-comm').value = expenses.comm; document.getElementById('set-fuel-type').value = expenses.type; document.getElementById('set-fuel-cons').value = expenses.cons; document.getElementById('set-fuel-price').value = expenses.price; document.getElementById('set-amort').value = (expenses.amort !== undefined ? expenses.amort : 0); document.getElementById('set-work-mode').value = expenses.workMode || 'solo'; document.getElementById('set-rent-val').value = expenses.rentVal || 30; document.getElementById('set-split-pct').value = expenses.splitPct || 10;
-                document.getElementById('inp-daily-done').value = goals.dailyDone; document.getElementById('set-daily-goal').value = goals.dailyGoal; document.getElementById('brand-daily-goal-val').innerText = goals.dailyGoal; document.getElementById('brand-done').value = brandingData.done; document.getElementById('brand-target').value = brandingData.target; document.getElementById('brand-days').value = brandingData.days;
+                document.getElementById('inp-daily-done').value = goals.dailyDone; document.getElementById('brand-daily-goal-val').innerText = goals.dailyGoal; document.getElementById('brand-done').value = brandingData.done; document.getElementById('brand-target').value = brandingData.target; document.getElementById('brand-days').value = brandingData.days;
 
                 if(dailyCashData.shiftActive) {
                     const btn = document.getElementById('btn-shift-toggle'); btn.innerText = "⏹ Завершити"; btn.classList.remove('start'); btn.classList.add('stop');
@@ -1155,7 +1170,7 @@
             const workingDaysLeft = totalDaysLeft - futureOffDays;
             
             document.getElementById('brand-days').value = workingDaysLeft > 0 ? workingDaysLeft : 1;
-            calcBranding(); syncDailyGoal();
+            calcBranding();
         }
 
         function toggleDayOff(day, el) {
@@ -1740,11 +1755,9 @@
 
         function shareReport() { haptic(); let hours = dailyCashData.shiftActive ? (dailyCashData.shiftHours || 0.01) : (parseFloat(document.getElementById('cash-hours')?.value) || 1); if (hours <= 0) hours = 0.01; const text = `Підсумок зміни (${dailyCashData.date}):\n\n✅ Замовлень: ${dailyCashData.orders}\n⏱ Годин: ${hours.toFixed(1)}\n📍 Пробіг: ${dailyCashData.totalKm.toFixed(1)} км\n\n💵 Оборот: ${fmt(dailyCashData.gross)} ₴\n (Гот: ${fmt(dailyCashData.totalCash)} | Карта: ${fmt(dailyCashData.totalCard)})\n🟡 Комісія: -${fmt(dailyCashData.comm)} ₴\n⛽ Пальне: -${fmt(dailyCashData.fuel)} ₴\n\n💰 ЧИСТИМИ: ${fmt(dailyCashData.net)} ₴\n📈 Ставка: ${fmt(dailyCashData.net / hours)} ₴/год\n\n🏦 Баланс (Винен парку): ${fmt(dailyCashData.totalCash - dailyCashData.comm - dailyCashData.rent)} ₴`; if (navigator.clipboard) { navigator.clipboard.writeText(text).then(() => { notify('Звіт скопійовано', 'success'); }); } }
         async function resetDailyCashClick() { haptic(); const ok = await confirmDialog('Поточні дані каси буде збережено в архів та обнулено.', 'Завершити зміну?', 'Завершити'); if (ok) { clearInterval(shiftTimerInterval); saveShiftToArchive(); createNewShift(); goals.dailyDone = 0; document.getElementById('inp-daily-done').value = 0; localStorage.setItem('taxi_goals_v22', JSON.stringify(goals)); updateCashPageUI(); calcBranding(); document.getElementById('btn-shift-toggle').innerText = "▶ Почати зміну"; document.getElementById('btn-shift-toggle').className = "btn-shift start"; document.getElementById('shift-timer-display').innerText = "00:00"; document.querySelector('.shift-timer-box')?.classList.remove('is-active'); notify('Зміна завершена, архів оновлено', 'success'); } }
-        function setDaysToEndOfMonth() { haptic(); const now = new Date(); const daysLeft = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate() - now.getDate() + 1; document.getElementById('brand-days').value = daysLeft; calcBranding(); syncDailyGoal(); }
-        function syncDailyGoal() { haptic(); let remain = Math.max(0, brandingData.target - brandingData.done); let days = parseInt(document.getElementById('brand-days').value) || 1; document.getElementById('set-daily-goal').value = Math.ceil(remain / days); calcBranding(); notify('Щоденну ціль оновлено', 'success'); }
-        function updateDailyGoalSlider(val) { document.getElementById('brand-daily-goal-val').innerText = val; document.getElementById('set-daily-goal').value = val; clearTimeout(saveSettingsTimeout); saveSettingsTimeout = setTimeout(() => calcBranding(), 300); }
-        async function resetDailyDone() { haptic(); const ok = await confirmDialog("Прогрес по сьогоднішній цілі буде скинуто.", "Скинути прогрес цілі?", "Скинути"); if(ok) { document.getElementById('inp-daily-done').value = 0; calcBranding(); } }
-        function manualDailyDoneInput() { clearTimeout(saveSettingsTimeout); saveSettingsTimeout = setTimeout(() => calcBranding(), 500); }
+        function setDaysToEndOfMonth() { haptic(); const now = new Date(); const daysLeft = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate() - now.getDate() + 1; document.getElementById('brand-days').value = daysLeft; calcBranding(); }
+        async function resetDailyDone() { haptic(); const ok = await confirmDialog("Прогрес по сьогоднішній цілі буде скинуто.", "Скинути прогрес цілі?", "Скинути"); if(ok) { const prevDaily = parseInt(document.getElementById('inp-daily-done').value) || 0; let monthDone = (parseInt(document.getElementById('brand-done').value) || 0) - prevDaily; if(monthDone<0) monthDone=0; document.getElementById('brand-done').value = monthDone; document.getElementById('inp-daily-done').value = 0; calcBranding(); } }
+        function manualDailyDoneInput() { clearTimeout(saveSettingsTimeout); saveSettingsTimeout = setTimeout(() => { const newDaily = parseInt(document.getElementById('inp-daily-done').value) || 0; const delta = newDaily - (goals.dailyDone || 0); let monthDone = (parseInt(document.getElementById('brand-done').value) || 0) + delta; if(monthDone<0) monthDone=0; document.getElementById('brand-done').value = monthDone; calcBranding(); }, 500); }
         function changeDailyDone(step) { haptic(); const input = document.getElementById('inp-daily-done'); let val = (parseInt(input.value) || 0) + step; if(val<0) val=0; input.value = val; let monthDone = parseInt(document.getElementById('brand-done').value) || 0; monthDone += step; if(monthDone<0) monthDone=0; document.getElementById('brand-done').value = monthDone; calcBranding(); }
 
         function calcBranding() {
@@ -1752,13 +1765,63 @@
             clearTimeout(saveSettingsTimeout); saveSettingsTimeout = setTimeout(() => { localStorage.setItem('taxi_branding_v22', JSON.stringify(brandingData)); }, 500);
             let pct = Math.min(100, (brandingData.done / brandingData.target) * 100); let remain = Math.max(0, brandingData.target - brandingData.done); let perDayReq = remain / brandingData.days;
             document.getElementById('brand-progress').style.width = pct + '%'; document.getElementById('brand-pct').innerText = pct.toFixed(1) + '%'; document.getElementById('brand-remain').innerText = remain; document.getElementById('brand-perday').innerText = perDayReq.toFixed(1) + ' зам/день';
-            const dailyGoal = parseInt(document.getElementById('set-daily-goal').value) || 12; const dailyDone = parseInt(document.getElementById('inp-daily-done').value) || 0;
-            goals.dailyGoal = dailyGoal; goals.dailyDone = dailyDone;
+
+            const dailyDone = parseInt(document.getElementById('inp-daily-done').value) || 0;
+            goals.dailyDone = dailyDone;
+
+            // Ціль на сьогодні: якщо є ручне перевизначення - беремо його, інакше авто-темп (округлено вгору)
+            const autoGoal = Math.max(1, Math.ceil(perDayReq));
+            const hasOverride = goals.dailyGoalOverride !== null && goals.dailyGoalOverride !== undefined;
+            const dailyGoal = hasOverride ? goals.dailyGoalOverride : autoGoal;
+            goals.dailyGoal = dailyGoal;
             localStorage.setItem('taxi_goals_v22', JSON.stringify(goals));
-            document.getElementById('brand-daily-goal-val').innerText = dailyGoal; let dPct = Math.min(100, (dailyDone / dailyGoal) * 100);
-            document.getElementById('brand-daily-progress').style.width = dPct + '%'; document.getElementById('brand-daily-pct').innerText = dPct.toFixed(1) + '%'; document.getElementById('brand-perday-required').innerText = perDayReq.toFixed(1) + ' зам/день';
-            let daysToGoal = "∞"; if (dailyGoal > 0) daysToGoal = (remain / dailyGoal).toFixed(1);
-            if (dailyGoal >= perDayReq) { document.getElementById('brand-daily-comment').innerHTML = `Йдете з випередженням! План за ${daysToGoal} дн.`; } else { document.getElementById('brand-daily-comment').innerHTML = `Прискортесь! Мінімум ${perDayReq.toFixed(1)} зам/день.`; }
+
+            document.getElementById('brand-daily-goal-val').innerText = dailyGoal;
+            document.getElementById('brand-daily-goal-auto-badge').style.display = hasOverride ? 'none' : 'inline';
+            document.getElementById('brand-daily-goal-reset-btn').style.display = hasOverride ? 'inline-block' : 'none';
+
+            let dPct = dailyGoal > 0 ? Math.min(100, (dailyDone / dailyGoal) * 100) : 0;
+            document.getElementById('brand-daily-progress').style.width = dPct + '%';
+
+            const remainToday = Math.max(0, dailyGoal - dailyDone);
+            document.getElementById('brand-daily-remain').innerText = remainToday;
+
+            // Темп на наступні дні: скільки треба буде виконувати ЗАВТРА і далі, якщо сьогодні дотягнете до цілі
+            const doneBeforeToday = brandingData.done - dailyDone;
+            const projectedDoneToday = Math.max(dailyDone, dailyGoal);
+            const remainAfterToday = Math.max(0, brandingData.target - (doneBeforeToday + projectedDoneToday));
+            const daysAfterToday = Math.max(0, brandingData.days - 1);
+            const nextDaysPace = daysAfterToday > 0 ? (remainAfterToday / daysAfterToday) : 0;
+            document.getElementById('brand-perday-required').innerText = daysAfterToday > 0 ? `${nextDaysPace.toFixed(1)} /день` : '🎉 Фініш!';
+
+            if (remainToday === 0) {
+                document.getElementById('brand-daily-comment').innerHTML = `✅ Сьогоднішню ціль виконано!`;
+            } else if (dailyGoal >= Math.ceil(perDayReq)) {
+                document.getElementById('brand-daily-comment').innerHTML = `Залишилось ${remainToday} зам. до цілі дня`;
+            } else {
+                document.getElementById('brand-daily-comment').innerHTML = `Залишилось ${remainToday} зам. · Прискортесь, щоб встигнути за планом`;
+            }
+        }
+
+        function setCustomDailyGoal() {
+            haptic();
+            promptDialog('Скільки замовлень плануєте виконати сьогодні?', goals.dailyGoal || 12).then(val => {
+                if (val === null) return;
+                const num = parseInt(val);
+                if (!num || num < 1) { notify('Введіть коректне число', 'error'); return; }
+                goals.dailyGoalOverride = num;
+                localStorage.setItem('taxi_goals_v22', JSON.stringify(goals));
+                calcBranding();
+                notify(`Ціль на сьогодні: ${num}`, 'success');
+            });
+        }
+
+        function resetDailyGoalToAuto() {
+            haptic();
+            goals.dailyGoalOverride = null;
+            localStorage.setItem('taxi_goals_v22', JSON.stringify(goals));
+            calcBranding();
+            notify('Ціль повернуто на авто-темп', 'success');
         }
 
         function updateFuelLabels(type) { const isElec = type === 'electro'; document.getElementById('set-fuel-cons-label').innerText = isElec ? "Розхід (kWt):" : "Розхід (л):"; document.getElementById('set-fuel-price-label').innerText = isElec ? "Ціна (₴/kWt):" : "Ціна (₴/л):"; }
