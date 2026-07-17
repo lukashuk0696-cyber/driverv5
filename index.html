@@ -119,6 +119,18 @@
         .result-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
         .result-row span:last-child { font-variant-numeric: tabular-nums; }
         .result-total { border-top: 1px solid var(--border-color); padding-top: 10px; margin-top: 8px; font-size: 19px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; color: var(--accent-success); font-variant-numeric: tabular-nums; letter-spacing: -0.2px; }
+
+        .stat-tile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+        .stat-tile { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 8px; text-align: center; box-shadow: var(--shadow-soft); }
+        .stat-tile-icon { width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; margin: 0 auto 6px auto; }
+        .stat-tile-value { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.2px; color: var(--text-color); }
+        .stat-tile-label { font-size: 9.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.02em; margin-top: 2px; }
+
+        .breakdown-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0 7px 10px; font-size: 13px; font-weight: 600; border-left: 3px solid transparent; margin-bottom: 2px; }
+        .breakdown-row.br-income { border-left-color: var(--uklon-green); }
+        .breakdown-row.br-expense { border-left-color: var(--accent-danger); }
+        .breakdown-row.br-neutral { border-left-color: var(--accent-blue); }
+        .breakdown-row span:last-child { font-variant-numeric: tabular-nums; }
         .eff-badge { color: white; padding: 4px 9px; border-radius: 7px; font-size: 11px; font-weight: 800; font-variant-numeric: tabular-nums; } .eff-green { background-color: var(--uklon-green); } .eff-yellow { background-color: #E8720E; } .eff-red { background-color: var(--accent-danger); }
         
         .admin-input { width: 70px; padding: 7px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); text-align: center; font-size: 13px; font-weight: 700; background: var(--bg-color); color: var(--text-color); font-variant-numeric: tabular-nums; }
@@ -373,24 +385,37 @@
 
         <button class="save-btn save-btn-alt" style="margin-bottom: 12px; margin-top: 6px; padding: 12px;" onclick="shareReport()">📤 Поділитися звітом</button>
         
+        <div class="stat-tile-grid">
+            <div class="stat-tile">
+                <div class="stat-tile-icon ib-blue">📦</div>
+                <div class="stat-tile-value" id="cash-orders-count">0</div>
+                <div class="stat-tile-label">Замовлень</div>
+            </div>
+            <div class="stat-tile">
+                <div class="stat-tile-icon ib-green">⏱️</div>
+                <div class="stat-tile-value" id="cash-hourly-rate" style="color: var(--accent-success);">0 ₴</div>
+                <div class="stat-tile-label">₴ / год</div>
+            </div>
+            <div class="stat-tile">
+                <div class="stat-tile-icon ib-purple">🛣️</div>
+                <div class="stat-tile-value" id="cash-total-km">0 км</div>
+                <div class="stat-tile-label">Пробіг</div>
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-title">Підсумок зміни</div>
-            <div class="result-row"><span>Виконано замовлень:</span><strong id="cash-orders-count" style="font-size:15px;">0</strong></div>
-            <div class="result-row" style="color: var(--accent-success);"><span>Середня ставка:</span><strong id="cash-hourly-rate">0 ₴/год</strong></div>
-            <div style="border-top: 1px solid var(--border-color); margin: 10px 0;"></div>
-            
-            <div class="result-row"><span style="color: var(--text-muted);">Загальний пробіг:</span><strong id="cash-total-km" style="color: var(--text-color);">0 км</strong></div>
-            <div class="result-row"><span style="color: var(--text-muted);">Загальний оборот:</span><span id="cash-gross" style="font-weight:700;">0 ₴</span></div>
-            <div class="result-row"><span style="color: var(--text-muted);">Комісія служби:</span><span id="cash-comm" style="color: var(--accent-danger);">-0 ₴</span></div>
-            <div class="result-row"><span style="color: var(--text-muted);">Пальне та ТО:</span><span id="cash-fuel" style="color: #ff9500;">-0 ₴</span></div>
-            <div class="result-row" id="row-cash-extraExp"><span style="color: var(--text-muted);">Витрати:</span><span id="cash-extraExp" style="color: var(--accent-danger);">-0 ₴</span></div>
-            <div class="result-row" id="row-cash-rent"><span style="color: var(--text-muted);">Оренда:</span><span id="cash-rent" style="color: var(--accent-danger);">-0 ₴</span></div>
+            <div class="breakdown-row br-income"><span style="color: var(--text-muted);">Загальний оборот</span><span id="cash-gross" style="font-weight:700; color: var(--text-color);">0 ₴</span></div>
+            <div class="breakdown-row br-expense"><span style="color: var(--text-muted);">Комісія служби</span><span id="cash-comm" style="color: var(--accent-danger);">-0 ₴</span></div>
+            <div class="breakdown-row br-expense"><span style="color: var(--text-muted);">Пальне та ТО</span><span id="cash-fuel" style="color: #ff9500;">-0 ₴</span></div>
+            <div class="breakdown-row br-expense" id="row-cash-extraExp"><span style="color: var(--text-muted);">Витрати</span><span id="cash-extraExp" style="color: var(--accent-danger);">-0 ₴</span></div>
+            <div class="breakdown-row br-expense" id="row-cash-rent"><span style="color: var(--text-muted);">Оренда</span><span id="cash-rent" style="color: var(--accent-danger);">-0 ₴</span></div>
             <div class="result-total" style="color: var(--uklon-green); font-size: 20px;"><span>Чистий прибуток:</span><span id="cash-net">0 ₴</span></div>
             
             <div style="border-top: 1px solid var(--border-color); margin: 10px 0; padding-top: 10px;">
-                <div class="result-row" style="font-size: 13px;"><span>💵 Всього Готівки:</span><strong id="cash-money-cash">0 ₴</strong></div>
-                <div class="result-row" style="font-size: 13px;"><span>💳 Всього на Картку:</span><strong id="cash-money-card">0 ₴</strong></div>
-                <div class="result-row" style="font-size: 14px; margin-top: 8px;"><span>🏦 Баланс (Кому винен):</span><strong id="cash-balance" style="color: var(--accent-blue);">0 ₴</strong></div>
+                <div class="breakdown-row br-neutral"><span>💵 Всього Готівки</span><strong id="cash-money-cash">0 ₴</strong></div>
+                <div class="breakdown-row br-neutral"><span>💳 Всього на Картку</span><strong id="cash-money-card">0 ₴</strong></div>
+                <div class="breakdown-row br-neutral" style="margin-top: 4px;"><span>🏦 Баланс (Кому винен)</span><strong id="cash-balance" style="color: var(--accent-blue);">0 ₴</strong></div>
             </div>
         </div>
         
@@ -433,14 +458,29 @@
             <button class="toggle-btn" onclick="shareAllStats()">📱 Поділитися статистикою</button>
         </div>
 
+        <div class="stat-tile-grid">
+            <div class="stat-tile">
+                <div class="stat-tile-icon ib-blue">📅</div>
+                <div class="stat-tile-value" id="stat-days">0</div>
+                <div class="stat-tile-label">Днів</div>
+            </div>
+            <div class="stat-tile">
+                <div class="stat-tile-icon ib-green">💰</div>
+                <div class="stat-tile-value" id="stat-avg-net" style="color: var(--uklon-green);">0 ₴</div>
+                <div class="stat-tile-label">Сер. дохід</div>
+            </div>
+            <div class="stat-tile">
+                <div class="stat-tile-icon ib-purple">📈</div>
+                <div class="stat-tile-value" id="stat-avg-eff">0</div>
+                <div class="stat-tile-label">₴ / км</div>
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-title">Статистика за період</div>
-            <div class="result-row"><span>Днів з даними:</span><strong id="stat-days" style="font-size: 16px;">0</strong></div>
-            <div class="result-row"><span>Усього поїздок:</span><strong id="stat-total-trips" style="font-size: 16px;">0</strong></div>
-            <div class="result-row"><span>Середній чистий дохід:</span><strong id="stat-avg-net" style="font-size: 16px; color: var(--uklon-green);">0 ₴</strong></div>
-            <div class="result-row"><span>Найкращий день:</span><strong id="stat-best-day" style="font-size: 16px;">-</strong></div>
-            <div class="result-row"><span>Сумарно пробіг:</span><strong id="stat-total-km" style="font-size: 16px;">0 км</strong></div>
-            <div class="result-row"><span>Середня ефективність:</span><strong id="stat-avg-eff" style="font-size: 16px;">0 ₴/км</strong></div>
+            <div class="breakdown-row br-neutral"><span>Усього поїздок</span><strong id="stat-total-trips">0</strong></div>
+            <div class="breakdown-row br-income"><span>Найкращий день</span><strong id="stat-best-day">-</strong></div>
+            <div class="breakdown-row br-neutral"><span>Сумарно пробіг</span><strong id="stat-total-km">0 км</strong></div>
         </div>
     </div>
 
@@ -1602,7 +1642,7 @@
             document.getElementById('stat-avg-net').innerText = `${fmt(avgNet)} ₴`;
             document.getElementById('stat-best-day').innerText = `${bestDay.date} (${fmt(bestDay.net)} ₴)`;
             document.getElementById('stat-total-km').innerText = `${totalKm.toFixed(1)} км`;
-            document.getElementById('stat-avg-eff').innerText = `${avgEff} ₴/км`;
+            document.getElementById('stat-avg-eff').innerText = `${avgEff}`;
         }
 
         function drawEarningsChart() {
@@ -1666,7 +1706,7 @@
             document.getElementById('cash-money-cash').innerText = fmt(dailyCashData.totalCash) + ' ₴'; document.getElementById('cash-money-card').innerText = fmt(dailyCashData.totalCard) + ' ₴';
             const balance = dailyCashData.totalCash - dailyCashData.comm - dailyCashData.rent; const balEl = document.getElementById('cash-balance'); balEl.innerText = fmt(balance) + ' ₴'; balEl.style.color = balance < 0 ? "var(--accent-danger)" : "var(--uklon-green)";
             let hours = dailyCashData.shiftActive ? (dailyCashData.shiftHours || 0.01) : (parseFloat(document.getElementById('cash-hours')?.value) || 1); if (hours <= 0) hours = 0.01;
-            document.getElementById('cash-hourly-rate').innerText = fmt(dailyCashData.net / hours) + ' ₴/год';
+            document.getElementById('cash-hourly-rate').innerText = fmt(dailyCashData.net / hours) + ' ₴';
             const list = document.getElementById('cash-history-list'); const empty = document.getElementById('cash-empty-state'); list.innerHTML = '';
             if(dailyCashData.history.length > 0) {
                 empty.style.display = 'none'; dailyCashData.history.forEach(trip => { 
