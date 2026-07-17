@@ -22,16 +22,16 @@
 
     <style>
         :root { 
-            --bg-color: #F7F4EF; --card-bg: #FFFFFF; --border-color: rgba(28, 25, 20, 0.09); 
-            --text-color: #1C1A17; --text-muted: #756F66; 
-            --accent-color: #E29400; --accent-success: #1FA75B; --accent-danger: #E0453D; --accent-blue: #1F7AE0; --uklon-green: #00B368;
-            --shadow-soft: 0 2px 10px rgba(28, 22, 12, 0.05);
-            --shadow-lift: 0 10px 30px rgba(28, 22, 12, 0.12);
+            --bg-color: #F2F4F5; --card-bg: #FFFFFF; --border-color: rgba(20, 25, 28, 0.09); 
+            --text-color: #171B1E; --text-muted: #6E7780; 
+            --accent-color: #00A884; --accent-success: #1FA75B; --accent-danger: #E0453D; --accent-blue: #1F7AE0; --uklon-green: #00A884;
+            --shadow-soft: 0 2px 10px rgba(20, 25, 28, 0.05);
+            --shadow-lift: 0 10px 30px rgba(20, 25, 28, 0.12);
             --radius-lg: 16px; --radius-md: 12px; --radius-sm: 8px;
         }
         
-        html[data-theme="dark"] { --bg-color: #100F0D; --card-bg: #1A1713; --border-color: rgba(255, 241, 224, 0.08); --text-color: #F5EFE6; --text-muted: #9C958A; --accent-color: #FFB020; --accent-success: #33D17A; --accent-danger: #FF5C57; --accent-blue: #4EA1FF; --uklon-green: #00D97E; --shadow-soft: 0 2px 10px rgba(0,0,0,0.25); --shadow-lift: 0 12px 34px rgba(0,0,0,0.45); }
-        html[data-theme="light"] { --bg-color: #F7F4EF; --card-bg: #FFFFFF; --border-color: rgba(28, 25, 20, 0.09); --text-color: #1C1A17; --text-muted: #756F66; --accent-color: #E29400; --accent-success: #1FA75B; --accent-danger: #E0453D; --accent-blue: #1F7AE0; --uklon-green: #00B368; --shadow-soft: 0 2px 10px rgba(28, 22, 12, 0.05); --shadow-lift: 0 10px 30px rgba(28, 22, 12, 0.12); }
+        html[data-theme="dark"] { --bg-color: #14161C; --card-bg: #1D2028; --border-color: rgba(255, 255, 255, 0.07); --text-color: #EDEFF2; --text-muted: #8B92A0; --accent-color: #00D9A3; --accent-success: #00D9A3; --accent-danger: #FF5C57; --accent-blue: #4EA1FF; --uklon-green: #00D9A3; --shadow-soft: 0 2px 10px rgba(0,0,0,0.25); --shadow-lift: 0 12px 34px rgba(0,0,0,0.45); }
+        html[data-theme="light"] { --bg-color: #F2F4F5; --card-bg: #FFFFFF; --border-color: rgba(20, 25, 28, 0.09); --text-color: #171B1E; --text-muted: #6E7780; --accent-color: #00A884; --accent-success: #1FA75B; --accent-danger: #E0453D; --accent-blue: #1F7AE0; --uklon-green: #00A884; --shadow-soft: 0 2px 10px rgba(20, 25, 28, 0.05); --shadow-lift: 0 10px 30px rgba(20, 25, 28, 0.12); }
         
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         
@@ -61,7 +61,7 @@
         .tabs { display: flex; background: var(--card-bg); padding: 3px; margin: 4px 8px 12px 8px; border-radius: var(--radius-md); box-shadow: var(--shadow-soft); border: 1px solid var(--border-color); gap: 1px; }
         .tab-btn { flex: 1; padding: 6px 1px; border: none; background: transparent; color: var(--text-muted); font-weight: 600; font-size: 9px; cursor: pointer; border-radius: 7px; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 1px; opacity: 0.75; min-width: 0; }
         .tab-btn span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
-        .tab-icon { font-size: 15px; transition: 0.2s; display: flex; align-items: center; justify-content: center; } .tab-icon svg { width: 17px; height: 17px; } .tab-btn.active { background: var(--accent-color); color: #171208; opacity: 1; box-shadow: 0 3px 10px rgba(226,148,0,0.25); }
+        .tab-icon { font-size: 15px; transition: 0.2s; display: flex; align-items: center; justify-content: center; } .tab-icon svg { width: 17px; height: 17px; } .tab-btn.active { background: var(--accent-color); color: #06231C; opacity: 1; box-shadow: 0 3px 10px rgba(0,217,163,0.25); }
         
         .page { display: none; padding: 0 10px; } 
         .page.active { display: block; animation: pageIn 0.28s cubic-bezier(0.2, 0.7, 0.3, 1); }
@@ -69,8 +69,8 @@
         
         .car-selector { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 10px 0; scrollbar-width: none; } .car-selector::-webkit-scrollbar { display: none; }
         .car-card { flex: 0 0 auto; background: var(--card-bg); padding: 7px 13px; border-radius: var(--radius-md); border: 1px solid var(--border-color); cursor: pointer; display: flex; flex-direction: row; align-items: center; gap: 6px; white-space: nowrap; }
-        .car-card.active { background: var(--accent-color); color: #171208; border-color: var(--accent-color); box-shadow: 0 5px 14px -3px rgba(226, 148, 0, 0.45); transform: scale(1.02); }
-        .car-emoji { font-size: 14px; } .car-name { font-size: 12px; font-weight: 700; } .car-price-info { font-size: 10px; font-weight: 600; opacity: 0.65; } .car-price-info::before { content: "• "; margin-right: 2px; } .car-card.active .car-price-info { opacity: 0.85; color: #171208; }
+        .car-card.active { background: var(--accent-color); color: #06231C; border-color: var(--accent-color); box-shadow: 0 5px 14px -3px rgba(0, 217, 163, 0.45); transform: scale(1.02); }
+        .car-emoji { font-size: 14px; } .car-name { font-size: 12px; font-weight: 700; } .car-price-info { font-size: 10px; font-weight: 600; opacity: 0.65; } .car-price-info::before { content: "• "; margin-right: 2px; } .car-card.active .car-price-info { opacity: 0.85; color: #06231C; }
         
         .card { background: var(--card-bg); border-radius: var(--radius-lg); padding: 12px 14px; margin-bottom: 10px; border: 1px solid var(--border-color); box-shadow: var(--shadow-soft); }
         .card-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-muted); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
@@ -316,7 +316,7 @@
             <div class="result-row"><span style="color: var(--text-muted);">Кілометраж:</span><span id="res-extra-dist">0 ₴</span></div>
             <div class="result-row"><span style="color: var(--text-muted);">Очікування/точки:</span><span id="res-addons">0 ₴</span></div>
             <div class="result-row" style="color:var(--uklon-green);" id="row-res-bonus"><span>Чайові/Доплата:</span><span id="res-bonus">0 ₴</span></div>
-            <div class="result-total" style="background: rgba(255,176,32,0.08); margin: 10px -14px -14px -14px; padding: 14px; border-radius: 0 0 var(--radius-lg) var(--radius-lg); border-top: 1px solid rgba(255,176,32,0.18); color: var(--accent-color); font-size: 22px;"><span>До сплати:</span><span id="res-total">0 ₴</span></div>
+            <div class="result-total" style="background: rgba(0,217,163,0.08); margin: 10px -14px -14px -14px; padding: 14px; border-radius: 0 0 var(--radius-lg) var(--radius-lg); border-top: 1px solid rgba(0,217,163,0.18); color: var(--accent-color); font-size: 22px;"><span>До сплати:</span><span id="res-total">0 ₴</span></div>
         </div>
 
         <div class="sticky-summary" id="sticky-panel">
@@ -595,7 +595,7 @@
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin: 20px 0 10px 4px;">
             <h3 style="font-size:12px; text-transform: uppercase; color: var(--text-muted); font-weight: 800; margin:0;">Налаштування Тарифів</h3>
-            <button onclick="openAddTariffModal()" style="background: var(--accent-color); color: #171208; border:none; border-radius: var(--radius-sm); padding: 6px 12px; font-size: 12px; font-weight: 800; cursor:pointer; display:flex; align-items:center; gap:4px;">＋ Додати</button>
+            <button onclick="openAddTariffModal()" style="background: var(--accent-color); color: #06231C; border:none; border-radius: var(--radius-sm); padding: 6px 12px; font-size: 12px; font-weight: 800; cursor:pointer; display:flex; align-items:center; gap:4px;">＋ Додати</button>
         </div>
         <div id="settings-container"></div>
         
@@ -2033,7 +2033,7 @@
         function renderTariffIconGrid() {
             const grid = document.getElementById('tm-icon-grid');
             grid.innerHTML = TARIFF_ICONS.map(icon => `
-                <button onclick="selectTariffIcon('${icon}')" data-icon="${icon}" class="tm-icon-btn" style="font-size:20px; padding:8px 0; border-radius:8px; border:1px solid ${icon === tariffModalSelectedIcon ? 'var(--accent-color)' : 'var(--border-color)'}; background:${icon === tariffModalSelectedIcon ? 'rgba(255,176,32,0.15)' : 'var(--bg-color)'}; cursor:pointer;">${icon}</button>
+                <button onclick="selectTariffIcon('${icon}')" data-icon="${icon}" class="tm-icon-btn" style="font-size:20px; padding:8px 0; border-radius:8px; border:1px solid ${icon === tariffModalSelectedIcon ? 'var(--accent-color)' : 'var(--border-color)'}; background:${icon === tariffModalSelectedIcon ? 'rgba(0,217,163,0.15)' : 'var(--bg-color)'}; cursor:pointer;">${icon}</button>
             `).join('');
         }
 
