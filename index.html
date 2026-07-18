@@ -55,6 +55,10 @@
         .app-title-block { display: flex; flex-direction: column; gap: 1px; }
         .app-title { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; background: linear-gradient(100deg, var(--text-color) 30%, var(--accent-color) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .app-subtitle { font-size: 11px; font-weight: 600; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+        .header-goal-strip { display: flex; align-items: center; gap: 8px; padding: 0 14px 10px 14px; cursor: pointer; }
+        .header-goal-track { flex: 1; height: 5px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 3px; overflow: hidden; }
+        .header-goal-fill { height: 100%; width: 0%; background: var(--accent-color); border-radius: 3px; transition: width 0.4s cubic-bezier(0.4,0,0.2,1); }
+        .header-goal-text { font-size: 10.5px; font-weight: 700; color: var(--text-muted); font-variant-numeric: tabular-nums; white-space: nowrap; flex-shrink: 0; }
         .theme-toggle { font-size: 15px; cursor: pointer; padding: 6px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-soft); }
         .theme-toggle:active { transform: scale(0.9) rotate(-15deg); }
         
@@ -206,6 +210,10 @@
             <div class="app-subtitle" id="header-subtitle">Сьогодні: 0 ₴</div>
         </div>
         <div class="theme-toggle" id="theme-btn" onclick="toggleTheme()">🌙</div>
+    </div>
+    <div class="header-goal-strip" id="header-goal-strip" onclick="switchTab('branding')">
+        <div class="header-goal-track"><div class="header-goal-fill" id="header-goal-fill"></div></div>
+        <span class="header-goal-text" id="header-goal-text">🎯 0 / 0</span>
     </div>
 
     <div class="tabs">
@@ -1869,8 +1877,19 @@
             });
         }
 
+        function updateHeaderGoalStrip() {
+            const fill = document.getElementById('header-goal-fill'); const text = document.getElementById('header-goal-text');
+            if (!fill || !text) return;
+            const goal = goals.dailyGoal || 1; const done = goals.dailyDone || 0;
+            const pct = Math.min(100, (done / goal) * 100);
+            fill.style.width = pct + '%';
+            fill.style.background = done >= goal ? 'var(--uklon-green)' : 'var(--accent-color)';
+            text.innerText = done >= goal ? `✅ ${done} / ${goal}` : `🎯 ${done} / ${goal}`;
+        }
+
         function updateCashPageUI() {
             const hdrSub = document.getElementById('header-subtitle'); if (hdrSub) hdrSub.innerText = `Сьогодні: ${fmt(dailyCashData.net)} ₴ · ${dailyCashData.orders} ${dailyCashData.orders === 1 ? 'поїздка' : 'поїздок'}`;
+            updateHeaderGoalStrip();
             document.getElementById('cash-orders-count').innerText = dailyCashData.orders; document.getElementById('cash-gross').innerText = fmt(dailyCashData.gross) + ' ₴'; document.getElementById('cash-comm').innerText = '-' + fmt(dailyCashData.comm) + ' ₴'; document.getElementById('cash-fuel').innerText = '-' + fmt(dailyCashData.fuel) + ' ₴'; document.getElementById('cash-total-km').innerText = dailyCashData.totalKm.toFixed(1) + ' км';
             if ((dailyCashData.actualFuel || 0) > 0) { document.getElementById('row-cash-actualFuel').style.display = 'flex'; document.getElementById('cash-actualFuel').innerText = '-' + fmt(dailyCashData.actualFuel) + ' ₴'; } else { document.getElementById('row-cash-actualFuel').style.display = 'none'; }
             const inpOrderMin = document.getElementById('inp-order-minutes'); if (inpOrderMin && document.activeElement !== inpOrderMin) inpOrderMin.value = dailyCashData.orderMinutes || 0;
@@ -1913,6 +1932,7 @@
             const dailyGoal = hasOverride ? goals.dailyGoalOverride : autoGoal;
             goals.dailyGoal = dailyGoal;
             localStorage.setItem('taxi_goals_v22', JSON.stringify(goals));
+            updateHeaderGoalStrip();
 
             document.getElementById('brand-daily-goal-val').innerText = dailyGoal;
             document.getElementById('brand-daily-goal-auto-badge').style.display = hasOverride ? 'none' : 'inline';
