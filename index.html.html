@@ -7,7 +7,7 @@
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0F1117">
+    <meta name="theme-color" content="#14161C">
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
@@ -22,16 +22,16 @@
 
     <style>
         :root { 
-            --bg-color: #F0F2F4; --card-bg: #FFFFFF; --border-color: rgba(20, 25, 28, 0.08); 
-            --text-color: #14181C; --text-muted: #5A636E; 
+            --bg-color: #F2F4F5; --card-bg: #FFFFFF; --border-color: rgba(20, 25, 28, 0.09); 
+            --text-color: #171B1E; --text-muted: #5C6570; 
             --accent-color: #00A884; --accent-success: #1FA75B; --accent-danger: #E0453D; --accent-blue: #1F7AE0; --uklon-green: #00A884;
-            --shadow-soft: 0 1px 8px rgba(20, 25, 28, 0.04);
-            --shadow-lift: 0 8px 24px rgba(20, 25, 28, 0.10);
-            --radius-lg: 14px; --radius-md: 11px; --radius-sm: 8px;
+            --shadow-soft: 0 2px 10px rgba(20, 25, 28, 0.05);
+            --shadow-lift: 0 10px 30px rgba(20, 25, 28, 0.12);
+            --radius-lg: 16px; --radius-md: 12px; --radius-sm: 8px;
         }
         
-        html[data-theme="dark"] { --bg-color: #0F1117; --card-bg: #181B24; --border-color: rgba(255, 255, 255, 0.065); --text-color: #E8EBF0; --text-muted: #8A92A0; --accent-color: #00C896; --accent-success: #00C896; --accent-danger: #FF5C57; --accent-blue: #4EA1FF; --uklon-green: #00C896; --shadow-soft: 0 1px 8px rgba(0,0,0,0.22); --shadow-lift: 0 10px 28px rgba(0,0,0,0.40); }
-        html[data-theme="light"] { --bg-color: #F0F2F4; --card-bg: #FFFFFF; --border-color: rgba(20, 25, 28, 0.08); --text-color: #14181C; --text-muted: #5A636E; --accent-color: #00A884; --accent-success: #1FA75B; --accent-danger: #E0453D; --accent-blue: #1F7AE0; --uklon-green: #00A884; --shadow-soft: 0 1px 8px rgba(20, 25, 28, 0.04); --shadow-lift: 0 8px 24px rgba(20, 25, 28, 0.10); }
+        html[data-theme="dark"] { --bg-color: #14161C; --card-bg: #1D2028; --border-color: rgba(255, 255, 255, 0.07); --text-color: #EDEFF2; --text-muted: #8B92A0; --accent-color: #00D9A3; --accent-success: #00D9A3; --accent-danger: #FF5C57; --accent-blue: #4EA1FF; --uklon-green: #00D9A3; --shadow-soft: 0 2px 10px rgba(0,0,0,0.25); --shadow-lift: 0 12px 34px rgba(0,0,0,0.45); }
+        html[data-theme="light"] { --bg-color: #F2F4F5; --card-bg: #FFFFFF; --border-color: rgba(20, 25, 28, 0.09); --text-color: #171B1E; --text-muted: #5C6570; --accent-color: #00A884; --accent-success: #1FA75B; --accent-danger: #E0453D; --accent-blue: #1F7AE0; --uklon-green: #00A884; --shadow-soft: 0 2px 10px rgba(20, 25, 28, 0.05); --shadow-lift: 0 10px 30px rgba(20, 25, 28, 0.12); }
         
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         
@@ -49,35 +49,35 @@
             *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
         }
 
-        body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 210px; transition: background-color 0.25s ease, color 0.25s ease; overscroll-behavior-y: none; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 300px; transition: background-color 0.25s ease, color 0.25s ease; overscroll-behavior-y: none; }
         
-        .app-header { padding: 8px 12px 4px 12px; display: flex; align-items: center; justify-content: space-between; }
+        .app-header { padding: 12px 14px 6px 14px; display: flex; align-items: center; justify-content: space-between; }
         .app-title-block { display: flex; flex-direction: column; gap: 1px; }
-        .app-title { font-size: 18px; font-weight: 800; letter-spacing: -0.4px; background: linear-gradient(100deg, var(--text-color) 30%, var(--accent-color) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .app-subtitle { font-size: 10.5px; font-weight: 600; color: var(--text-muted); font-variant-numeric: tabular-nums; }
-        .header-goal-strip { display: flex; align-items: center; gap: 8px; padding: 0 12px 6px 12px; cursor: pointer; }
-        .header-goal-track { flex: 1; height: 4px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 3px; overflow: hidden; }
+        .app-title { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; background: linear-gradient(100deg, var(--text-color) 30%, var(--accent-color) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .app-subtitle { font-size: 11px; font-weight: 600; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+        .header-goal-strip { display: flex; align-items: center; gap: 8px; padding: 0 14px 10px 14px; cursor: pointer; }
+        .header-goal-track { flex: 1; height: 5px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 3px; overflow: hidden; }
         .header-goal-fill { height: 100%; width: 0%; background: var(--accent-color); border-radius: 3px; transition: width 0.4s cubic-bezier(0.4,0,0.2,1); }
-        .header-goal-text { font-size: 10px; font-weight: 700; color: var(--text-muted); font-variant-numeric: tabular-nums; white-space: nowrap; flex-shrink: 0; }
-        .theme-toggle { font-size: 14px; cursor: pointer; padding: 5px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-soft); }
+        .header-goal-text { font-size: 10.5px; font-weight: 700; color: var(--text-muted); font-variant-numeric: tabular-nums; white-space: nowrap; flex-shrink: 0; }
+        .theme-toggle { font-size: 15px; cursor: pointer; padding: 6px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-soft); }
         .theme-toggle:active { transform: scale(0.9) rotate(-15deg); }
         
-        .tabs { display: flex; background: var(--card-bg); padding: 2px; margin: 2px 6px 8px 6px; border-radius: var(--radius-md); box-shadow: var(--shadow-soft); border: 1px solid var(--border-color); gap: 1px; }
-        .tab-btn { flex: 1; padding: 5px 1px; border: none; background: transparent; color: var(--text-muted); font-weight: 600; font-size: 8.5px; cursor: pointer; border-radius: 7px; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 0px; opacity: 0.75; min-width: 0; }
+        .tabs { display: flex; background: var(--card-bg); padding: 3px; margin: 4px 8px 12px 8px; border-radius: var(--radius-md); box-shadow: var(--shadow-soft); border: 1px solid var(--border-color); gap: 1px; }
+        .tab-btn { flex: 1; padding: 6px 1px; border: none; background: transparent; color: var(--text-muted); font-weight: 600; font-size: 9px; cursor: pointer; border-radius: 7px; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 1px; opacity: 0.75; min-width: 0; }
         .tab-btn span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
-        .tab-icon { font-size: 14px; transition: 0.2s; display: flex; align-items: center; justify-content: center; } .tab-icon svg { width: 16px; height: 16px; } .tab-btn.active { background: var(--accent-color); color: #06231C; opacity: 1; box-shadow: 0 2px 8px rgba(0,200,150,0.22); }
+        .tab-icon { font-size: 15px; transition: 0.2s; display: flex; align-items: center; justify-content: center; } .tab-icon svg { width: 17px; height: 17px; } .tab-btn.active { background: var(--accent-color); color: #06231C; opacity: 1; box-shadow: 0 3px 10px rgba(0,217,163,0.25); }
         
-        .page { display: none; padding: 0 8px; } 
-        .page.active { display: block; animation: pageIn 0.22s cubic-bezier(0.2, 0.7, 0.3, 1); }
+        .page { display: none; padding: 0 10px; } 
+        .page.active { display: block; animation: pageIn 0.28s cubic-bezier(0.2, 0.7, 0.3, 1); }
         @keyframes pageIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
         
-        .car-selector { display: flex; gap: 5px; overflow-x: auto; padding: 1px 0 8px 0; scrollbar-width: none; } .car-selector::-webkit-scrollbar { display: none; }
-        .car-card { flex: 0 0 auto; background: var(--card-bg); padding: 6px 11px; border-radius: var(--radius-md); border: 1px solid var(--border-color); cursor: pointer; display: flex; flex-direction: row; align-items: center; gap: 5px; white-space: nowrap; }
-        .car-card.active { background: var(--accent-color); color: #06231C; border-color: var(--accent-color); box-shadow: 0 4px 12px -3px rgba(0, 200, 150, 0.40); transform: scale(1.02); }
-        .car-emoji { font-size: 13px; display: flex; align-items: center; justify-content: center; } .car-emoji svg { width: 14px; height: 14px; } .car-name { font-size: 11.5px; font-weight: 700; } .car-price-info { font-size: 9.5px; font-weight: 600; opacity: 0.65; } .car-price-info::before { content: "• "; margin-right: 2px; } .car-card.active .car-price-info { opacity: 0.85; color: #06231C; }
+        .car-selector { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 10px 0; scrollbar-width: none; } .car-selector::-webkit-scrollbar { display: none; }
+        .car-card { flex: 0 0 auto; background: var(--card-bg); padding: 7px 13px; border-radius: var(--radius-md); border: 1px solid var(--border-color); cursor: pointer; display: flex; flex-direction: row; align-items: center; gap: 6px; white-space: nowrap; }
+        .car-card.active { background: var(--accent-color); color: #06231C; border-color: var(--accent-color); box-shadow: 0 5px 14px -3px rgba(0, 217, 163, 0.45); transform: scale(1.02); }
+        .car-emoji { font-size: 14px; display: flex; align-items: center; justify-content: center; } .car-emoji svg { width: 15px; height: 15px; } .car-name { font-size: 12px; font-weight: 700; } .car-price-info { font-size: 10px; font-weight: 600; opacity: 0.65; } .car-price-info::before { content: "• "; margin-right: 2px; } .car-card.active .car-price-info { opacity: 0.85; color: #06231C; }
         
-        .card { background: var(--card-bg); border-radius: var(--radius-lg); padding: 10px 12px; margin-bottom: 8px; border: 1px solid var(--border-color); box-shadow: var(--shadow-soft); }
-        .card-title { font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-muted); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .card { background: var(--card-bg); border-radius: var(--radius-lg); padding: 12px 14px; margin-bottom: 10px; border: 1px solid var(--border-color); box-shadow: var(--shadow-soft); }
+        .card-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-muted); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         
         .ac-wrapper { position: relative; width: 100%; margin-bottom: 8px; }
         .map-input-group { display: flex; align-items: center; background: var(--bg-color); border-radius: 10px; padding: 6px 10px; border: 1px solid var(--border-color); }
@@ -89,14 +89,14 @@
         .gps-btn { background: transparent; border: none; font-size: 14px; cursor: pointer; color: var(--accent-blue); padding-left: 8px; border-left: 1px solid var(--border-color); }
         .nav-btn-group { display: none; gap: 6px; margin-top: 8px; } .nav-btn { flex: 1; padding: 8px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; border: none; display: flex; justify-content: center; align-items: center; gap: 4px; }
         
-        .sticky-summary { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: var(--card-bg); border-radius: 16px 16px 0 0; padding: 8px 12px calc(14px + env(safe-area-inset-bottom)) 12px; box-shadow: var(--shadow-lift); border-top: 1px solid var(--border-color); transition: transform 0.3s cubic-bezier(0.2,0.7,0.3,1); overflow: hidden; }
-        .sticky-summary::before { content: ""; position: absolute; top: 0; left: 12%; right: 12%; height: 2px; background: linear-gradient(90deg, transparent, var(--accent-color), transparent); opacity: 0.55; }
-        @supports (backdrop-filter: blur(10px)) { .sticky-summary { background: rgba(var(--card-bg-rgb, 255,255,255), 0.90); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); } html[data-theme="dark"] .sticky-summary { background: rgba(24, 27, 36, 0.93); } }
-        .drag-handle { width: 32px; height: 3px; background: var(--border-color); border-radius: 2px; margin: 0 auto 6px auto; }
+        .sticky-summary { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: var(--card-bg); border-radius: 22px 22px 0 0; padding: 12px 14px calc(20px + env(safe-area-inset-bottom)) 14px; box-shadow: var(--shadow-lift); border-top: 1px solid var(--border-color); transition: transform 0.3s cubic-bezier(0.2,0.7,0.3,1); overflow: hidden; }
+        .sticky-summary::before { content: ""; position: absolute; top: 0; left: 12%; right: 12%; height: 2px; background: linear-gradient(90deg, transparent, var(--accent-color), transparent); opacity: 0.6; }
+        @supports (backdrop-filter: blur(10px)) { .sticky-summary { background: rgba(var(--card-bg-rgb, 255,255,255), 0.88); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); } html[data-theme="dark"] .sticky-summary { background: rgba(26,23,19, 0.88); } }
+        .drag-handle { width: 36px; height: 4px; background: var(--border-color); border-radius: 2px; margin: 0 auto 8px auto; }
         .summary-header { display: flex; justify-content: space-between; align-items: flex-end; cursor: pointer; padding-bottom: 4px; }
         .summary-mini-label { font-size: 10.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px; }
-        .summary-mini-title { font-size: 14px; font-weight: 700; transition: color 0.3s; }
-        .summary-mini-title #res-net { font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.5px; transition: color 0.2s ease; line-height: 1; }
+        .summary-mini-title { font-size: 15px; font-weight: 700; transition: color 0.3s; }
+        .summary-mini-title #res-net { font-size: 28px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.5px; transition: color 0.2s ease; line-height: 1; }
         .summary-mini-title #res-net.flash { animation: gaugeFlash 0.5s ease; }
         @keyframes gaugeFlash { 0% { filter: brightness(1); } 35% { filter: brightness(1.6); } 100% { filter: brightness(1); } }
         .summary-chevron { font-size: 11px; font-weight: 700; color: var(--accent-success); background: rgba(31, 167, 91, 0.15); padding: 4px 10px; border-radius: 10px; }
@@ -105,7 +105,7 @@
         .pay-opt { flex: 1; text-align: center; padding: 6px 0; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer; color: var(--text-muted); transition: 0.2s; }
         .pay-opt.active { background: var(--card-bg); color: var(--text-color); box-shadow: 0 2px 6px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
         
-        .input-block { padding: 5px 0; border-bottom: 1px solid var(--border-color); } .input-block:last-child { border-bottom: none; padding-bottom: 0; }
+        .input-block { padding: 6px 0; border-bottom: 1px solid var(--border-color); } .input-block:last-child { border-bottom: none; padding-bottom: 0; }
         .input-header { display: flex; justify-content: space-between; align-items: center; }
         .icon-wrap { display: flex; align-items: center; gap: 8px; } .icon-box { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; }
         .ib-blue { background: rgba(31, 122, 224, 0.15); color: #1F7AE0; } .ib-purple { background: rgba(175, 82, 222, 0.15); color: #AF52DE; } .ib-cyan { background: rgba(50, 173, 230, 0.15); color: #32ADE6; } .ib-orange { background: rgba(255, 149, 0, 0.15); color: #FF9500; } .ib-yellow { background: rgba(226, 148, 0, 0.2); color: #E29400; } .ib-red { background: rgba(224, 69, 61, 0.15); color: #E0453D; } .ib-green { background: rgba(31, 167, 91, 0.15); color: #1FA75B; } .ib-gray { background: rgba(140, 135, 125, 0.18); color: #8C877D; }
@@ -128,28 +128,28 @@
         
         .quick-coef-container { display: flex; gap: 6px; margin-top: 4px; margin-bottom: 2px; } .quick-coef-btn { flex: 1; padding: 6px 0; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-weight: 800; font-size: 11px; cursor: pointer; transition: 0.1s; } .quick-coef-btn:active { background: var(--accent-color); color: #06231C; border-color: var(--accent-color); transform: scale(0.97); } .btn-clear { background: rgba(255, 59, 48, 0.1); color: var(--accent-danger); flex: 0 0 36px; border: none; }
 
-        .result-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12.5px; font-weight: 600; }
+        .result-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
         .result-row span:last-child { font-variant-numeric: tabular-nums; }
-        .result-total { border-top: 1px solid var(--border-color); padding-top: 8px; margin-top: 6px; font-size: 18px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; color: var(--accent-success); font-variant-numeric: tabular-nums; letter-spacing: -0.2px; }
+        .result-total { border-top: 1px solid var(--border-color); padding-top: 10px; margin-top: 8px; font-size: 19px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; color: var(--accent-success); font-variant-numeric: tabular-nums; letter-spacing: -0.2px; }
 
         .stat-tile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
-        .stat-tile { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 8px 6px; text-align: center; box-shadow: var(--shadow-soft); }
-        .stat-tile-icon { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; margin: 0 auto 4px auto; }
-        .stat-tile-icon svg { width: 13px; height: 13px; }
-        .stat-tile-value { font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.2px; color: var(--text-color); }
-        .stat-tile-label { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.02em; margin-top: 1px; }
+        .stat-tile { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 8px; text-align: center; box-shadow: var(--shadow-soft); }
+        .stat-tile-icon { width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; margin: 0 auto 6px auto; }
+        .stat-tile-icon svg { width: 14px; height: 14px; }
+        .stat-tile-value { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.2px; color: var(--text-color); }
+        .stat-tile-label { font-size: 9.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.02em; margin-top: 2px; }
 
-        .breakdown-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0 5px 9px; font-size: 12.5px; font-weight: 600; border-left: 3px solid transparent; margin-bottom: 1px; }
+        .breakdown-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0 7px 10px; font-size: 13px; font-weight: 600; border-left: 3px solid transparent; margin-bottom: 2px; }
         .breakdown-row.br-income { border-left-color: var(--uklon-green); }
         .breakdown-row.br-expense { border-left-color: var(--accent-danger); }
         .breakdown-row.br-neutral { border-left-color: var(--accent-blue); }
         .breakdown-row span:last-child { font-variant-numeric: tabular-nums; }
         .eff-badge { color: white; padding: 4px 9px; border-radius: 7px; font-size: 11px; font-weight: 800; font-variant-numeric: tabular-nums; } .eff-green { background-color: var(--uklon-green); } .eff-yellow { background-color: #E8720E; } .eff-red { background-color: var(--accent-danger); }
         
-        .admin-input { width: 66px; padding: 6px; min-height: 32px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); text-align: center; font-size: 12.5px; font-weight: 700; background: var(--bg-color); color: var(--text-color); font-variant-numeric: tabular-nums; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+        .admin-input { width: 70px; padding: 7px; min-height: 34px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); text-align: center; font-size: 13px; font-weight: 700; background: var(--bg-color); color: var(--text-color); font-variant-numeric: tabular-nums; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
         .admin-input:focus { border-color: var(--accent-blue); outline: none; box-shadow: 0 0 0 3px rgba(78,161,255,0.18); }
         select.admin-input { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239C958A' stroke-width='2.5'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 6px center; background-size: 12px; padding-right: 20px; }
-        .save-btn { width: 100%; padding: 11px; background: var(--uklon-green); color: #FFF; border: none; border-radius: var(--radius-md); font-size: 13.5px; font-weight: 800; cursor: pointer; margin-top: 8px; box-shadow: 0 5px 14px -3px rgba(0, 179, 104, 0.35); letter-spacing: 0.01em; } .save-btn:active { transform: scale(0.98); } .save-btn-alt { background: var(--text-color); color: var(--bg-color); box-shadow: var(--shadow-soft); }
+        .save-btn { width: 100%; padding: 13px; background: var(--uklon-green); color: #FFF; border: none; border-radius: var(--radius-md); font-size: 14px; font-weight: 800; cursor: pointer; margin-top: 10px; box-shadow: 0 6px 16px -4px rgba(0, 179, 104, 0.4); letter-spacing: 0.01em; } .save-btn:active { transform: scale(0.98); } .save-btn-alt { background: var(--text-color); color: var(--bg-color); box-shadow: var(--shadow-soft); }
         .save-btn:disabled { opacity: 0.6; cursor: default; transform: none; }
         
         .reset-btn { width: 100%; padding: 12px; background: rgba(224, 69, 61, 0.1); color: var(--accent-danger); border: none; border-radius: var(--radius-md); font-size: 13px; font-weight: 800; cursor: pointer; margin-top: 8px; } 
@@ -160,7 +160,7 @@
         
         .shift-timer-box { background: var(--bg-color); border-radius: var(--radius-md); padding: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border: 1px solid var(--border-color); position: relative; overflow: hidden; }
         .timer-text { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.3px; }
-        .shift-timer-box.is-active { border-color: rgba(0, 200, 150, 0.35); }
+        .shift-timer-box.is-active { border-color: rgba(0, 217, 126, 0.35); }
         .shift-timer-box.is-active::before { content: ""; position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--uklon-green); top: 10px; right: 10px; box-shadow: 0 0 0 rgba(0,217,126,0.5); animation: livePulse 1.8s infinite; }
         @keyframes livePulse { 0% { box-shadow: 0 0 0 0 rgba(0,217,126,0.5); } 70% { box-shadow: 0 0 0 7px rgba(0,217,126,0); } 100% { box-shadow: 0 0 0 0 rgba(0,217,126,0); } }
         .btn-shift { padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 800; font-size: 12px; cursor: pointer; border: none; }
@@ -348,13 +348,13 @@
             </div>
         </div>
 
-        <div class="card" style="padding-bottom:0;">
-            <div class="card-title" style="display:flex; align-items:center; gap:6px; margin-bottom:6px;"><span class="card-title-icon" data-icon="receipt"></span> Чек клієнта</div>
-            <div class="result-row" style="margin-bottom:3px;"><span style="color: var(--text-muted);">База:</span><span id="res-base">0 ₴</span></div>
-            <div class="result-row" style="margin-bottom:3px;"><span style="color: var(--text-muted);">Кілометраж:</span><span id="res-extra-dist">0 ₴</span></div>
-            <div class="result-row" style="margin-bottom:3px;"><span style="color: var(--text-muted);">Очік./точки:</span><span id="res-addons">0 ₴</span></div>
-            <div class="result-row" style="color:var(--uklon-green); margin-bottom:3px;" id="row-res-bonus"><span>Чайові:</span><span id="res-bonus">0 ₴</span></div>
-            <div class="result-total" style="background: rgba(0,200,150,0.08); margin: 6px -12px 0 -12px; padding: 10px 12px; border-radius: 0 0 var(--radius-lg) var(--radius-lg); border-top: 1px solid rgba(0,200,150,0.18); color: var(--accent-color); font-size: 18px;"><span>До сплати:</span><span id="res-total">0 ₴</span></div>
+        <div class="card">
+            <div class="card-title" style="display:flex; align-items:center; gap:6px;"><span class="card-title-icon" data-icon="receipt"></span> Чек клієнта</div>
+            <div class="result-row"><span style="color: var(--text-muted);">База (з коеф.):</span><span id="res-base">0 ₴</span></div>
+            <div class="result-row"><span style="color: var(--text-muted);">Кілометраж:</span><span id="res-extra-dist">0 ₴</span></div>
+            <div class="result-row"><span style="color: var(--text-muted);">Очікування/точки:</span><span id="res-addons">0 ₴</span></div>
+            <div class="result-row" style="color:var(--uklon-green);" id="row-res-bonus"><span>Чайові/Доплата:</span><span id="res-bonus">0 ₴</span></div>
+            <div class="result-total" style="background: rgba(0,217,163,0.08); margin: 10px -14px -14px -14px; padding: 14px; border-radius: 0 0 var(--radius-lg) var(--radius-lg); border-top: 1px solid rgba(0,217,163,0.18); color: var(--accent-color); font-size: 22px;"><span>До сплати:</span><span id="res-total">0 ₴</span></div>
         </div>
 
         <div class="sticky-summary" id="sticky-panel">
@@ -374,16 +374,16 @@
                 <div style="text-align: right; font-size: 11px; font-weight: 700; margin-top: 2px;" id="res-eff-diff"></div>
             </div>
             
-            <div class="pay-switch" style="margin:6px 0;">
+            <div class="pay-switch">
                 <div class="pay-opt active" id="pay-opt-cash" onclick="setPaymentMode('cash')">💵 Готівка</div>
                 <div class="pay-opt" id="pay-opt-card" onclick="setPaymentMode('card')">💳 Картка</div>
             </div>
-            <button class="save-btn" style="padding:10px; font-size:13px; margin-top:4px;" onclick="addToDailyCash()">✓ Зафіксувати</button>
+            <button class="save-btn" onclick="addToDailyCash()">Зафіксувати поїздку</button>
         </div>
     </div>
 
     <div id="page-branding" class="page">
-        <div class="card" style="border: 1px solid rgba(0,200,150,0.28); position: relative; overflow: hidden;">
+        <div class="card" style="border: 1px solid rgba(0,217,163,0.3); position: relative; overflow: hidden;">
             <div style="position:absolute; top:0; left:15%; right:15%; height:2px; background: linear-gradient(90deg, transparent, var(--accent-color), transparent); opacity:0.7;"></div>
             <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
                 <span style="display:flex; align-items:center; gap:6px;"><span class="card-title-icon" data-icon="target"></span> Щоденна Ціль</span>
@@ -394,14 +394,14 @@
                     <span>Ціль на сьогодні: <strong id="brand-daily-goal-val" style="font-size: 16px; color: var(--accent-blue);">0</strong> <span id="brand-daily-goal-auto-badge" style="font-size: 10px; color: var(--text-muted); font-weight: 700;">(авто)</span></span>
                     <button id="brand-daily-goal-reset-btn" onclick="resetDailyGoalToAuto()" style="display:none; background: none; border: none; color: var(--accent-blue); font-size: 11px; font-weight: 700; cursor: pointer; padding: 2px 6px;">↺ Авто</button>
                 </div>
-                <div class="input-header" style="margin-bottom:6px;"><span>Виконано сьогодні:</span><div class="counter"><button class="btn-counter" style="color:var(--accent-danger); font-size:14px;" onclick="resetDailyDone()">🔄</button><button class="btn-counter" onclick="changeDailyDone(-1)">-</button><input inputmode="decimal" type="number" enterkeyhint="done" class="counter-value" id="inp-daily-done" value="0" oninput="manualDailyDoneInput()"><button class="btn-counter" onclick="changeDailyDone(1)">+</button></div></div>
-                <div class="input-header" style="margin-bottom:6px;"><span style="font-size: 12px; color: var(--text-muted);">Планова зміна:</span><div style="display:flex; align-items:center; gap:4px;"><input inputmode="decimal" type="number" enterkeyhint="done" step="0.5" class="admin-input" style="width: 50px;" id="inp-planned-hours" value="10" oninput="plannedHoursInput()"><span style="font-size:12px; color:var(--text-muted);">год</span></div></div>
+                <div class="input-header" style="margin-bottom:8px;"><span>Виконано сьогодні:</span><div class="counter"><button class="btn-counter" style="color:var(--accent-danger); font-size:14px;" onclick="resetDailyDone()">🔄</button><button class="btn-counter" onclick="changeDailyDone(-1)">-</button><input inputmode="decimal" type="number" enterkeyhint="done" class="counter-value" id="inp-daily-done" value="0" oninput="manualDailyDoneInput()"><button class="btn-counter" onclick="changeDailyDone(1)">+</button></div></div>
+                <div class="input-header" style="margin-bottom:8px;"><span style="font-size: 12px; color: var(--text-muted);">Планова тривалість зміни:</span><div style="display:flex; align-items:center; gap:4px;"><input inputmode="decimal" type="number" enterkeyhint="done" step="0.5" class="admin-input" style="width: 54px;" id="inp-planned-hours" value="10" oninput="plannedHoursInput()"><span style="font-size:12px; color:var(--text-muted);">год</span></div></div>
             </div>
-            <div class="progress-container" style="margin:6px 0;"><div class="progress-bar" id="brand-daily-progress" style="background: var(--accent-blue);"></div></div>
+            <div class="progress-container"><div class="progress-bar" id="brand-daily-progress" style="background: var(--accent-blue);"></div></div>
 
-            <div id="brand-live-status" style="display:none; margin-top: 8px; padding: 8px 10px; background: rgba(78,161,255,0.1); border: 1px solid rgba(78,161,255,0.25); border-radius: var(--radius-sm); font-size: 11.5px; line-height: 1.45;"></div>
+            <div id="brand-live-status" style="display:none; margin-top: 10px; padding: 10px 12px; background: rgba(78,161,255,0.1); border: 1px solid rgba(78,161,255,0.25); border-radius: var(--radius-sm); font-size: 12px; line-height: 1.5;"></div>
 
-            <div class="stat-tile-grid" style="margin-top: 8px; margin-bottom: 0;">
+            <div class="stat-tile-grid" style="margin-top: 12px; margin-bottom: 0;">
                 <div class="stat-tile" style="grid-column: span 1;">
                     <div class="stat-tile-icon ib-blue" data-icon="target"></div>
                     <div class="stat-tile-value" id="brand-daily-remain">0</div>
@@ -446,31 +446,28 @@
 
     <div id="page-cash" class="page">
 
-        <!-- Швидкі дії: одна компактна сітка -->
-        <div style="display:grid; grid-template-columns: 1.4fr 1fr 1fr; gap:6px; margin-bottom:8px;">
-            <button class="save-btn" id="btn-import" style="background: var(--accent-color); margin:0; padding:11px 8px; font-size:13px;" onclick="openQuickInputModal()">⚡ Швидкий ввід</button>
-            <button class="save-btn" style="background: var(--accent-blue); margin:0; padding:11px 6px; font-size:12px;" onclick="pasteFromClipboard()">📋 Буфер</button>
-            <button class="save-btn" style="background: #7C5CFC; margin:0; padding:11px 6px; font-size:12px;" onclick="processScreenshot()">📸 Uklon</button>
-        </div>
+        <button class="save-btn" id="btn-import" style="background: var(--accent-blue); margin-bottom: 8px; margin-top: 0; padding: 12px;" onclick="openQuickInputModal()">⚡ Швидкий ввід</button>
+        <button class="save-btn" style="background: #6366F1; margin-bottom: 8px; padding: 12px;" onclick="pasteFromClipboard()">📋 Вставити з буфера</button>
+        <button class="save-btn" style="background: #9B59B6; margin-bottom: 8px; padding: 12px;" onclick="processScreenshot()">📸 Розпізнати чек (OCR)</button>
         <input type="file" id="screenshot-input" accept="image/*" multiple style="display:none" onchange="handleFile(event)">
 
-        <!-- Таймер зміни + витрати в один ряд -->
-        <div class="shift-timer-box" style="margin-bottom:8px;">
+        <div class="shift-timer-box">
             <div>
-                <div style="font-size:11px; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Годин на лінії</div>
-                <div class="timer-text" id="shift-timer-display" style="font-size:20px;">00:00</div>
+                <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Годин на лінії</div>
+                <div class="timer-text" id="shift-timer-display">00:00</div>
             </div>
-            <button class="btn-shift start" id="btn-shift-toggle" onclick="toggleShiftTimer()">▶ Почати</button>
+            <button class="btn-shift start" id="btn-shift-toggle" onclick="toggleShiftTimer()">▶ Почати зміну</button>
         </div>
 
-        <div class="quick-expense-row" style="margin-bottom:8px;">
+        <div class="quick-expense-row">
             <button class="qe-btn" style="border-color: rgba(255,149,0,0.35); color: #ff9500;" onclick="addFuelPurchase()">⛽ Заправка</button>
             <button class="qe-btn" onclick="addExpense('Мийка')">🧽 Мийка</button>
             <button class="qe-btn" onclick="addExpense('Перекус')">🍔 Перекус</button>
-            <button class="qe-btn" style="border-color: rgba(78,161,255,0.3); color: var(--accent-blue);" onclick="shareReport()">📤 Звіт</button>
         </div>
+
+        <button class="save-btn save-btn-alt" style="margin-bottom: 12px; margin-top: 6px; padding: 12px;" onclick="shareReport()">📤 Поділитися звітом</button>
         
-        <div class="stat-tile-grid" style="margin-bottom:8px;">
+        <div class="stat-tile-grid">
             <div class="stat-tile">
                 <div class="stat-tile-icon ib-blue" data-icon="box"></div>
                 <div class="stat-tile-value" id="cash-orders-count">0</div>
@@ -520,7 +517,7 @@
             <div id="cash-empty-state" class="empty-state">
                 <span class="empty-icon">🧾</span>
                 <div class="empty-title">Поки що порожньо</div>
-                <div class="empty-sub">Натисніть «Швидкий ввід» або зафіксуйте з вкладки «Тариф»</div>
+                <div class="empty-sub">Зафіксуйте першу поїздку на вкладці «Тариф»</div>
             </div>
         </div>
         
@@ -699,7 +696,7 @@
             <div style="display:flex; justify-content:space-between; margin-bottom:8px; align-items: center;"><span style="font-weight: 600; font-size: 13px;">Комісія (%):</span><input inputmode="decimal" type="number" step="0.1" class="admin-input" id="set-comm" value="17" oninput="autoSaveSettings()"></div>
             <div style="display:flex; justify-content:space-between; margin-bottom:8px; align-items: center;"><span style="font-weight: 600; font-size: 13px;">Тип пального:</span><select class="admin-input" style="width:100px;" id="set-fuel-type" onchange="autoSaveSettings()"><option value="gas">Газ</option><option value="petrol">Бензин</option><option value="diesel">Дизель</option><option value="electro">Електро</option></select></div>
             <div style="display:flex; justify-content:space-between; margin-bottom:8px; align-items: center;"><span id="set-fuel-cons-label" style="font-weight: 600; font-size: 13px;">Розхід (на 100км):</span><input inputmode="decimal" type="number" step="0.1" class="admin-input" id="set-fuel-cons" value="14" oninput="autoSaveSettings()"></div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px; align-items: center;"><span id="set-fuel-price-label" style="font-weight: 600; font-size: 13px;">Ціна (₴):</span><input inputmode="decimal" type="number" step="0.1" class="admin-input" id="set-fuel-price" value="55.9" oninput="autoSaveSettings()"></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px; align-items: center;"><span id="set-fuel-price-label" style="font-weight: 600; font-size: 13px;">Ціна (₴):</span><input inputmode="decimal" type="number" step="0.1" class="admin-input" id="set-fuel-price" value="41.9" oninput="autoSaveSettings()"></div>
             <div style="display:flex; justify-content:space-between; margin-bottom:0; align-items: center;"><span style="font-weight: 600; font-size: 13px;">Амортизація ТО (₴/км):</span><input inputmode="decimal" type="number" step="0.1" class="admin-input" id="set-amort" value="0" oninput="autoSaveSettings()"></div>
             <div style="display:flex; justify-content:space-between; margin-bottom:0; align-items: center; margin-top:8px; padding-top:8px; border-top:1px dashed var(--border-color);"><span style="font-weight: 600; font-size: 13px; color: var(--accent-blue);">💰 Резерв на податки ФОП (%):</span><input inputmode="decimal" type="number" step="0.5" class="admin-input" id="set-taxRate" value="5" oninput="autoSaveSettings()"></div>
         </div>
@@ -799,23 +796,27 @@
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 <div>
                     <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Сума до сплати (₴)</label>
-                    <input type="number" inputmode="decimal" id="qi-gross" placeholder="245" class="dlg-input" style="margin-top:0; font-size:22px;">
+                    <input type="number" inputmode="decimal" id="qi-gross" placeholder="1200" class="dlg-input" style="margin-top:0;">
                 </div>
                 <div>
-                    <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Пробіг замовлення (км)</label>
-                    <input type="number" inputmode="decimal" step="0.1" id="qi-km" placeholder="6.5" class="dlg-input" style="margin-top:0; font-size:20px;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Пробіг міста (км)</label>
+                    <input type="number" inputmode="decimal" step="0.1" id="qi-city" placeholder="5.5" class="dlg-input" style="margin-top:0;">
+                </div>
+                <div>
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Пробіг за містом (км)</label>
+                    <input type="number" inputmode="decimal" step="0.1" id="qi-out" placeholder="10.2" class="dlg-input" style="margin-top:0;">
                 </div>
                 <div>
                     <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Оплата</label>
                     <div style="display: flex; gap: 6px;">
-                        <button class="qe-btn" onclick="quickInputSetPayment('cash')" id="qi-cash" style="flex: 1; background: rgba(0,200,150,0.15); color: var(--uklon-green); border: 1px solid rgba(0,200,150,0.35);">💵 Готівка</button>
+                        <button class="qe-btn" onclick="quickInputSetPayment('cash')" id="qi-cash" style="flex: 1; background: rgba(0,217,126,0.15); color: var(--uklon-green); border: 1px solid rgba(0,217,126,0.35);">💵 Готівка</button>
                         <button class="qe-btn" onclick="quickInputSetPayment('card')" id="qi-card" style="flex: 1;">💳 Картка</button>
                     </div>
                 </div>
             </div>
             <div class="dlg-btn-row" style="margin-top: 14px;">
                 <button class="reset-btn" style="flex:1;" onclick="closeQuickInputModal()">Скасувати</button>
-                <button class="save-btn" style="flex:1; margin: 0;" onclick="addQuickInputToShift()">Додати в касу</button>
+                <button class="save-btn" style="flex:1; margin: 0;" onclick="addQuickInputToShift()">Додати</button>
             </div>
         </div>
     </div>
@@ -861,8 +862,8 @@
         let shiftTimerInterval = null;
         let offDays = [];
 
-        const defaultTariffs = { standard: { name: 'Стандарт', icon: 'car-econ', minPrice: 95, minKm: 1.8, perKmCity: 30.00, perKmOut: 45.00, perMin: 3.50, stopPrice: 10, minProfitPerKm: 40 }, comfort: { name: 'Комфорт', icon: 'car-comfort', minPrice: 100, minKm: 1.8, perKmCity: 35.00, perKmOut: 45.00, perMin: 4.00, stopPrice: 15, minProfitPerKm: 40 }, business: { name: 'Бізнес', icon: 'car-business', minPrice: 120, minKm: 1.5, perKmCity: 40.00, perKmOut: 45.00, perMin: 5.00, stopPrice: 15, minProfitPerKm: 40 }, intercity: { name: 'За місто', icon: 'route', minPrice: 100, minKm: 1.5, perKmCity: 30.00, perKmOut: 40.00, perMin: 4.00, stopPrice: 15, minProfitPerKm: 40 } };
-        const defaultExpenses = { comm: 17, type: 'gas', cons: 14, price: 55.9, amort: 0, workMode: 'solo', rentVal: 30, splitPct: 10, taxRate: 5 };
+        const defaultTariffs = { standard: { name: 'Стандарт', icon: 'car-econ', minPrice: 95, minKm: 1.8, perKmCity: 30, perKmOut: 45, perMin: 3.50, stopPrice: 10, minProfitPerKm: 40 }, comfort: { name: 'Комфорт', icon: 'car-comfort', minPrice: 100, minKm: 1.8, perKmCity: 35, perKmOut: 45, perMin: 4.00, stopPrice: 15, minProfitPerKm: 40 }, business: { name: 'Бізнес', icon: 'car-business', minPrice: 120, minKm: 1.5, perKmCity: 40, perKmOut: 45, perMin: 5.00, stopPrice: 15, minProfitPerKm: 40 }, intercity: { name: 'За місто', icon: 'route', minPrice: 100, minKm: 1.5, perKmCity: 30.00, perKmOut: 40.00, perMin: 4.00, stopPrice: 15, minProfitPerKm: 40 } };
+        const defaultExpenses = { comm: 17, type: 'gas', cons: 14, price: 41.9, amort: 0, workMode: 'solo', rentVal: 30, splitPct: 10, taxRate: 5 };
         const defaultGoals = { dailyGoal: 12, dailyDone: 0, dailyGoalOverride: null, plannedShiftHours: 10, date: new Date().toLocaleDateString() };
         const defaultBranding = { done: 0, target: 700, days: 0 };
         const defaultDailyCash = { orders: 0, gross: 0, comm: 0, fuel: 0, extraExp: 0, rent: 0, net: 0, totalKm: 0, date: new Date().toLocaleDateString(), history: [], totalCash: 0, totalCard: 0, shiftActive: false, shiftStart: null, shiftHours: 0, actualFuel: 0, cancelPct: 0, orderMinutes: 0, tips: 0 };
@@ -871,7 +872,7 @@
 
         if (tg) { tg.expand(); tg.ready(); }
 
-        const fmt = (num) => Math.ceil(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        const fmt = (num) => Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
         // Автовиділення тексту при кліку
         document.addEventListener('focusin', function(e) { 
@@ -1087,12 +1088,9 @@
             document.getElementById('quick-input-modal').style.display = 'flex';
             if (prefill) {
                 document.getElementById('qi-gross').value = prefill.price > 0 ? prefill.price : '';
-                const totalKm = (prefill.cityKm || 0) + (prefill.outKm || 0);
-                document.getElementById('qi-km').value = totalKm > 0 ? totalKm : '';
+                document.getElementById('qi-city').value = prefill.cityKm > 0 ? prefill.cityKm : '';
+                document.getElementById('qi-out').value = prefill.outKm > 0 ? prefill.outKm : '';
                 quickInputSetPayment(prefill.isCash === false ? 'card' : 'cash');
-            } else {
-                document.getElementById('qi-gross').value = '';
-                document.getElementById('qi-km').value = '';
             }
             setTimeout(() => {
                 document.getElementById('qi-gross').focus();
@@ -1102,30 +1100,14 @@
 
         // ==== ВСТАВКА З БУФЕРА ОБМІНУ (швидше за OCR, без ручного вводу) ====
         function parseTextForTripData(text) {
-            // Оптимізовано під Uklon / Bolt / Uber скріни
-            let clean = text.replace(/\n/g, ' ').replace(/,/g, '.').replace(/\s+/g, ' ');
-            // Типові фрази Uklon: "До сплати", "Вартість поїздки", "Сума", "Оплата"
-            const pricePatterns = [
-                /(?:до\s*сплати|вартість|сума|оплата|разом|всього|total|price)[:\s]*(\d{1,5}(?:\.\d{1,2})?)/gi,
-                /(\d{1,5}(?:\.\d{1,2})?)\s*(?:₴|грн|г\.?|uah)/gi,
-                /(\d{2,4}(?:\.\d{1,2})?)\s*(?:₴|грн)/gi
-            ];
-            let prices = [];
-            for (const re of pricePatterns) {
-                const found = [...clean.matchAll(re)].map(m => parseFloat(m[1])).filter(p => p >= 30 && p < 15000);
-                prices = prices.concat(found);
-            }
+            const clean = text.replace(/\n/g, ' ').replace(/,/g, '.');
+            const prices = [...clean.matchAll(/(\d{1,5}(?:\.\d{1,3})?)\s*(?:₴|грн|€|\$|uah|usd)/gi)]
+                            .map(m => parseFloat(m[1])).filter(p => p > 0 && p < 10000);
             if (prices.length === 0) return null;
-            // Беремо найбільшу розумну суму (зазвичай "До сплати")
             const targetPrice = Math.max(...prices);
-
-            // Км: "5.2 км", "Відстань 12 км", "12,4 км"
-            const kmMatches = [...clean.matchAll(/(\d{1,3}(?:\.\d{1,2})?)\s*(?:км|km)/gi)]
-                .map(m => parseFloat(m[1])).filter(k => k > 0 && k < 400);
-            const totalKm = kmMatches.length ? Math.max(...kmMatches) : 0;
-
-            const isCash = /готівк|готівкою|cash/i.test(clean) || (!/картк|card|безготів/i.test(clean));
-            return { price: targetPrice, cityKm: totalKm, outKm: 0, isCash };
+            const kmMatches = [...clean.matchAll(/(\d{1,4}(?:\.\d{1,2})?)\s*(?:км|km)/gi)].map(m => parseFloat(m[1]));
+            const isCash = !/картк|card/i.test(clean) || /готівк|cash/i.test(clean);
+            return { price: targetPrice, cityKm: kmMatches[0] || 0, outKm: kmMatches[1] || 0, isCash };
         }
 
         async function pasteFromClipboard() {
@@ -1161,95 +1143,102 @@
             haptic();
             document.getElementById('quick-input-modal').style.display = 'none';
             document.getElementById('qi-gross').value = '';
-            document.getElementById('qi-km').value = '';
+            document.getElementById('qi-city').value = '';
+            document.getElementById('qi-out').value = '';
         }
 
         function quickInputSetPayment(type) {
             haptic();
             quickInputPayment = type;
-            document.getElementById('qi-cash').style.background = type === 'cash' ? 'rgba(0,200,150,0.15)' : 'var(--bg-color)';
-            document.getElementById('qi-cash').style.borderColor = type === 'cash' ? 'rgba(0,200,150,0.35)' : 'var(--border-color)';
+            document.getElementById('qi-cash').style.background = type === 'cash' ? 'rgba(0,217,126,0.15)' : 'var(--bg-color)';
+            document.getElementById('qi-cash').style.borderColor = type === 'cash' ? 'rgba(0,217,126,0.35)' : 'var(--border-color)';
             document.getElementById('qi-card').style.background = type === 'card' ? 'rgba(31,122,224,0.15)' : 'var(--bg-color)';
             document.getElementById('qi-card').style.borderColor = type === 'card' ? 'rgba(31,122,224,0.35)' : 'var(--border-color)';
         }
 
         function addQuickInputToShift() {
             haptic();
-            const gross = Math.ceil(parseFloat(document.getElementById('qi-gross').value) || 0);
-            const tripKm = parseFloat(document.getElementById('qi-km').value) || 0;
+            const gross = parseFloat(document.getElementById('qi-gross').value) || 0;
+            const cityKm = parseFloat(document.getElementById('qi-city').value) || 0;
+            const outKm = parseFloat(document.getElementById('qi-out').value) || 0;
 
             if (gross === 0) {
                 notify('Введіть суму', 'error');
                 return;
             }
 
-            // Прямий розрахунок витрат від суми та км (без переходу на Тариф)
-            const comm = gross * (expenses.comm / 100);
-            const fuel = (tripKm / 100) * expenses.cons * expenses.price;
-            const amort = tripKm * (expenses.amort || 0);
-            let rentCost = 0;
-            if (expenses.workMode === 'rent') rentCost = expenses.rentVal;
-            else if (expenses.workMode === 'split') rentCost = (gross - comm) * (expenses.splitPct / 100);
-            const net = gross - comm - fuel - amort - rentCost;
+            // Встановити кілометраж і скинути коефіцієнт/доплату для чистого розрахунку бази
+            document.getElementById('inp-dist').value = cityKm || 0;
+            document.getElementById('slider-dist').value = Math.min(cityKm || 0, 50);
+            document.getElementById('inp-distOut').value = outKm || 0;
+            document.getElementById('slider-distOut').value = Math.min(outKm || 0, 250);
+            document.getElementById('inp-coef').value = '1.0';
+            document.getElementById('slider-coef').value = 1.0;
+            document.getElementById('inp-clientBonus').value = 0;
+            document.getElementById('slider-clientBonus').value = 0;
 
-            dailyCashData.orders += 1;
-            dailyCashData.gross += gross;
-            dailyCashData.comm += comm;
-            dailyCashData.fuel += fuel;
-            dailyCashData.extraExp += amort;
-            dailyCashData.rent += rentCost;
-            dailyCashData.net += net;
-            dailyCashData.totalKm += tripKm;
-            if (quickInputPayment === 'cash') dailyCashData.totalCash += gross;
-            else dailyCashData.totalCard += gross;
+            recalc();
 
-            const timeStr = new Date().getHours().toString().padStart(2, '0') + ':' + new Date().getMinutes().toString().padStart(2, '0');
-            dailyCashData.history.unshift({
-                id: Date.now(), time: timeStr, gross, net, km: tripKm,
-                pay: quickInputPayment, comm, fuel, extraExp: amort, rent: rentCost, tips: 0
-            });
-            localStorage.setItem('taxi_daily_cash_data_v22', JSON.stringify(dailyCashData));
+            // Різниця між введеною сумою і розрахованою базою йде в "Доплата/Чайові", щоб сума збіглась з реальним чеком
+            const calculatedPrice = Math.round(parseFloat(document.getElementById('res-total').innerText.replace(/[^\d.-]/g, ''))) || 0;
+            const diff = Math.round(gross - calculatedPrice);
+            if (diff !== 0) {
+                document.getElementById('inp-clientBonus').value = diff;
+                document.getElementById('slider-clientBonus').value = Math.max(0, Math.min(diff, 100));
+                recalc();
+            }
 
-            // Синхронізація цілей
-            goals.dailyDone += 1;
-            brandingData.done += 1;
-            document.getElementById('inp-daily-done').value = goals.dailyDone;
-            document.getElementById('brand-done').value = brandingData.done;
-            localStorage.setItem('taxi_goals_v22', JSON.stringify(goals));
-            localStorage.setItem('taxi_branding_v22', JSON.stringify(brandingData));
+            // Встановити оплату
+            setPaymentMode(quickInputPayment);
 
             closeQuickInputModal();
-            updateCashPageUI();
-            calcBranding();
-            notify(`✅ Додано ${fmt(gross)} ₴ · ${tripKm.toFixed(1)} км · чистими ${fmt(net)} ₴`, 'success');
+            switchTab('calc');
+            notify(`Додано: ${fmt(gross)} ₴. Перевірте деталі й натисніть «Зафіксувати»`, 'success');
         }
 
         // ==== ПОКРАЩЕНА OCR З FALLBACK ====
         async function handleFile(e) {
             const files = e.target.files;
             if (!files || files.length === 0) return;
-
-            notify(`⏳ Аналізую ${files.length > 1 ? files.length + ' скрінів' : 'скрін Uklon'}...`, 'info');
+            
+            const btn = document.getElementById('btn-import');
+            const originalText = btn.innerText;
+            btn.innerText = `⏳ Аналізую ${files.length} фото...`;
+            btn.disabled = true;
 
             let successCount = 0;
-            const useSimpleMode = files.length > 1;
+            const useSimpleMode = files.length > 1;  // Для багатьох - простий режим швидше
 
             for (let i = 0; i < files.length; i++) {
                 try {
+                    btn.innerText = `⏳ ${i+1}/${files.length}...`;
+                    
                     let result = null;
+
                     if (useSimpleMode) {
+                        // Простий режим: без Tesseract, просто спроба витягнути цифри з метаданих
                         result = await extractFromImageSimple(files[i]);
                     } else {
+                        // Режим з Tesseract (точніше, але повільніше)
                         result = await extractFromImageOCR(files[i]);
+                        
+                        // Якщо Tesseract не спрацював - fallback на простий режим
                         if (!result || !result.price) {
                             result = await extractFromImageSimple(files[i]);
                         }
                     }
-                    if (!result || result.price === 0) continue;
+
+                    if (!result || result.price === 0) {
+                        continue;  // Пропустити, якщо не вдалось розпізнати
+                    }
+
+                    // Обробити результат
                     processOCRResult(result, files.length > 1);
                     successCount++;
+
                 } catch(err) {
                     console.error("OCR помилка:", err);
+                    // Продовжити до наступного файлу
                 }
             }
 
@@ -1262,11 +1251,13 @@
                 updateCashPageUI();
                 calcBranding();
                 switchTab('cash');
-                notify(`✅ Успішно оброблено: ${successCount}`, 'success');
+                notify(`✅ Успішно обробленно: ${successCount}`, 'success');
             } else if (successCount === 0) {
-                notify("❌ Не вдалось розпізнати. Спробуй ⚡ Швидкий ввід або вставку з буфера", 'error');
+                notify("❌ Не вдалось розпізнати суми. Спробуйте ручний ввід (⚡ Швидкий ввід)", 'error');
             }
 
+            btn.innerText = originalText;
+            btn.disabled = false;
             document.getElementById('screenshot-input').value = "";
         }
 
@@ -1284,18 +1275,42 @@
             });
         }
 
-        // OCR режим з Tesseract (оптимізовано під скріни Uklon)
+        // OCR режим з Tesseract
         async function extractFromImageOCR(file) {
             try {
                 const { data: { text } } = await Tesseract.recognize(file, 'ukr+eng');
-                // Переиспользуємо покращений парсер (Uklon / Bolt / Uber)
-                const parsed = parseTextForTripData(text);
-                if (!parsed) return null;
+                
+                // Агресивна очищення тексту
+                let textClean = text.replace(/\n/g, ' ')
+                                    .replace(/o|о|q|@|Q|O/gi, '0')  // Заміна букв на цифри
+                                    .replace(/l|L|І|і|ї/gi, '1')    // Заміна букв на 1
+                                    .replace(/S|s|З|з|Ѕ/gi, '5')    // Заміна на 5
+                                    .replace(/,/g, '.')             // Запятая на крапка
+                                    .toLowerCase();
+
+                // Витягування сум (агресивно)
+                const prices = [...textClean.matchAll(/(\d{1,5}(?:\.\d{1,3})?)\s*(?:₴|грн|г|з|€|\$|uah|usd)/gi)]
+                                .map(m => parseFloat(m[1]))
+                                .filter(p => p > 0 && p < 10000);  // Фільтр: реальна ціна
+
+                if (prices.length === 0) {
+                    return null;
+                }
+
+                // Беремо найбільшу суму (це, ймовірно, оборот)
+                const targetPrice = Math.max(...prices);
+
+                // Витягування км
+                const kmMatches = [...textClean.matchAll(/(\d{1,4}(?:\.\d{1,2})?)\s*(?:км|km)/gi)]
+                                    .map(m => parseFloat(m[1]));
+
+                const cityKm = kmMatches[0] || 0;
+                const outKm = kmMatches[1] || 0;
+
                 return {
-                    price: parsed.price,
-                    cityKm: parsed.cityKm || 0,
-                    outKm: parsed.outKm || 0,
-                    isCash: parsed.isCash,
+                    price: targetPrice,
+                    cityKm: cityKm,
+                    outKm: outKm,
                     raw: text
                 };
             } catch(err) {
@@ -1307,12 +1322,12 @@
         function processOCRResult(result, isBatch) {
             if (!result) return;
 
-            const { price, cityKm, outKm, isCash } = result;
-            const totalKm = (cityKm || 0) + (outKm || 0);
+            const { price, cityKm, outKm } = result;
 
             if (isBatch) {
-                // Пакетна обробка: одразу в касу
+                // Пакетна обробка: додати до каси
                 const commCost = price * (expenses.comm / 100);
+                const totalKm = cityKm + outKm;
                 const fuelCost = (totalKm / 100) * expenses.cons * expenses.price;
                 const amortCost = totalKm * (expenses.amort ?? 0);
                 let rentCost = 0; if (expenses.workMode === 'rent') rentCost = expenses.rentVal; else if (expenses.workMode === 'split') rentCost = (price - commCost) * (expenses.splitPct / 100);
@@ -1334,14 +1349,29 @@
                 goals.dailyDone += 1;
                 brandingData.done += 1;
             } else {
-                // Одиночний скрін → відкриваємо Швидкий ввід з уже підтягнутими даними (найшвидший шлях)
-                openQuickInputModal({
-                    price: price,
-                    cityKm: totalKm,
-                    outKm: 0,
-                    isCash: isCash !== false
-                });
-                notify(`Розпізнано: ${fmt(price)} ₴ · ${totalKm.toFixed(1)} км — перевір і додай`, 'success');
+                // Одиночна обробка: встановити на калькулятор
+                document.getElementById('inp-dist').value = cityKm.toFixed(1);
+                document.getElementById('slider-dist').value = cityKm.toFixed(1);
+                document.getElementById('inp-distOut').value = outKm.toFixed(1);
+                document.getElementById('slider-distOut').value = outKm.toFixed(1);
+                document.getElementById('inp-clientBonus').value = 0;
+                document.getElementById('slider-clientBonus').value = 0;
+                document.getElementById('inp-coef').value = '1.0';
+                document.getElementById('slider-coef').value = 1.0;
+
+                recalc();
+
+                const calculatedPrice = Math.ceil(parseFloat(document.getElementById('res-total').innerText.replace(/ /g,'').replace('₴',''))) || 0;
+                if (price > calculatedPrice) {
+                    const diff = price - calculatedPrice;
+                    document.getElementById('inp-clientBonus').value = diff;
+                    document.getElementById('slider-clientBonus').value = diff;
+                    recalc();
+                }
+
+                setPaymentMode('cash');
+                switchTab('calc');
+                notify("✅ Розпізнано. Перевірте суму на вкладці Тариф", 'success');
             }
         }
 
@@ -2000,7 +2030,7 @@
                 const diffPct = ((thisWeekTotal - lastWeekTotal) / lastWeekTotal) * 100;
                 const up = diffPct >= 0;
                 badge.innerText = (up ? '▲ +' : '▼ ') + Math.abs(diffPct).toFixed(0) + '%';
-                badge.style.background = up ? 'rgba(0,200,150,0.15)' : 'rgba(255,92,87,0.15)';
+                badge.style.background = up ? 'rgba(0,217,163,0.15)' : 'rgba(255,92,87,0.15)';
                 badge.style.color = up ? 'var(--uklon-green)' : 'var(--accent-danger)';
             } else {
                 badge.innerText = '—';
@@ -2143,7 +2173,7 @@
                         label: 'Чистий дохід (₴)',
                         data: data,
                         borderColor: getComputedStyle(document.documentElement).getPropertyValue('--uklon-green'),
-                        backgroundColor: 'rgba(0, 200, 150, 0.1)',
+                        backgroundColor: 'rgba(0, 217, 126, 0.1)',
                         borderWidth: 3,
                         fill: true,
                         tension: 0.4,
@@ -2324,9 +2354,9 @@
             const enabled = localStorage.getItem('taxi_pin_enabled_v1') === '1';
             const btn = document.getElementById('pin-toggle-btn');
             btn.innerText = enabled ? '🔒 Увімкнено' : 'Вимкнено';
-            btn.style.background = enabled ? 'rgba(0,200,150,0.15)' : 'var(--bg-color)';
+            btn.style.background = enabled ? 'rgba(0,217,163,0.15)' : 'var(--bg-color)';
             btn.style.color = enabled ? 'var(--uklon-green)' : 'var(--text-color)';
-            btn.style.borderColor = enabled ? 'rgba(0,200,150,0.35)' : 'var(--border-color)';
+            btn.style.borderColor = enabled ? 'rgba(0,217,163,0.35)' : 'var(--border-color)';
             document.getElementById('change-pin-btn').style.display = enabled ? 'block' : 'none';
         }
 
@@ -2404,7 +2434,7 @@
                     liveStatus.style.background = 'rgba(255,92,87,0.1)'; liveStatus.style.borderColor = 'rgba(255,92,87,0.3)';
                     liveStatus.innerHTML = `⏰ Запланований час зміни вичерпано, а ще залишилось ${remainToday} зам. Продовжуєте роботу?`;
                 } else if (projectedTotal >= dailyGoal) {
-                    liveStatus.style.background = 'rgba(0,200,150,0.1)'; liveStatus.style.borderColor = 'rgba(0,200,150,0.3)';
+                    liveStatus.style.background = 'rgba(0,217,163,0.1)'; liveStatus.style.borderColor = 'rgba(0,217,163,0.3)';
                     liveStatus.innerHTML = `🚗 Працюєте ${hoursWorked.toFixed(1)} год, темп ${rate.toFixed(1)} зам/год. За таким темпом встигнете ~${Math.round(projectedTotal)} до кінця зміни (${hoursLeft.toFixed(1)} год лишилось) — ціль буде виконано ✅`;
                 } else {
                     const neededRate = remainToday / hoursLeft;
@@ -2515,7 +2545,7 @@
         function renderTariffIconGrid() {
             const grid = document.getElementById('tm-icon-grid');
             grid.innerHTML = TARIFF_ICONS.map(icon => `
-                <button onclick="selectTariffIcon('${icon}')" class="tm-icon-btn" style="padding:9px 0; border-radius:8px; border:1px solid ${icon === tariffModalSelectedIcon ? 'var(--accent-color)' : 'var(--border-color)'}; background:${icon === tariffModalSelectedIcon ? 'rgba(0,200,150,0.15)' : 'var(--bg-color)'}; color:${icon === tariffModalSelectedIcon ? 'var(--accent-color)' : 'var(--text-color)'}; cursor:pointer; display:flex; align-items:center; justify-content:center;"><span style="width:19px; height:19px; display:flex;">${ICONS[icon] || ''}</span></button>
+                <button onclick="selectTariffIcon('${icon}')" class="tm-icon-btn" style="padding:9px 0; border-radius:8px; border:1px solid ${icon === tariffModalSelectedIcon ? 'var(--accent-color)' : 'var(--border-color)'}; background:${icon === tariffModalSelectedIcon ? 'rgba(0,217,163,0.15)' : 'var(--bg-color)'}; color:${icon === tariffModalSelectedIcon ? 'var(--accent-color)' : 'var(--text-color)'}; cursor:pointer; display:flex; align-items:center; justify-content:center;"><span style="width:19px; height:19px; display:flex;">${ICONS[icon] || ''}</span></button>
             `).join('');
         }
 
@@ -2532,7 +2562,7 @@
 
             if (tariffModalMode === 'add') {
                 const key = 'custom_' + Date.now();
-                tariffs[key] = { name: name, icon: tariffModalSelectedIcon, minPrice: 95, minKm: 1.8, perKmCity: 30.00, perKmOut: 45.00, perMin: 3.50, stopPrice: 10, minProfitPerKm: 40 };
+                tariffs[key] = { name: name, icon: tariffModalSelectedIcon, minPrice: 90, minKm: 1.6, perKmCity: 16.30, perKmOut: 16.80, perMin: 3.50, stopPrice: 10, minProfitPerKm: 40 };
                 localStorage.setItem('taxi_tariffs_v22', JSON.stringify(tariffs));
                 renderSettings(); renderCarSelector();
                 notify(`Тариф «${name}» додано`, 'success');
@@ -2649,5 +2679,881 @@
     </script>    <div id="kb-done-bar" style="display:none; position:fixed; left:0; right:0; bottom:0; z-index:9999; background:var(--card-bg); border-top:1px solid var(--border-color); padding:8px 12px calc(8px + env(safe-area-inset-bottom)) 12px; justify-content:flex-end; box-shadow: 0 -4px 14px rgba(0,0,0,0.15);">
         <button onclick="dismissKeyboard()" style="background:var(--accent-color); color:#06231C; border:none; border-radius:8px; padding:9px 20px; font-weight:800; font-size:14px; cursor:pointer;">✓ Готово</button>
     </div>
+<!-- ===== DriverHub: ВСІ ЗМІНИ В ОДНОМУ БЛОЦІ. Вставити ПЕРЕД </body>, після останнього </script> ===== -->
+<!-- ===== DriverHub UPGRADE: вставити ПЕРЕД </body> (після останнього </script>) ===== -->
+<style>
+/* ---------- Нова палітра ---------- */
+html[data-theme="dark"]{--bg-color:#0E1116;--card-bg:#171B22;--border-color:rgba(255,255,255,.06);--text-color:#F1F3F6;--text-muted:#8A93A3;--accent-color:#2DE2B0;--accent-success:#2DE2B0;--uklon-green:#2DE2B0;--accent-danger:#FF6B64;--accent-blue:#5AA9FF;--glass:rgba(23,27,34,.82)}
+html[data-theme="light"]{--bg-color:#EEF1F4;--card-bg:#FFFFFF;--border-color:rgba(15,23,32,.07);--text-color:#101820;--text-muted:#5B6674;--accent-color:#00A57F;--accent-success:#12A150;--uklon-green:#00A57F;--accent-danger:#DC3F38;--accent-blue:#1C74E4;--glass:rgba(255,255,255,.84)}
+:root{--radius-lg:20px;--radius-md:14px;--radius-sm:10px}
+body{background:radial-gradient(120% 60% at 50% -10%,color-mix(in srgb,var(--accent-color) 9%,transparent),transparent 60%),var(--bg-color);background-attachment:fixed}
+
+/* ---------- Картки та вкладки ---------- */
+.card{border-radius:var(--radius-lg);padding:14px 16px;box-shadow:0 1px 0 rgba(255,255,255,.03) inset,var(--shadow-soft)}
+.card-title{letter-spacing:.06em;font-size:10.5px}
+.tabs{border-radius:18px;padding:4px;gap:2px}
+.tab-btn{border-radius:14px;padding:8px 1px;font-size:9.5px}
+.tab-btn.active{background:var(--accent-color);color:#04201A;box-shadow:0 6px 16px -4px color-mix(in srgb,var(--accent-color) 55%,transparent)}
+.car-card{border-radius:999px;padding:8px 15px}
+.car-card.active{box-shadow:0 8px 18px -6px color-mix(in srgb,var(--accent-color) 60%,transparent)}
+
+/* ---------- Нижня панель прибутку ---------- */
+.sticky-summary{background:var(--glass)!important;-webkit-backdrop-filter:blur(22px) saturate(1.4);backdrop-filter:blur(22px) saturate(1.4);border-radius:26px 26px 0 0}
+.summary-mini-title #res-net{font-size:34px;letter-spacing:-1px}
+.save-btn{border-radius:16px;padding:15px;background:linear-gradient(135deg,var(--accent-color),color-mix(in srgb,var(--accent-color) 70%,#0a7))!important;color:#03231B;box-shadow:0 10px 22px -8px color-mix(in srgb,var(--accent-color) 70%,transparent)}
+.save-btn-alt,.save-btn[style*="background"]{background-image:none!important}
+
+/* ---------- Вердикт поїздки ---------- */
+#verdict-chip{display:none;margin-top:6px;padding:6px 10px;border-radius:12px;font-size:12px;font-weight:800;line-height:1.35;max-width:230px}
+#verdict-chip.v-good{background:color-mix(in srgb,var(--accent-color) 16%,transparent);color:var(--accent-color)}
+#verdict-chip.v-mid{background:rgba(255,159,10,.16);color:#FF9F0A}
+#verdict-chip.v-bad{background:rgba(255,107,100,.16);color:var(--accent-danger)}
+</style>
+
+<script>
+/* ---------- Розумний вердикт: брати / на межі / відмовитись + мін. ціна для порогу ₴/км ---------- */
+(function () {
+  const host = document.querySelector('.summary-mini-title');
+  if (!host) return;
+  const chip = document.createElement('div');
+  chip.id = 'verdict-chip';
+  host.appendChild(chip);
+
+  const baseRecalc = recalc;                 // оригінальна функція з основного скрипта
+  recalc = function () {
+    baseRecalc.apply(this, arguments);
+    try { updateVerdict(); } catch (e) { chip.style.display = 'none'; }
+  };
+
+  function updateVerdict() {
+    const L = lastCalc;
+    if (!L || !L.totalKm || L.totalKm <= 0) { chip.style.display = 'none'; return; }
+
+    const minProfit = tariffs[currentClass]?.minProfitPerKm ?? 40;
+    const comm  = (expenses.comm || 0) / 100;
+    const split = expenses.workMode === 'split' ? (expenses.splitPct || 0) / 100 : 0;
+    const rent  = expenses.workMode === 'rent'  ? (expenses.rentVal  || 0)       : 0;
+    const factor = (1 - comm) * (1 - split);
+    if (factor <= 0) { chip.style.display = 'none'; return; }
+
+    // Скільки треба взяти з клієнта, щоб вийти на цільові ₴/км чистими
+    const needGross = (minProfit * L.totalKm + L.fuelCost + L.amortCost + L.extraExp + rent) / factor;
+    const effKm = L.netIncome / L.totalKm;
+
+    chip.style.display = 'block';
+    if (effKm >= minProfit) {
+      chip.className = 'v-good'; chip.id = 'verdict-chip';
+      chip.innerText = '✅ Вигідно · запас ' + fmt(L.finalTotal - needGross) + ' ₴';
+    } else if (effKm >= minProfit * 0.7) {
+      chip.className = 'v-mid'; chip.id = 'verdict-chip';
+      chip.innerText = '⚠️ На межі · бажано від ' + fmt(needGross) + ' ₴';
+    } else {
+      chip.className = 'v-bad'; chip.id = 'verdict-chip';
+      chip.innerText = '❌ Невигідно · треба від ' + fmt(needGross) + ' ₴';
+    }
+    chip.style.display = 'block';
+  }
+  recalc();
+})();
+</script>
+
+<!-- ===== DriverHub: НОВА КАСА. Вставити ПЕРЕД </body>, ПІСЛЯ останнього </script> (і після upgrade-блоку, якщо він є) ===== -->
+<style>
+.ch-lbl{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
+.ch-hero{border-radius:24px;padding:16px;margin-bottom:10px;border:1px solid var(--border-color);background:linear-gradient(160deg,color-mix(in srgb,var(--accent-color) 14%,var(--card-bg)),var(--card-bg) 62%);box-shadow:var(--shadow-soft)}
+.ch-hero-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ch-pill{font-size:10.5px;font-weight:800;padding:4px 10px;border-radius:999px;background:var(--bg-color);color:var(--text-muted);white-space:nowrap}
+.ch-pill.on{background:color-mix(in srgb,var(--accent-color) 18%,transparent);color:var(--accent-color)}
+.ch-net{font-size:42px;font-weight:800;letter-spacing:-1.5px;margin:6px 0 2px;font-variant-numeric:tabular-nums;color:var(--accent-color);line-height:1.05}
+.ch-net.neg{color:var(--accent-danger)}
+.ch-sub{font-size:12px;font-weight:600;color:var(--text-muted)}
+.ch-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.ch-kpis>div{background:var(--bg-color);border-radius:14px;padding:10px 6px;text-align:center}
+.ch-kpis b{display:block;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+.ch-kpis span{font-size:9.5px;font-weight:700;text-transform:uppercase;color:var(--text-muted)}
+.ch-card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:20px;padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow-soft)}
+.ch-timer{display:flex;justify-content:space-between;align-items:center}
+.ch-time{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+.ch-btn-shift{border:none;border-radius:14px;padding:12px 18px;font-size:13px;font-weight:800;cursor:pointer}
+.ch-btn-shift.start{background:var(--accent-color);color:#04201A}
+.ch-btn-shift.stop{background:rgba(255,107,100,.14);color:var(--accent-danger)}
+.ch-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.ch-act{display:flex;align-items:center;justify-content:center;gap:6px;padding:13px 6px;border-radius:14px;border:1px solid var(--border-color);background:var(--card-bg);color:var(--text-color);font-size:12.5px;font-weight:700;cursor:pointer;box-shadow:var(--shadow-soft)}
+.ch-act.primary{background:var(--accent-blue);border-color:transparent;color:#fff;grid-column:span 2;font-size:14px;padding:15px}
+.ch-chips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+.ch-chip{padding:10px 2px;border-radius:12px;border:1px solid var(--border-color);background:var(--card-bg);color:var(--text-color);font-size:11px;font-weight:700;cursor:pointer}
+.ch-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13px;font-weight:600;border-bottom:1px solid var(--border-color)}
+.ch-row:last-child{border-bottom:none}
+.ch-row span:first-child{color:var(--text-muted)}
+.ch-row b{font-variant-numeric:tabular-nums}
+.ch-row.total{font-size:16px;padding-top:12px}
+.ch-row.total span:first-child{color:var(--text-color);font-weight:800}
+.neg{color:var(--accent-danger)}.pos{color:var(--accent-color)}.warn{color:#FF9F0A}
+.ch-h{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border-color)}
+.ch-h:last-child{border-bottom:none}
+.ch-h-ic{width:34px;height:34px;border-radius:11px;background:var(--bg-color);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.ch-h-m{flex:1;min-width:0}.ch-h-m b{display:block;font-size:13px}.ch-h-m span{font-size:11px;color:var(--text-muted)}
+.ch-h-v{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+.ch-det summary{cursor:pointer;font-size:12px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;list-style:none}
+.ch-det summary::-webkit-details-marker{display:none}
+.ch-note{font-size:11px;line-height:1.4;color:var(--text-muted);margin-top:8px}
+</style>
+
+<script>
+(function () {
+  const chm = n => Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  const $ = id => document.getElementById(id);
+  const nowStr = () => { const t = new Date(); return String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0'); };
+  const persist = () => localStorage.setItem('taxi_daily_cash_data_v22', JSON.stringify(dailyCashData));
+
+  /* ---------- Розмітка ---------- */
+  $('page-cash').innerHTML = `
+  <div class="ch-hero">
+    <div class="ch-hero-top"><span class="ch-lbl">Чистий прибуток сьогодні</span><span class="ch-pill" id="ch-state">Зміна не розпочата</span></div>
+    <div class="ch-net" id="cash-net">0 ₴</div>
+    <div class="ch-sub" id="ch-sub">0 поїздок · 0 км</div>
+    <div class="ch-kpis">
+      <div><b id="cash-gross">0 ₴</b><span>Оборот</span></div>
+      <div><b id="cash-hourly-rate">—</b><span>₴ / год</span></div>
+      <div><b id="ch-perkm">—</b><span>₴ / км</span></div>
+    </div>
+  </div>
+
+  <div class="ch-card ch-timer">
+    <div><span class="ch-lbl">На лінії</span><div class="ch-time" id="shift-timer-display">00:00</div></div>
+    <button class="ch-btn-shift start" id="btn-shift-toggle" onclick="toggleShiftTimer()">▶ Почати зміну</button>
+  </div>
+
+  <div class="ch-actions">
+    <button class="ch-act primary" id="btn-import" onclick="openQuickInputModal()">⚡ Швидкий ввід поїздки</button>
+    <button class="ch-act" onclick="pasteFromClipboard()">📋 З буфера</button>
+    <button class="ch-act" id="ch-ocr-btn" onclick="processScreenshot()">📸 Чек (OCR)</button>
+  </div>
+  <input type="file" id="screenshot-input" accept="image/*" multiple style="display:none" onchange="handleFile(event)">
+
+  <div class="ch-chips">
+    <button class="ch-chip" onclick="addFuelPurchase()">⛽ Заправка</button>
+    <button class="ch-chip" onclick="addExpense('Мийка')">🧽 Мийка</button>
+    <button class="ch-chip" onclick="addExpense('Перекус')">🍔 Перекус</button>
+    <button class="ch-chip" onclick="addExpense('Інше')">➕ Інше</button>
+  </div>
+
+  <div class="ch-card">
+    <div class="ch-lbl" style="margin-bottom:6px">Підсумок зміни</div>
+    <div class="ch-row"><span>Оборот</span><b id="cash-gross2">0 ₴</b></div>
+    <div class="ch-row"><span>Комісія служби</span><b class="neg" id="cash-comm">−0 ₴</b></div>
+    <div class="ch-row"><span id="cash-fuel-label">Пальне (розрахунок)</span><b class="warn" id="cash-fuel">−0 ₴</b></div>
+    <div class="ch-row" id="row-cash-extraExp"><span>Витрати й амортизація</span><b class="neg" id="cash-extraExp">−0 ₴</b></div>
+    <div class="ch-row" id="row-cash-rent"><span>Оренда / парк</span><b class="neg" id="cash-rent">−0 ₴</b></div>
+    <div class="ch-row" id="row-cash-tips"><span>🎁 З обороту — чайові</span><b class="pos" id="cash-tips">0 ₴</b></div>
+    <div class="ch-row total"><span>Чистий прибуток</span><b class="pos" id="cash-net2">0 ₴</b></div>
+  </div>
+
+  <div class="ch-card">
+    <div class="ch-lbl" style="margin-bottom:6px">Розрахунки</div>
+    <div class="ch-row"><span>💵 Готівка в руках</span><b id="cash-money-cash">0 ₴</b></div>
+    <div class="ch-row"><span>💳 Безготівка (у сервісу)</span><b id="cash-money-card">0 ₴</b></div>
+    <div class="ch-row"><span id="cash-balance-label">🏦 Баланс із сервісом</span><b id="cash-balance">0 ₴</b></div>
+    <div class="ch-row" id="row-cash-taxreserve"><span>💰 Відкласти на податки</span><b class="pos" id="cash-taxreserve">0 ₴</b></div>
+    <div class="ch-note">Баланс = безготівка мінус комісія й оренда. Плюс — сервіс винен вам, мінус — ви винні сервісу.</div>
+  </div>
+
+  <div class="ch-card">
+    <div class="ch-lbl" style="margin-bottom:4px">Історія · <span id="cash-orders-count">0</span></div>
+    <div id="cash-history-list"></div>
+    <div id="cash-empty-state" class="empty-state"><span class="empty-icon">🧾</span><div class="empty-title">Поки що порожньо</div><div class="empty-sub">Додайте першу поїздку через «Швидкий ввід» або вкладку «Тариф»</div></div>
+  </div>
+
+  <div class="ch-card ch-det"><details>
+    <summary>📊 Дані сервісу (вручну)</summary>
+    <div class="ch-row"><span>Час за замовленнями (хв)</span><input inputmode="decimal" type="number" class="admin-input" id="inp-order-minutes" value="0" oninput="manualServiceStatsInput()"></div>
+    <div class="ch-row"><span>Скасовані (%)</span><input inputmode="decimal" type="number" step="0.1" class="admin-input" id="inp-cancel-pct" value="0" oninput="manualServiceStatsInput()"></div>
+    <div class="ch-note">Додаток не рахує ці показники сам — впишіть зі статистики Uklon/Bolt/Uber, вони потраплять в архів.</div>
+  </details></div>
+
+  <button class="ch-act" style="width:100%;margin-bottom:8px" onclick="shareReport()">📤 Поділитися звітом</button>
+  <button class="reset-btn" onclick="resetDailyCashClick()">Завершити зміну (зберегти в архів і обнулити)</button>`;
+
+  /* ---------- Ядро розрахунків ---------- */
+  // Єдине джерело правди: пальне = факт заправок, якщо вони є, інакше розрахунок. Це прибирає подвійний облік.
+  function chNet() {
+    const d = dailyCashData, fuel = d.actualFuel > 0 ? d.actualFuel : d.fuel;
+    return d.gross - d.comm - fuel - d.extraExp - d.rent;
+  }
+  function chHours() {
+    const d = dailyCashData;
+    return ((d.shiftAccMs || 0) + (d.shiftActive && d.shiftStart ? Date.now() - d.shiftStart : 0)) / 3600000;
+  }
+  function chTimerText() {
+    const mins = Math.floor(chHours() * 60);
+    $('shift-timer-display').innerText = String(Math.floor(mins / 60)).padStart(2, '0') + ':' + String(mins % 60).padStart(2, '0');
+  }
+
+  /* ---------- Таймер (з паузами: перерви не рахуються) ---------- */
+  toggleShiftTimer = function () {
+    haptic(); const d = dailyCashData;
+    if (d.shiftActive) { d.shiftAccMs = (d.shiftAccMs || 0) + (Date.now() - d.shiftStart); d.shiftStart = null; d.shiftActive = false; clearInterval(shiftTimerInterval); }
+    else { d.shiftActive = true; d.shiftStart = Date.now(); clearInterval(shiftTimerInterval); shiftTimerInterval = setInterval(updateShiftTimerUI, 30000); }
+    d.shiftHours = chHours(); persist(); updateCashPageUI();
+  };
+  updateShiftTimerUI = function () {
+    dailyCashData.shiftHours = chHours(); chTimerText();
+    if ($('page-cash').classList.contains('active')) updateCashPageUI();
+    if ($('page-branding').classList.contains('active')) calcBranding();
+  };
+
+  /* ---------- Додавання поїздки / витрат ---------- */
+  function chAddTrip(p) {
+    const d = dailyCashData, gross = Math.round(p.price), km = (p.cityKm || 0) + (p.outKm || 0);
+    const comm = gross * expenses.comm / 100, fuel = km / 100 * expenses.cons * expenses.price, amort = km * (expenses.amort || 0);
+    let rent = 0;
+    if (expenses.workMode === 'rent') rent = expenses.rentVal; else if (expenses.workMode === 'split') rent = (gross - comm) * expenses.splitPct / 100;
+    const net = gross - comm - fuel - amort - rent, pay = p.isCash === false ? 'card' : 'cash';
+    d.orders++; d.gross += gross; d.comm += comm; d.fuel += fuel; d.extraExp += amort; d.rent += rent; d.totalKm += km;
+    if (pay === 'cash') d.totalCash += gross; else d.totalCard += gross;
+    d.history.unshift({ id: Date.now() + Math.random(), time: nowStr(), gross, net, km, pay, comm, fuel, extraExp: amort, rent, tips: 0 });
+    goals.dailyDone++; brandingData.done++;
+  }
+  function chSaveAll() {
+    persist(); localStorage.setItem('taxi_goals_v22', JSON.stringify(goals)); localStorage.setItem('taxi_branding_v22', JSON.stringify(brandingData));
+    $('inp-daily-done').value = goals.dailyDone; $('brand-done').value = brandingData.done; updateCashPageUI(); calcBranding();
+  }
+  addFuelPurchase = async function () {
+    haptic(); const v = parseFloat(String(await promptDialog('Скільки залили на заправці (₴)?', '')).replace(',', '.'));
+    if (!(v > 0)) { if (!isNaN(v)) notify('Введіть коректну суму', 'error'); return; }
+    dailyCashData.actualFuel += v;
+    dailyCashData.history.unshift({ id: Date.now(), time: nowStr(), gross: 0, net: -v, km: 0, pay: 'expense', name: '⛽ Заправка', comm: 0, fuel: 0, extraExp: 0, rent: 0, actualFuel: v });
+    persist(); updateCashPageUI(); notify('Заправку додано', 'success');
+  };
+  addExpense = async function (name) {
+    haptic(); const raw = await promptDialog(`Сума витрат: ${name} (₴)`, '');
+    if (raw === null) return; const v = parseFloat(String(raw).replace(',', '.'));
+    if (!(v > 0)) { notify('Введіть коректну суму', 'error'); return; }
+    dailyCashData.extraExp += v;
+    dailyCashData.history.unshift({ id: Date.now(), time: nowStr(), gross: 0, net: -v, km: 0, pay: 'expense', name, comm: 0, fuel: 0, extraExp: v, rent: 0 });
+    persist(); updateCashPageUI(); notify('Витрату додано', 'success');
+  };
+
+  /* ---------- OCR: одне фото → перевірка у «Швидкому вводі», кілька → додаються одразу ---------- */
+  handleFile = async function (e) {
+    const files = [...e.target.files]; if (!files.length) return;
+    if (typeof Tesseract === 'undefined') { notify('OCR недоступний офлайн. Використайте «Швидкий ввід»', 'error'); e.target.value = ''; return; }
+    const btn = $('ch-ocr-btn'), old = btn.innerHTML; btn.disabled = true; let ok = 0, last = null;
+    for (let i = 0; i < files.length; i++) {
+      btn.innerHTML = `⏳ ${i + 1}/${files.length}`;
+      try {
+        const { data: { text } } = await Tesseract.recognize(files[i], 'ukr+eng'); const p = parseTextForTripData(text);
+        if (p) { last = p; ok++; if (files.length > 1) chAddTrip(p); }
+      } catch (err) { console.error(err); }
+    }
+    btn.innerHTML = old; btn.disabled = false; e.target.value = '';
+    if (!ok) { notify('Не вдалось розпізнати суму. Спробуйте «Швидкий ввід»', 'error'); return; }
+    if (files.length === 1) { openQuickInputModal(last); notify('Розпізнано — перевірте й додайте', 'success'); }
+    else { chSaveAll(); notify(`Додано поїздок: ${ok} з ${files.length}`, 'success'); }
+  };
+
+  /* ---------- Рендер ---------- */
+  updateCashPageUI = function () {
+    const d = dailyCashData, set = (id, v) => { const el = $(id); if (el) el.innerText = v; };
+    const show = (id, on) => { const el = $(id); if (el) el.style.display = on ? 'flex' : 'none'; };
+    d.net = chNet(); d.shiftHours = chHours();
+    const hours = d.shiftHours, fuelUsed = d.actualFuel > 0 ? d.actualFuel : d.fuel;
+
+    set('cash-net', chm(d.net) + ' ₴'); set('cash-net2', chm(d.net) + ' ₴'); $('cash-net').classList.toggle('neg', d.net < 0);
+    set('ch-sub', `${d.orders} ${d.orders === 1 ? 'поїздка' : 'поїздок'} · ${d.totalKm.toFixed(1)} км`);
+    set('cash-gross', chm(d.gross) + ' ₴'); set('cash-gross2', chm(d.gross) + ' ₴');
+    set('cash-hourly-rate', hours >= 0.05 ? chm(d.net / hours) : '—');
+    set('ch-perkm', d.totalKm > 0 ? (d.net / d.totalKm).toFixed(1) : '—');
+    set('cash-orders-count', d.orders);
+    set('header-subtitle', `Сьогодні: ${chm(d.net)} ₴ · ${d.orders} ${d.orders === 1 ? 'поїздка' : 'поїздок'}`);
+    if (typeof updateHeaderGoalStrip === 'function') updateHeaderGoalStrip();
+
+    const st = $('ch-state'), btn = $('btn-shift-toggle');
+    st.className = 'ch-pill' + (d.shiftActive ? ' on' : ''); st.innerText = d.shiftActive ? '● На лінії' : (hours > 0 ? 'Пауза' : 'Зміна не розпочата');
+    btn.className = 'ch-btn-shift ' + (d.shiftActive ? 'stop' : 'start'); btn.innerText = d.shiftActive ? '⏸ Пауза' : (hours > 0 ? '▶ Продовжити' : '▶ Почати зміну');
+    chTimerText();
+
+    set('cash-comm', '−' + chm(d.comm) + ' ₴');
+    set('cash-fuel-label', d.actualFuel > 0 ? '⛽ Пальне (факт заправок)' : 'Пальне (розрахунок)'); set('cash-fuel', '−' + chm(fuelUsed) + ' ₴');
+    set('cash-extraExp', '−' + chm(d.extraExp) + ' ₴'); show('row-cash-extraExp', d.extraExp > 0);
+    set('cash-rent', '−' + chm(d.rent) + ' ₴'); show('row-cash-rent', d.rent > 0);
+    set('cash-tips', '+' + chm(d.tips) + ' ₴'); show('row-cash-tips', (d.tips || 0) > 0);
+
+    set('cash-money-cash', chm(d.totalCash) + ' ₴'); set('cash-money-card', chm(d.totalCard) + ' ₴');
+    const bal = d.totalCard - d.comm - d.rent, be = $('cash-balance');
+    set('cash-balance-label', bal >= 0 ? '🏦 Сервіс винен вам' : '🏦 Ви винні сервісу');
+    be.innerText = chm(Math.abs(bal)) + ' ₴'; be.className = bal >= 0 ? 'pos' : 'neg';
+    const tax = expenses.taxRate || 0; set('cash-taxreserve', chm(d.gross * tax / 100) + ' ₴'); show('row-cash-taxreserve', tax > 0 && d.gross > 0);
+
+    const a = $('inp-order-minutes'), b = $('inp-cancel-pct');
+    if (a && document.activeElement !== a) a.value = d.orderMinutes || 0; if (b && document.activeElement !== b) b.value = d.cancelPct || 0;
+
+    const list = $('cash-history-list'); $('cash-empty-state').style.display = d.history.length ? 'none' : 'block';
+    list.innerHTML = d.history.map(t => t.pay === 'expense'
+      ? `<div class="ch-h"><div class="ch-h-ic">💸</div><div class="ch-h-m"><b>${t.name}</b><span>${t.time} · витрата</span></div><b class="ch-h-v neg">−${chm(Math.abs(t.net))} ₴</b><button class="del-btn" onclick="removeTrip(${t.id})">✕</button></div>`
+      : `<div class="ch-h"><div class="ch-h-ic">${t.pay === 'cash' ? '💵' : '💳'}</div><div class="ch-h-m"><b>${chm(t.gross)} ₴ · ${t.km.toFixed(1)} км</b><span>${t.time}${t.tips > 0 ? ' · чайові ' + chm(t.tips) + ' ₴' : ''}</span></div><b class="ch-h-v pos">+${chm(t.net)} ₴</b><button class="del-btn" onclick="removeTrip(${t.id})">✕</button></div>`).join('');
+
+    // Автозбереження в архів — день не втрачається, якщо забули завершити зміну
+    clearTimeout(window._chArc);
+    window._chArc = setTimeout(() => { if (dailyCashData.orders > 0) { dailyCashData.net = chNet(); saveShiftToArchive(); } }, 800);
+  };
+
+  /* ---------- Звіт і завершення зміни ---------- */
+  shareReport = function () {
+    haptic(); const d = dailyCashData, h = chHours(), bal = d.totalCard - d.comm - d.rent, fuel = d.actualFuel > 0 ? d.actualFuel : d.fuel;
+    const text = `Підсумок зміни (${d.date}):\n\n✅ Замовлень: ${d.orders}\n⏱ Годин: ${h.toFixed(1)}\n📍 Пробіг: ${d.totalKm.toFixed(1)} км\n\n💵 Оборот: ${chm(d.gross)} ₴\n (Гот: ${chm(d.totalCash)} | Карта: ${chm(d.totalCard)})\n🟡 Комісія: −${chm(d.comm)} ₴\n⛽ Пальне: −${chm(fuel)} ₴\n💸 Витрати: −${chm(d.extraExp)} ₴${d.rent > 0 ? `\n🏠 Оренда/парк: −${chm(d.rent)} ₴` : ''}\n\n💰 ЧИСТИМИ: ${chm(chNet())} ₴${h >= 0.05 ? `\n📈 Ставка: ${chm(chNet() / h)} ₴/год` : ''}${(expenses.taxRate || 0) > 0 ? `\n🧾 На податки: ${chm(d.gross * expenses.taxRate / 100)} ₴` : ''}\n\n🏦 ${bal >= 0 ? 'Сервіс винен вам' : 'Ви винні сервісу'}: ${chm(Math.abs(bal))} ₴`;
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => notify('Звіт скопійовано', 'success'), () => notify('Не вдалось скопіювати', 'error'));
+    else notify('Копіювання недоступне на цьому пристрої', 'error');
+  };
+  resetDailyCashClick = async function () {
+    haptic(); const ok = await confirmDialog('Дані каси збережуться в архів і обнуляться.', 'Завершити зміну?', 'Завершити');
+    if (!ok) return;
+    clearInterval(shiftTimerInterval); clearTimeout(window._chArc);
+    dailyCashData.shiftHours = chHours(); dailyCashData.net = chNet();
+    if (dailyCashData.orders > 0) saveShiftToArchive();
+    createNewShift(); updateCashPageUI(); calcBranding(); notify('Зміну завершено, архів оновлено', 'success');
+  };
+
+  updateCashPageUI();
+})();
+</script>
+
+<!-- ===== DriverHub v2: загальний редизайн + нові тарифи ===== -->
+<style>
+:root{--radius-lg:22px;--radius-md:16px;--radius-sm:11px}
+html[data-theme="dark"]{--bg-color:#0B0E13;--card-bg:#141921;--border-color:rgba(255,255,255,.065);--glass:rgba(20,25,33,.78);--track:rgba(255,255,255,.12)}
+html[data-theme="light"]{--bg-color:#EDF0F4;--card-bg:#FFFFFF;--border-color:rgba(15,23,32,.07);--glass:rgba(255,255,255,.8);--track:rgba(15,23,32,.12)}
+*{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif}
+::-webkit-scrollbar{display:none}
+.page{padding:0 12px}
+.app-header{padding:14px 16px 8px}
+.app-title{font-size:24px;letter-spacing:-.7px}
+.app-subtitle{font-size:12px}
+.theme-toggle{width:38px;height:38px;font-size:17px}
+.header-goal-strip{padding:2px 16px 12px}
+.header-goal-track{height:8px;border-radius:5px}
+.header-goal-fill{border-radius:5px;background:linear-gradient(90deg,var(--accent-color),color-mix(in srgb,var(--accent-color) 55%,var(--accent-blue)))!important}
+
+/* Меню: липка скляна панель */
+.tabs{position:sticky;top:8px;z-index:60;margin:4px 12px 14px;padding:5px;border-radius:20px;background:var(--glass);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);box-shadow:0 8px 24px -10px rgba(0,0,0,.35)}
+.tab-btn{border-radius:15px;padding:8px 0 7px;font-size:9.5px;font-weight:700;opacity:.7}
+.tab-btn.active{opacity:1;transform:translateY(-1px)}
+.tab-btn.active .tab-icon{transform:scale(1.1)}
+
+/* Картки */
+.card,.ch-card{background:linear-gradient(180deg,color-mix(in srgb,var(--text-color) 3.5%,var(--card-bg)),var(--card-bg) 55%);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px}
+.card-title{font-size:10.5px;letter-spacing:.07em;margin-bottom:12px}
+.stat-tile{border-radius:18px;padding:12px 6px;background:linear-gradient(180deg,color-mix(in srgb,var(--text-color) 3.5%,var(--card-bg)),var(--card-bg))}
+.stat-tile-value{font-size:17px}
+.stat-tile-icon{width:30px;height:30px;border-radius:10px}
+
+/* Поля вводу: більші, зручні для великого пальця */
+.input-block{padding:10px 0}
+.input-label{font-size:14px}
+.icon-box{width:30px;height:30px;border-radius:10px}
+.icon-box svg{width:15px;height:15px}
+.btn-counter{width:36px;height:36px;border-radius:11px;font-size:19px;background:color-mix(in srgb,var(--text-color) 7%,var(--card-bg))}
+.btn-x2{font-size:12px;padding:0 11px}
+.counter-value{font-size:17px;width:54px}
+.counter{gap:5px}
+.admin-input{min-height:38px;border-radius:12px;font-size:14px}
+input[type=range]{height:26px}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--accent-color) var(--p,0%),var(--track) var(--p,0%))}
+input[type=range]::-webkit-slider-thumb{height:24px;width:24px;margin-top:-9px;border:3px solid var(--accent-color);background:var(--card-bg);box-shadow:0 3px 8px rgba(0,0,0,.3)}
+.quick-coef-btn{padding:9px 0;border-radius:11px;font-size:12px}
+.pay-switch{border-radius:14px;padding:4px}
+.pay-opt{padding:9px 0;border-radius:11px;font-size:13px}
+
+/* Кнопки */
+.toggle-btn{border-radius:14px;padding:12px}
+.reset-btn{border-radius:14px;padding:14px}
+.progress-container{height:10px;border-radius:5px;background:var(--track)}
+.progress-bar{border-radius:5px;background:linear-gradient(90deg,var(--accent-color),color-mix(in srgb,var(--accent-color) 55%,var(--accent-blue)))!important}
+.history-item{padding:12px 0}
+.del-btn{border-radius:12px}
+.empty-state{padding:28px 10px}
+
+/* Модальні вікна — як шторки знизу */
+.modal-overlay{align-items:flex-end!important;padding:0!important;background:rgba(5,8,12,.55)}
+.modal-content{max-width:none!important;width:100%;border-radius:28px 28px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom));max-height:88vh;animation:sheetIn .26s cubic-bezier(.2,.8,.3,1)}
+.modal-content::after{content:"";position:absolute;top:8px;left:50%;width:38px;height:4px;margin-left:-19px;border-radius:2px;background:var(--track)}
+@keyframes sheetIn{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.dlg-input{border-radius:14px;padding:14px}
+.dlg-btn-row .save-btn,.dlg-btn-row .reset-btn{padding:14px}
+
+/* Опції, таблиця, статистика */
+#settings-container .card{border-radius:18px!important}
+#finmatrix-table th,#finmatrix-table td{font-size:12px}
+.lock-key{width:100%;font-size:24px}
+</style>
+
+<script>
+/* Заповнення доріжок слайдерів */
+function paintSliders(){document.querySelectorAll('input[type=range]').forEach(el=>{const mn=+el.min||0,mx=+el.max||100;el.style.setProperty('--p',Math.max(0,Math.min(100,(el.value-mn)/(mx-mn)*100))+'%')})}
+document.addEventListener('input',e=>{if(e.target.type==='range')paintSliders()});
+(function(){const r=recalc;recalc=function(){r.apply(this,arguments);paintSliders()};
+  const t=toggleTheme;toggleTheme=function(){t.apply(this,arguments);setTimeout(()=>{if(document.getElementById('page-analytics').classList.contains('active')&&shiftArchive.length)drawEarningsChart()},60)};
+  paintSliders();
+})();
+
+/* Нові загальні тарифи: застосувати один раз до збережених даних */
+(function(){const K='taxi_tariffs_mig_2026_11';if(localStorage.getItem(K))return;
+  const nv={standard:[95,1.8,30,45],comfort:[100,1.8,35,45],business:[120,1.5,40,45]};
+  Object.keys(nv).forEach(k=>{if(tariffs[k]){const a=nv[k];Object.assign(tariffs[k],{minPrice:a[0],minKm:a[1],perKmCity:a[2],perKmOut:a[3]})}});
+  localStorage.setItem('taxi_tariffs_v22',JSON.stringify(tariffs));localStorage.setItem(K,'1');
+  renderSettings();renderCarSelector();recalc();calcStrategy();
+})();
+</script>
+
+<!-- ===== DriverHub v3: стиль «таксі-бурштин» + компактність ===== -->
+<style>
+/* Палітра: графіт + бурштин (інтерфейс), зелений лишається для грошей */
+html[data-theme="dark"]{--bg-color:#0F1114;--card-bg:#181B20;--border-color:rgba(255,255,255,.07);--text-color:#F3F1EC;--text-muted:#8E9099;--accent-color:#FFC53D;--accent-success:#3DDC97;--uklon-green:#3DDC97;--accent-blue:#6AB0FF;--glass:rgba(24,27,32,.8);--track:rgba(255,255,255,.12)}
+html[data-theme="light"]{--bg-color:#F4F1EA;--card-bg:#FFFFFF;--border-color:rgba(40,30,10,.08);--text-color:#1B1812;--text-muted:#6E675A;--accent-color:#E59A00;--accent-success:#14A265;--uklon-green:#14A265;--accent-blue:#1C74E4;--glass:rgba(255,255,255,.85);--track:rgba(40,30,10,.13)}
+body{background:radial-gradient(110% 45% at 50% -8%,color-mix(in srgb,var(--accent-color) 10%,transparent),transparent 65%),var(--bg-color);background-attachment:fixed;padding-bottom:200px}
+.app-title{background:linear-gradient(100deg,var(--text-color) 35%,var(--accent-color))!important;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* Текст на бурштиновому фоні — темний */
+.tab-btn.active,.car-card.active,.car-card.active .car-price-info,.ch-btn-shift.start,.lock-key:active,.quick-coef-btn:active{color:#1A1300!important}
+.tab-btn.active{box-shadow:0 5px 14px -4px color-mix(in srgb,var(--accent-color) 60%,transparent)}
+.save-btn{color:#1A1300;background:linear-gradient(135deg,var(--accent-color),color-mix(in srgb,var(--accent-color) 80%,#ff7a00))!important;box-shadow:0 8px 18px -8px color-mix(in srgb,var(--accent-color) 70%,transparent)}
+.save-btn-alt{background:var(--text-color)!important;color:var(--bg-color)!important}
+.save-btn[style*="background"]{background-image:none!important;color:#fff}
+.summary-chevron{background:color-mix(in srgb,var(--accent-color) 16%,transparent);color:var(--accent-color)}
+.progress-bar,.header-goal-fill{background:linear-gradient(90deg,var(--accent-color),color-mix(in srgb,var(--accent-color) 70%,#ff7a00))!important}
+
+/* Гроші — завжди зелені */
+.ch-net,.pos,#verdict-chip.v-good{color:var(--uklon-green)}
+#verdict-chip.v-good{background:color-mix(in srgb,var(--uklon-green) 16%,transparent)}
+.ch-pill.on{background:color-mix(in srgb,var(--uklon-green) 18%,transparent);color:var(--uklon-green)}
+.ch-net.neg{color:var(--accent-danger)}
+.ch-hero{background:linear-gradient(160deg,color-mix(in srgb,var(--accent-color) 13%,var(--card-bg)),var(--card-bg) 62%)}
+
+/* Компактність */
+.page{padding:0 10px}
+.app-header{padding:8px 14px 4px}
+.app-title{font-size:20px}
+.app-subtitle{font-size:11px}
+.theme-toggle{width:32px;height:32px;font-size:15px}
+.header-goal-strip{padding:0 14px 8px}
+.header-goal-track{height:6px}
+.tabs{margin:2px 10px 8px;padding:3px;border-radius:16px}
+.tab-btn{padding:6px 0 5px;font-size:9px;border-radius:12px}
+.tab-icon svg{width:16px;height:16px}
+.car-selector{padding:0 0 6px;gap:5px}
+.car-card{padding:6px 12px}
+.card,.ch-card{padding:11px 13px;margin-bottom:8px;border-radius:18px}
+.card-title{margin-bottom:7px}
+.input-block{padding:5px 0}
+.input-label{font-size:13px}
+.icon-box{width:26px;height:26px;border-radius:8px}
+.icon-box svg{width:13px;height:13px}
+.btn-counter{width:32px;height:32px;border-radius:10px;font-size:17px}
+.counter-value{font-size:16px;width:48px}
+.counter{gap:3px}
+input[type=range]{height:20px}
+.slider-container{padding-top:0;margin-top:-2px}
+input[type=range]::-webkit-slider-thumb{height:20px;width:20px;margin-top:-7px;border-width:3px}
+input[type=range]::-webkit-slider-runnable-track{height:5px}
+.quick-coef-container{margin:2px 0}
+.quick-coef-btn{padding:6px 0;font-size:11px}
+.toggle-btn{padding:9px;margin-top:6px;font-size:12px}
+.reset-btn{padding:11px}
+.save-btn{padding:12px;margin-top:8px}
+.admin-input{min-height:34px;padding:5px}
+.stat-tile-grid{gap:6px;margin-bottom:8px}
+.stat-tile{padding:8px 4px;border-radius:15px}
+.stat-tile-icon{width:24px;height:24px;margin-bottom:4px}
+.stat-tile-value{font-size:15px}
+.breakdown-row{padding:5px 0 5px 9px;font-size:12.5px}
+.result-row{margin-bottom:4px}
+.history-item{padding:8px 0}
+.empty-state{padding:16px 10px}
+.progress-container{height:8px;margin:6px 0}
+
+/* Нижня панель Тарифу */
+.sticky-summary{padding:8px 14px calc(12px + env(safe-area-inset-bottom));border-radius:22px 22px 0 0}
+.drag-handle{margin-bottom:5px}
+.summary-mini-title #res-net{font-size:28px}
+.pay-switch{margin:6px 0}
+.pay-opt{padding:7px 0}
+
+/* Каса */
+.ch-hero{padding:12px 14px;margin-bottom:8px;border-radius:20px}
+.ch-net{font-size:34px;margin:3px 0 1px}
+.ch-kpis{margin-top:10px;gap:6px}
+.ch-kpis>div{padding:7px 4px;border-radius:12px}
+.ch-kpis b{font-size:14px}
+.ch-timer{padding:10px 14px}
+.ch-time{font-size:24px}
+.ch-btn-shift{padding:10px 16px}
+.ch-actions{gap:6px;margin-bottom:6px}
+.ch-act{padding:10px 4px;font-size:12px;border-radius:12px}
+.ch-act.primary{padding:12px;font-size:13.5px}
+.ch-chips{gap:5px;margin-bottom:8px}
+.ch-chip{padding:8px 2px;font-size:10.5px}
+.ch-row{padding:6px 0;font-size:12.5px}
+.ch-row.total{padding-top:9px;font-size:15px}
+.ch-h{padding:7px 0;gap:9px}
+.ch-h-ic{width:30px;height:30px;font-size:14px}
+
+/* Шторки */
+.modal-content{padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
+</style>
+<script>
+/* Колір шапки/фону Telegram у тон застосунку */
+function syncTgColors(){try{const bg=getComputedStyle(document.documentElement).getPropertyValue('--bg-color').trim();
+  document.querySelector('meta[name="theme-color"]').setAttribute('content',bg);
+  if(tg){tg.setHeaderColor&&tg.setHeaderColor(bg);tg.setBackgroundColor&&tg.setBackgroundColor(bg)}}catch(e){}}
+(function(){const t=toggleTheme;toggleTheme=function(){t.apply(this,arguments);syncTgColors()};syncTgColors()})();
+</script>
+
+<!-- ===== DriverHub v4: хмара, ціль у ₴, маршрути, години, свайп, ТО ===== -->
+<style>
+.app-title{background:none!important;-webkit-background-clip:border-box!important;-webkit-text-fill-color:var(--text-color)!important;color:var(--text-color)!important}
+.pr-add{font-size:11px;font-weight:800;color:var(--accent-color);cursor:pointer;text-transform:none;letter-spacing:0}
+.pr-list{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.pr-empty{font-size:12px;color:var(--text-muted)}
+.pr-chip{flex:0 0 auto;background:var(--bg-color);border:1px solid var(--border-color);border-radius:13px;padding:7px 28px 7px 11px;position:relative;cursor:pointer}
+.pr-chip b{display:block;font-size:12.5px}.pr-chip span{font-size:10.5px;color:var(--text-muted)}
+.pr-chip i{position:absolute;top:5px;right:8px;font-style:normal;font-size:11px;color:var(--text-muted)}
+.mg-big{font-size:26px;font-weight:800;letter-spacing:-.6px;font-variant-numeric:tabular-nums}.mg-big>span{font-size:14px;color:var(--text-muted);font-weight:700}
+.hr-bars{display:flex;align-items:flex-end;gap:2px;height:70px;margin-top:6px}
+.hr-bars div{flex:1;border-radius:3px 3px 0 0;background:var(--track);min-height:2px}
+.hr-bars div.top{background:var(--accent-color)}
+.hr-lbl{display:flex;justify-content:space-between;font-size:9.5px;color:var(--text-muted);margin-top:3px}
+.svc-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--border-color);font-size:13px;font-weight:600}
+.svc-row small{display:block;font-size:11px;color:var(--text-muted);font-weight:600}
+.svc-row.due small{color:var(--accent-danger)}.svc-row.soon small{color:#FF9F0A}
+.svc-ok{background:var(--bg-color);border:1px solid var(--border-color);border-radius:10px;padding:7px 10px;font-size:12px;font-weight:800;color:var(--uklon-green);cursor:pointer}
+.svc-banner{background:rgba(255,159,10,.14);border:1px solid rgba(255,159,10,.35);color:#FF9F0A;border-radius:14px;padding:9px 12px;margin-bottom:8px;font-size:12px;font-weight:700;cursor:pointer}
+</style>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const m=n=>Math.round(n||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+const J=(k,f)=>{try{return JSON.parse(localStorage.getItem(k))||f}catch(e){return f}};
+const S=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const _set=Storage.prototype.setItem;
+async function askText(t){const i=$('prompt-input');i.type='text';i.inputMode='text';const r=await promptDialog(t,'');i.type='number';i.inputMode='decimal';return r}
+
+/* ===== 1. Хмарна копія (Telegram CloudStorage) ===== */
+const CS=tg&&tg.CloudStorage, CH=3500; let ct;
+const skip=k=>/pin|last_backup|backup_dismissed|cloud_init/.test(k);
+function cloudSave(cb){
+  if(!CS){cb&&cb(false);return}
+  const tasks=[];
+  Object.keys(localStorage).filter(k=>k.startsWith('taxi_')&&!skip(k)).forEach(k=>{const v=localStorage.getItem(k)||'';const n=Math.max(1,Math.ceil(v.length/CH));for(let i=0;i<n;i++)tasks.push([k+'__'+i,v.slice(i*CH,(i+1)*CH)]);tasks.push([k+'__n',String(n)])});
+  let left=tasks.length,ok=true;
+  tasks.forEach(([k,v])=>CS.setItem(k,v,e=>{if(e)ok=false;if(--left===0){if(ok)_set.call(localStorage,'taxi_cloud_last',String(Date.now()));cb&&cb(ok);cloudStatus()}}));
+}
+function cloudRestore(cb){
+  CS.getKeys((e,all)=>{
+    const ns=(all||[]).filter(k=>k.endsWith('__n'));if(e||!ns.length)return cb(false);
+    CS.getItems(ns,(e2,r)=>{
+      if(e2||!r)return cb(false);
+      const base=ns.map(k=>k.slice(0,-3)),need=[];
+      base.forEach(b=>{for(let i=0;i<(parseInt(r[b+'__n'])||0);i++)need.push(b+'__'+i)});
+      const out={};let idx=0;
+      (function next(){
+        if(idx>=need.length){base.forEach(b=>{let v='';for(let i=0;i<(parseInt(r[b+'__n'])||0);i++)v+=out[b+'__'+i]||'';_set.call(localStorage,b,v)});return cb(true)}
+        const part=need.slice(idx,idx+40);idx+=40;
+        CS.getItems(part,(e3,r3)=>{if(e3||!r3)return cb(false);Object.assign(out,r3);next()});
+      })();
+    });
+  });
+}
+Storage.prototype.setItem=function(k,v){_set.call(this,k,v);if(this===localStorage&&String(k).startsWith('taxi_')&&!skip(k)&&localStorage.getItem('taxi_cloud_init')){clearTimeout(ct);ct=setTimeout(()=>cloudSave(),4000)}};
+if(CS&&!localStorage.getItem('taxi_cloud_init')){cloudRestore(ok=>{_set.call(localStorage,'taxi_cloud_init','1');if(ok)location.reload();else cloudSave()})}
+function cloudStatus(){const el=$('cloud-status');if(!el)return;const t=parseInt(localStorage.getItem('taxi_cloud_last')||0);el.innerText=!CS?'Доступно лише всередині Telegram':(t?'Остання копія: '+new Date(t).toLocaleString('uk-UA'):'Копія ще не створена')}
+window.cloudSaveNow=()=>{haptic();cloudSave(ok=>notify(ok?'Збережено в хмару Telegram':'Не вдалось зберегти',ok?'success':'error'))};
+window.cloudRestoreNow=async()=>{haptic();if(!CS){notify('Доступно лише всередині Telegram','error');return}
+  if(!await confirmDialog('Поточні дані на цьому пристрої буде замінено копією з хмари.','Відновити з хмари?','Відновити'))return;
+  cloudRestore(ok=>{if(ok){notify('Відновлено','success');setTimeout(()=>location.reload(),600)}else notify('У хмарі немає копії','error')})};
+
+/* ===== 2. Ціль у гривнях ===== */
+$('page-branding').insertAdjacentHTML('afterbegin',`<div class="card" id="mg-card"><div class="card-title"><span>💰 Ціль у гривнях</span><span class="pr-add" onclick="setMoneyGoal()">✏️ Змінити</span></div><div class="mg-big"><b id="mg-earned">0</b><span> / <span id="mg-goal">2000</span> ₴</span></div><div class="progress-container"><div class="progress-bar" id="mg-bar"></div></div><div id="mg-info" class="ch-note" style="margin-top:4px"></div></div>`);
+window.setMoneyGoal=async()=>{haptic();const v=parseInt(await promptDialog('Скільки хочете заробити чистими за день (₴)?',J('taxi_moneygoal_v1',{daily:2000}).daily));if(v>0){S('taxi_moneygoal_v1',{daily:v});updateMoneyGoal()}};
+function updateMoneyGoal(){
+  const d=dailyCashData,g=J('taxi_moneygoal_v1',{daily:2000}).daily,net=d.gross-d.comm-(d.actualFuel>0?d.actualFuel:d.fuel)-d.extraExp-d.rent,left=Math.max(0,g-net);
+  $('mg-earned').innerText=m(net);$('mg-goal').innerText=m(g);$('mg-bar').style.width=Math.max(0,Math.min(100,net/g*100))+'%';
+  const h=d.shiftHours||0,plan=goals.plannedShiftHours||10;let t;
+  if(left===0)t='✅ Ціль дня виконано!';
+  else{t='Залишилось '+m(left)+' ₴';
+    if(d.shiftActive&&h>=0.15){const hl=Math.max(0,plan-h),f=net+net/h*hl;t+=' · прогноз до кінця зміни ~'+m(f)+' ₴ ('+(f>=g?'встигнете ✅':'не вистачає '+m(g-f)+' ₴')+')';if(hl>0)t+=' · потрібно '+m(left/hl)+' ₴/год'}
+    else t+=' · запустіть зміну для прогнозу'}
+  $('mg-info').innerText=t;
+}
+
+/* ===== 3. Швидкі маршрути ===== */
+const PF=['dist','distOut','emptyKm','delivery','wait','stops'];
+$('params-body').closest('.card').insertAdjacentHTML('beforebegin',`<div class="card" id="pr-card"><div class="card-title"><span>⚡ Швидкі маршрути</span><span class="pr-add" onclick="addPreset()">＋ Зберегти поточний</span></div><div class="pr-list" id="pr-list"></div></div>`);
+function renderPresets(){const p=J('taxi_presets_v1',[]);$('pr-list').innerHTML=p.length?p.map((x,i)=>`<div class="pr-chip" onclick="applyPreset(${i})"><b>${x.name}</b><span>${(+x.dist+ +x.distOut).toFixed(1)} км · ${(+x.coef).toFixed(1)}x</span><i onclick="event.stopPropagation();delPreset(${i})">✕</i></div>`).join(''):'<div class="pr-empty">Введіть маршрут і збережіть його одним тапом — наприклад «Центр → вокзал».</div>'}
+window.addPreset=async()=>{haptic();const v={};PF.concat('coef').forEach(k=>v[k]=parseFloat($('inp-'+k).value)||0);
+  if(v.dist+v.distOut<=0){notify('Спершу вкажіть кілометраж','error');return}
+  const n=await askText('Назва маршруту');if(!n||!n.trim())return;v.name=n.trim().slice(0,24).replace(/[<>&]/g,'');
+  const p=J('taxi_presets_v1',[]);p.push(v);S('taxi_presets_v1',p.slice(-12));renderPresets();notify('Маршрут збережено','success')};
+window.applyPreset=i=>{haptic();const v=J('taxi_presets_v1',[])[i];if(!v)return;PF.concat('coef').forEach(k=>{$('inp-'+k).value=v[k];$('slider-'+k).value=v[k]});recalc();notify('«'+v.name+'» застосовано','success')};
+window.delPreset=async i=>{if(!await confirmDialog('Маршрут буде видалено.','Видалити?','Видалити'))return;const p=J('taxi_presets_v1',[]);p.splice(i,1);S('taxi_presets_v1',p);renderPresets()};
+
+/* ===== 4. Найкращі години ===== */
+$('week-compare-card').insertAdjacentHTML('afterend',`<div class="card" id="hr-card" style="display:none"><div class="card-title"><span>🕒 Найкращі години</span></div><div id="hr-top" style="font-size:13px;font-weight:700"></div><div class="hr-bars" id="hr-bars"></div><div class="hr-lbl"><span>0</span><span>6</span><span>12</span><span>18</span><span>23</span></div><div class="ch-note" id="hr-note"></div></div>`);
+const _ssa=saveShiftToArchive;
+saveShiftToArchive=function(){_ssa.apply(this,arguments);try{const hr=Array(24).fill(0),tr=Array(24).fill(0);dailyCashData.history.forEach(t=>{if(t.pay==='expense')return;const h=parseInt(t.time);if(h>=0&&h<24){hr[h]+=t.net;tr[h]++}});const e=shiftArchive.find(s=>s.date===dailyCashData.date);if(e){e.hr=hr;e.tr=tr;localStorage.setItem('taxi_shift_archive_v1',JSON.stringify(shiftArchive.slice(0,90)))}}catch(x){}};
+function renderHours(){loadArchive();const days=shiftArchive.filter(s=>s.hr),c=$('hr-card');if(!days.length){c.style.display='none';return}c.style.display='block';
+  const sum=Array(24).fill(0),cnt=Array(24).fill(0);days.forEach(s=>s.hr.forEach((v,h)=>{if(s.tr&&s.tr[h]>0){sum[h]+=v;cnt[h]++}}));
+  const avg=sum.map((v,h)=>cnt[h]?v/cnt[h]:0),mx=Math.max(...avg,1),top=avg.map((v,h)=>[v,h]).filter(x=>x[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,3),tp=top.map(x=>x[1]);
+  $('hr-bars').innerHTML=avg.map((v,h)=>`<div class="${tp.includes(h)?'top':''}" style="height:${Math.max(3,v/mx*100)}%"></div>`).join('');
+  $('hr-top').innerText=top.length?'🔥 '+top.map(x=>String(x[1]).padStart(2,'0')+':00 · '+m(x[0])+' ₴').join('   '):'';
+  $('hr-note').innerText='Середній чистий заробіток за годину доби у дні, коли ви їздили. Враховано змін: '+days.length+' (дані накопичуються з нових змін).'}
+const _uai=updateAnalyticsUI;updateAnalyticsUI=function(){_uai.apply(this,arguments);renderHours()};
+
+/* ===== 5. Свайп між вкладками ===== */
+const ORD=['calc','branding','cash','analytics','strategy','settings'];let sx=0,sy=0,st=0,sw=false;
+document.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();sw=!e.target.closest('input,textarea,select,.car-selector,.pr-list,table,[style*="overflow-x"],#archive-list,.modal-overlay,#lock-screen,.tabs')},{passive:true});
+document.addEventListener('touchend',e=>{if(!sw)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
+  if(Math.abs(dx)<90||Math.abs(dy)>45||Date.now()-st>600)return;
+  if([...document.querySelectorAll('.modal-overlay')].some(x=>x.style.display==='flex'))return;
+  const cur=ORD.findIndex(n=>$('page-'+n).classList.contains('active')),nx=cur+(dx<0?1:-1);
+  if(nx>=0&&nx<ORD.length){switchTab(ORD[nx]);window.scrollTo({top:0})}},{passive:true});
+
+/* ===== 6. ТО за пробігом ===== */
+function trackKm(){const k=J('taxi_km_v1',{total:0,seen:0,date:''}),cur=dailyCashData.totalKm||0;let ch=false;
+  if(k.date!==dailyCashData.date){k.date=dailyCashData.date;k.seen=0;ch=true}
+  const dl=cur-k.seen;if(dl!==0){k.total=Math.max(0,k.total+dl);k.seen=cur;ch=true}
+  if(ch)S('taxi_km_v1',k);return k.total}
+const _cns=createNewShift;
+createNewShift=function(){try{if(dailyCashData)trackKm()}catch(e){}_cns.apply(this,arguments);try{const k=J('taxi_km_v1',{total:0});k.seen=0;k.date=dailyCashData.date;S('taxi_km_v1',k)}catch(e){}};
+const svcGet=()=>J('taxi_service_v1',{odo:null,kmAt:0,items:[]});
+function curOdo(s,tot){return s.odo===null?null:s.odo+(tot-s.kmAt)}
+$('page-settings').querySelector('.donate-card').insertAdjacentHTML('beforebegin',`
+<div class="card"><div class="card-title"><span>🔧 ТО та обслуговування</span><span class="pr-add" onclick="addService()">＋ Додати</span></div>
+<div class="svc-row"><span>Пробіг авто, км<small>Додаток сам додає км із поїздок</small></span><input type="number" inputmode="decimal" class="admin-input" style="width:96px" id="svc-odo" onchange="setOdo(this.value)" placeholder="введіть"></div>
+<div id="svc-list"></div></div>
+<div class="card"><div class="card-title"><span>☁️ Хмарна копія</span></div><div style="display:flex;gap:8px"><button class="toggle-btn" style="margin-top:0" onclick="cloudSaveNow()">Зберегти зараз</button><button class="toggle-btn" style="margin-top:0" onclick="cloudRestoreNow()">Відновити</button></div><div class="ch-note" id="cloud-status"></div><div class="ch-note">Копія зберігається автоматично у хмарі Telegram і підтягнеться після перевстановлення. PIN-код у копію не входить.</div></div>`);
+window.setOdo=v=>{const n=parseFloat(v);if(!(n>=0))return;const s=svcGet(),t=trackKm(),old=curOdo(s,t);s.items.forEach(i=>{if(old===null)i.last=n});s.odo=n;s.kmAt=t;S('taxi_service_v1',s);renderService()};
+window.addService=async()=>{haptic();const s=svcGet();if(s.odo===null){notify('Спершу введіть пробіг авто','error');return}
+  const n=await askText('Що обслуговуємо? (напр. Заміна масла)');if(!n||!n.trim())return;
+  const e=parseInt(await promptDialog('Інтервал, км (напр. 8000)',''));if(!(e>0)){notify('Вкажіть інтервал у км','error');return}
+  s.items.push({id:Date.now(),name:n.trim().slice(0,28).replace(/[<>&]/g,''),every:e,last:curOdo(s,trackKm())});S('taxi_service_v1',s);renderService()};
+window.svcDone=async id=>{haptic();const s=svcGet(),i=s.items.find(x=>x.id===id);if(!i)return;
+  if(!await confirmDialog('Лічильник для «'+i.name+'» почнеться заново з поточного пробігу.','Позначити виконаним?','Так'))return;i.last=curOdo(s,trackKm());S('taxi_service_v1',s);renderService()};
+window.svcDel=async id=>{if(!await confirmDialog('Пункт буде видалено.','Видалити?','Видалити'))return;const s=svcGet();s.items=s.items.filter(x=>x.id!==id);S('taxi_service_v1',s);renderService()};
+$('page-cash').insertAdjacentHTML('afterbegin','<div class="svc-banner" id="svc-banner" style="display:none" onclick="switchTab(\'settings\')"></div>');
+function renderService(){
+  const s=svcGet(),tot=trackKm(),cur=curOdo(s,tot),inp=$('svc-odo');
+  if(inp&&document.activeElement!==inp)inp.value=cur===null?'':Math.round(cur);
+  const rows=s.items.map(i=>({i,rem:i.last+i.every-(cur??0)})),due=rows.filter(r=>cur!==null&&r.rem<=300);
+  $('svc-list').innerHTML=cur===null?'<div class="pr-empty" style="padding:8px 0">Введіть поточний пробіг, щоб додати пункти (масло, колодки, ремінь ГРМ…).</div>':rows.map(({i,rem})=>`<div class="svc-row ${rem<=0?'due':rem<=300?'soon':''}"><span>${i.name}<small>${rem<=0?'Прострочено на '+m(-rem)+' км':'Залишилось '+m(rem)+' км · кожні '+m(i.every)+' км'}</small></span><span style="display:flex;gap:6px"><button class="svc-ok" onclick="svcDone(${i.id})">✓</button><button class="svc-ok" style="color:var(--accent-danger)" onclick="svcDel(${i.id})">✕</button></span></div>`).join('')||'<div class="pr-empty" style="padding:8px 0">Додайте перший пункт кнопкою «＋ Додати».</div>';
+  const b=$('svc-banner');b.style.display=due.length?'block':'none';
+  if(due.length)b.innerText='🔧 '+due.map(r=>r.i.name+(r.rem<=0?' — прострочено':' — ще '+m(r.rem)+' км')).join('; ')}
+
+/* ===== Підключення оновлень ===== */
+const _u=updateCashPageUI;updateCashPageUI=function(){_u.apply(this,arguments);try{updateMoneyGoal();renderService()}catch(e){}};
+const _cb=calcBranding;calcBranding=function(){_cb.apply(this,arguments);try{updateMoneyGoal()}catch(e){}};
+const _rs=renderSettings;renderSettings=function(){_rs.apply(this,arguments);try{renderService();cloudStatus()}catch(e){}};
+renderPresets();updateMoneyGoal();renderService();cloudStatus();
+})();
+</script>
+
+<!-- ===== DriverHub v5: єдиний спокійний тон (сланцево-бірюзовий), не надто темний ===== -->
+<style>
+html[data-theme="dark"]{--bg-color:#222F38;--card-bg:#2C3B46;--border-color:rgba(255,255,255,.09);--text-color:#EAF1F3;--text-muted:#9DB1BA;--accent-color:#6FE3C4;--accent-success:#6FE3C4;--uklon-green:#6FE3C4;--accent-blue:#6FE3C4;--accent-danger:#FF8F88;--on-accent:#0E2A24;--glass:rgba(44,59,70,.82);--track:rgba(255,255,255,.15)}
+html[data-theme="light"]{--bg-color:#E8EFEF;--card-bg:#FFFFFF;--border-color:rgba(20,50,55,.09);--text-color:#16262B;--text-muted:#5D737B;--accent-color:#0E9F86;--accent-success:#0E9F86;--uklon-green:#0E9F86;--accent-blue:#0E9F86;--accent-danger:#D9534F;--on-accent:#FFFFFF;--glass:rgba(255,255,255,.86);--track:rgba(20,50,55,.14)}
+body{background:radial-gradient(120% 40% at 50% -8%,color-mix(in srgb,var(--accent-color) 7%,transparent),transparent 65%),var(--bg-color)!important;background-attachment:fixed}
+
+/* Усі кольорові елементи — в один тон */
+.ib-blue,.ib-purple,.ib-cyan,.ib-orange,.ib-yellow,.ib-red,.ib-green,.ib-gray{background:color-mix(in srgb,var(--accent-color) 15%,transparent)!important;color:var(--accent-color)!important}
+.save-btn,.save-btn[style*="background"]{background:var(--accent-color)!important;background-image:none!important;color:var(--on-accent)!important;box-shadow:0 6px 16px -8px color-mix(in srgb,var(--accent-color) 60%,transparent)}
+.save-btn-alt{background:color-mix(in srgb,var(--text-color) 12%,var(--card-bg))!important;color:var(--text-color)!important;box-shadow:none}
+.ch-act.primary,.nav-btn,.btn-shift.start,.ch-btn-shift.start,.cal-day.active,.tab-btn.active,.car-card.active,.car-card.active .car-price-info,.lock-key:active,.quick-coef-btn:active,.qe-btn:active,[style*="06231C"]{color:var(--on-accent)!important}
+.ch-act.primary,.nav-btn,.btn-shift.start{background:var(--accent-color)!important}
+.tab-btn.active,.car-card.active{background:var(--accent-color)!important;box-shadow:0 5px 14px -6px color-mix(in srgb,var(--accent-color) 55%,transparent)}
+.progress-bar,.header-goal-fill{background:var(--accent-color)!important}
+.toggle-btn,.btn-x2{background:color-mix(in srgb,var(--accent-color) 10%,transparent)!important;border-color:color-mix(in srgb,var(--accent-color) 25%,transparent)!important;color:var(--accent-color)!important}
+.eff-green{background:var(--accent-color)!important;color:var(--on-accent)!important}
+.eff-yellow{background:color-mix(in srgb,var(--text-color) 35%,var(--card-bg))!important}
+.warn,[style*="ff9500"],[style*="FF9500"],[style*="#E29400"]{color:var(--text-muted)!important}
+#verdict-chip.v-mid,.svc-banner{background:color-mix(in srgb,var(--accent-color) 12%,transparent);color:var(--accent-color);border-color:color-mix(in srgb,var(--accent-color) 30%,transparent)}
+.svc-row.soon small{color:var(--text-muted)}
+.summary-chevron,.ch-pill.on{background:color-mix(in srgb,var(--accent-color) 16%,transparent)!important;color:var(--accent-color)!important}
+.ch-hero{background:linear-gradient(160deg,color-mix(in srgb,var(--accent-color) 10%,var(--card-bg)),var(--card-bg) 65%)}
+.card,.ch-card,.stat-tile{background:var(--card-bg)}
+.sticky-summary{box-shadow:0 -10px 30px -12px rgba(0,0,0,.35)}
+.donate-card{background:color-mix(in srgb,var(--accent-color) 6%,var(--card-bg));border-color:color-mix(in srgb,var(--accent-color) 40%,transparent)}
+</style>
+
+<!-- ===== DriverHub v5: один тон (бурштин) + світліша графітова тема ===== -->
+<style>
+html[data-theme="dark"]{--bg-color:#2A2D34;--card-bg:#353941;--border-color:rgba(255,255,255,.09);--text-color:#F6F3EC;--text-muted:#ABAEB6;--accent-color:#FFC85A;--accent-success:#FFC85A;--uklon-green:#FFC85A;--accent-blue:#FFC85A;--accent-danger:#FF8478;--glass:rgba(53,57,65,.86);--track:rgba(255,255,255,.15)}
+html[data-theme="light"]{--bg-color:#F5F1E8;--card-bg:#FFFFFF;--text-color:#26211A;--text-muted:#7A7263;--accent-color:#D98E00;--accent-success:#D98E00;--uklon-green:#D98E00;--accent-blue:#D98E00;--accent-danger:#D4453C;--glass:rgba(255,255,255,.88);--track:rgba(40,30,10,.13)}
+body{background:radial-gradient(110% 45% at 50% -8%,color-mix(in srgb,var(--accent-color) 12%,transparent),transparent 65%),var(--bg-color)}
+
+/* Усі кольорові іконки й плитки — в один тон */
+.ib-blue,.ib-purple,.ib-cyan,.ib-orange,.ib-yellow,.ib-red,.ib-green,.ib-gray{background:color-mix(in srgb,var(--accent-color) 16%,transparent)!important;color:var(--accent-color)!important}
+.btn-x2{background:color-mix(in srgb,var(--accent-color) 16%,transparent);color:var(--accent-color)}
+.toggle-btn{background:color-mix(in srgb,var(--accent-color) 10%,transparent);border-color:color-mix(in srgb,var(--accent-color) 28%,transparent);color:var(--accent-color)}
+.car-card.active .car-price-info{color:#1A1300}
+
+/* Гроші: плюс — акцент, мінус — м'який червоний */
+.warn,[style*="#ff9500"],[style*="#FF9500"],[style*="#FF9F0A"],[style*="#E29400"]{color:var(--text-muted)!important}
+.eff-yellow{background:color-mix(in srgb,var(--accent-color) 55%,#7a5a10)!important;color:#1A1300}
+.eff-green{color:#1A1300}
+#verdict-chip.v-mid{background:color-mix(in srgb,var(--text-color) 10%,transparent);color:var(--text-color)}
+.svc-banner{background:color-mix(in srgb,var(--accent-color) 14%,transparent);border-color:color-mix(in srgb,var(--accent-color) 35%,transparent);color:var(--accent-color)}
+.svc-row.soon small{color:var(--accent-color)}
+
+/* Кнопки з рядковим фоном — бурштин із темним текстом */
+.save-btn[style*="background"]{color:#1A1300!important}
+[style*="#FF9500"][class*="save-btn"],[style*="#6366F1"],[style*="#9B59B6"]{background:var(--accent-color)!important;color:#1A1300!important}
+.nav-btn{background:var(--bg-color)!important;color:var(--text-color)!important;border:1px solid var(--border-color)}
+.cal-day.active{color:#1A1300}
+.cal-day.active .cal-day-name{opacity:.75}
+.donate-card{background:color-mix(in srgb,var(--accent-color) 7%,var(--card-bg));border-color:color-mix(in srgb,var(--accent-color) 40%,transparent)}
+.summary-chevron{color:var(--accent-color)}
+.toast.success,.toast.info{border-color:color-mix(in srgb,var(--accent-color) 40%,transparent)}
+</style>
+
+<!-- ===== DriverHub v6: Liquid Glass + компактність + тактильність ===== -->
+<style>
+html[data-theme="dark"]{--gl:rgba(255,255,255,.075);--gl-b:rgba(255,255,255,.15);--gl-s:inset 0 1px 0 rgba(255,255,255,.2),0 8px 22px -12px rgba(0,0,0,.5);--inner:rgba(255,255,255,.08)}
+html[data-theme="light"]{--gl:rgba(255,255,255,.66);--gl-b:rgba(255,255,255,.95);--gl-s:inset 0 1px 0 #fff,0 8px 22px -14px rgba(90,60,0,.35);--inner:rgba(60,40,0,.06)}
+body{padding-bottom:130px!important}
+body::before{content:"";position:fixed;inset:-15%;z-index:-1;pointer-events:none;background:radial-gradient(38% 26% at 12% 8%,color-mix(in srgb,var(--accent-color) 30%,transparent),transparent 70%),radial-gradient(34% 26% at 92% 38%,color-mix(in srgb,var(--accent-color) 16%,transparent),transparent 70%),radial-gradient(40% 28% at 25% 96%,color-mix(in srgb,#ff7a3d 16%,transparent),transparent 70%)}
+
+/* Скляні поверхні */
+.card,.ch-card,.stat-tile,.ch-chip,.ch-act:not(.primary),.car-card:not(.active),.qe-btn,.pr-chip{background:var(--gl)!important;border:1px solid var(--gl-b)!important;box-shadow:var(--gl-s)!important}
+.ch-hero{border:1px solid var(--gl-b);box-shadow:var(--gl-s);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.tabs{background:var(--glass)!important;border:1px solid var(--gl-b);box-shadow:var(--gl-s)!important}
+.modal-content{background:var(--glass)!important;-webkit-backdrop-filter:blur(28px) saturate(1.6);backdrop-filter:blur(28px) saturate(1.6);border:1px solid var(--gl-b);box-shadow:var(--gl-s)}
+.toast{background:var(--glass);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.btn-counter,.admin-input,.map-input-group,.pay-switch,.ch-kpis>div,.dlg-input,.counter-value:focus{background:var(--inner)!important}
+.pay-opt.active{background:var(--gl)!important;box-shadow:var(--gl-s)}
+.progress-container{background:var(--inner)}
+
+/* Компактніше */
+.app-header{padding:6px 14px 2px}.app-title{font-size:18px}.app-subtitle{font-size:10.5px}
+.theme-toggle{width:28px;height:28px;font-size:13px}
+.header-goal-strip{padding:0 14px 6px}
+.tabs{margin:2px 10px 6px;padding:3px;border-radius:15px}.tab-btn{padding:5px 0 4px;font-size:8.5px}.tab-icon svg{width:15px;height:15px}
+.car-selector{padding:0 0 5px}.car-card{padding:5px 11px}.car-name{font-size:11.5px}
+.card,.ch-card{padding:10px 12px;margin-bottom:7px;border-radius:17px}
+.card-title{margin-bottom:6px;font-size:10px}
+.stat-tile-grid{gap:5px;margin-bottom:7px}.stat-tile{padding:6px 3px;border-radius:14px}.stat-tile-icon{display:none}.stat-tile-value{font-size:14px}.stat-tile-label{font-size:9px}
+.breakdown-row{padding:4px 0 4px 8px;font-size:12px}
+.ch-hero{padding:10px 12px;margin-bottom:7px}.ch-net{font-size:30px;margin:2px 0}.ch-kpis{margin-top:7px}.ch-kpis>div{padding:5px 3px}.ch-kpis b{font-size:13px}
+.ch-timer{padding:8px 12px}.ch-time{font-size:21px}.ch-btn-shift{padding:8px 14px;font-size:12px}
+.ch-act{padding:9px 4px;font-size:11.5px}.ch-act.primary{padding:10px;font-size:13px}.ch-chip{padding:7px 2px;font-size:10px}
+.ch-row{padding:5px 0;font-size:12px}.ch-row.total{padding-top:7px;font-size:14px}.ch-h{padding:5px 0}.ch-h-ic{width:26px;height:26px;font-size:12px}
+.history-item{padding:6px 0}.empty-state{padding:10px}
+#page-settings .card div[style*="margin-bottom:8px"]{margin-bottom:5px!important}
+.toggle-btn{padding:8px;margin-top:5px}.reset-btn{padding:10px;margin-top:6px}.save-btn{padding:10px;margin-top:6px;font-size:13px}
+
+/* Тариф: параметри у дві колонки */
+#params-body:not([style*="none"]),#extra-params[style*="block"]{display:grid!important;grid-template-columns:1fr 1fr;column-gap:12px}
+#params-body>.toggle-btn,#params-body>#extra-params,#extra-params>.input-block:nth-child(4),#params-body>.input-block:nth-child(5){grid-column:1/-1}
+#params-body .input-block,#extra-params .input-block{padding:4px 0;border-bottom:none;min-width:0}
+#params-body .input-header,#extra-params .input-header{flex-direction:column;align-items:stretch;gap:2px}
+#params-body>.input-block:nth-child(5) .input-header,#extra-params>.input-block:nth-child(4) .input-header{flex-direction:row;align-items:center}
+#params-body .counter,#extra-params .counter{justify-content:space-between}
+#params-body>.input-block:nth-child(5) .counter,#extra-params>.input-block:nth-child(4) .counter{justify-content:flex-end}
+#params-body .btn-counter,#extra-params .btn-counter{width:30px;height:30px;font-size:16px;position:relative}
+#params-body .btn-counter::after,#extra-params .btn-counter::after{content:"";position:absolute;inset:-4px}
+#params-body .counter-value,#extra-params .counter-value{width:38px;font-size:15px}
+#params-body .btn-x2{padding:0 7px}
+#params-body .input-label,#extra-params .input-label{font-size:12px}
+
+/* Нижня панель — тонка */
+.sticky-summary{display:flex!important;flex-wrap:wrap;gap:5px;padding:6px 12px calc(10px + env(safe-area-inset-bottom))!important;border-radius:20px 20px 0 0!important;border:1px solid var(--gl-b);border-bottom:none;box-shadow:var(--gl-s)!important;-webkit-backdrop-filter:blur(26px) saturate(1.6)!important;backdrop-filter:blur(26px) saturate(1.6)!important}
+.sticky-summary .drag-handle{flex:0 0 100%;height:3px;margin:0 auto 1px;width:32px}
+.sticky-summary .summary-header{flex:1 1 100%;padding:0;align-items:center}
+.summary-mini-title{display:grid!important;grid-template-columns:auto 1fr;column-gap:8px;align-items:center}
+.summary-mini-label{grid-column:1/-1;font-size:9.5px!important;margin:0!important}
+.summary-mini-title #res-net{font-size:22px!important}
+#verdict-chip{margin:0!important;max-width:none!important;padding:3px 8px!important;font-size:10.5px!important;justify-self:start}
+.summary-chevron{padding:3px 9px;font-size:10px}
+#summary-details{flex:1 1 100%;margin-top:2px!important;padding-top:6px!important}
+.sticky-summary .pay-switch{flex:0 0 42%;margin:0;padding:3px;border-radius:12px}
+.sticky-summary .pay-opt{padding:6px 0;font-size:11.5px}
+.sticky-summary .save-btn{flex:1;margin:0;padding:10px;font-size:13px;border-radius:13px}
+
+/* Експорт у сітці */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}.grid2 .card-title{grid-column:1/-1}
+.grid2 .save-btn,.grid2 .save-btn-alt,.grid2 .toggle-btn{margin:0!important;padding:9px 4px!important;font-size:11px!important}
+
+/* Тактильність: відгук на кожне натискання */
+button,.btn-counter,.car-card,.tab-btn,.pay-opt,.cal-day,.qe-btn,.quick-coef-btn,.ch-act,.ch-chip,.pr-chip,.svc-ok,.theme-toggle,.lock-key,.summary-header,.pr-add,.nav-btn,.toggle-btn,.header-goal-strip{cursor:pointer;-webkit-touch-callout:none;touch-action:manipulation;transition:transform .12s ease,background-color .15s ease,opacity .15s ease,box-shadow .15s ease}
+button:active,.btn-counter:active,.car-card:active,.tab-btn:active,.pay-opt:active,.cal-day:active,.qe-btn:active,.quick-coef-btn:active,.ch-act:active,.ch-chip:active,.pr-chip:active,.svc-ok:active,.theme-toggle:active,.lock-key:active,.pr-add:active,.nav-btn:active,.toggle-btn:active,.summary-chevron:active{transform:scale(.94)!important;opacity:.85}
+.summary-header:active{opacity:.8}
+</style>
+<script>
+(function(){
+const HF=tg&&tg.HapticFeedback;
+const hap=k=>{try{if(!HF)return;k==='sel'?HF.selectionChanged():k==='ok'?HF.notificationOccurred('success'):k==='err'?HF.notificationOccurred('error'):HF.impactOccurred(k==='med'?'medium':'light')}catch(e){}};
+haptic=function(){};   /* вібрація тепер на pointerdown — миттєво, без дублювання */
+const SEL='button,.btn-counter,.car-card,.tab-btn,.pay-opt,.cal-day,.qe-btn,.quick-coef-btn,.ch-act,.ch-chip,.pr-chip,.svc-ok,.theme-toggle,.lock-key,.summary-header,.pr-add,.del-btn,.nav-btn,.toggle-btn,.ac-item,.header-goal-strip';
+document.addEventListener('pointerdown',e=>{const el=e.target.closest(SEL);if(!el||el.disabled)return;
+  hap(el.matches('.tab-btn,.pay-opt,.car-card,.cal-day,.pr-chip,.ac-item')?'sel':el.matches('.save-btn,.ch-act.primary,.ch-btn-shift')?'med':'light')},{passive:true,capture:true});
+let lastStep=0;document.addEventListener('input',e=>{if(e.target.type==='range'){const n=Date.now();if(n-lastStep>70){lastStep=n;hap('sel')}}});
+const _n=notify;notify=function(m,t){_n.apply(this,arguments);hap(t==='success'?'ok':t==='error'?'err':'sel')};
+const _a=addToDailyCash;addToDailyCash=function(){const g=Math.ceil(lastCalc.finalTotal||0);_a.apply(this,arguments);notify('Поїздку зафіксовано · '+g+' ₴','success')};
+const ex=document.querySelector('#page-analytics button[onclick="exportDataAsJSON()"]');if(ex)ex.closest('.card').classList.add('grid2');
+})();
+</script>
+
+<style>#params-body .counter-value,#extra-params .counter-value{flex:1;width:auto;min-width:0;padding:2px 0}#params-body>.input-block:nth-child(5) .counter-value,#extra-params>.input-block:nth-child(4) .counter-value{flex:0 0 52px}</style>
+<!-- ===== DriverHub v7: без горизонтального зсуву + плавність ===== -->
+<style>
+/* Жодного руху вбік: clip не ламає липкі елементи, на відміну від hidden */
+html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none;touch-action:pan-y}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+.car-selector,.pr-list,[style*="overflow-x"],#archive-list{touch-action:pan-x pan-y;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+/* 16px у полях — iOS/Telegram не наближає екран при фокусі (головна причина «втечі» вбік) */
+input,select,textarea{font-size:16px!important}
+.counter-value,.admin-input,.dlg-input,.map-input{font-size:16px!important}
+/* Довгі назви й великі суми не розпирають верстку */
+.car-name{max-width:120px;overflow:hidden;text-overflow:ellipsis}
+.pr-chip b{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.svc-row>span:first-child,.history-item>div:first-child,.ch-h-m,.input-header>.icon-wrap{min-width:0;overflow-wrap:anywhere}
+.ch-net,.mg-big{overflow-wrap:anywhere}
+.ch-kpis b,.stat-tile-value{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card,.ch-card,.ch-hero{max-width:100%;min-width:0}
+.breakdown-row>span,.result-row>span,.ch-row>span{min-width:0;overflow-wrap:anywhere}
+#earnings-chart{margin:0 -4px!important;max-width:calc(100% + 8px)}
+#page-strategy div[style*="overflow-x"]{margin:0 -12px!important;padding:0 12px!important}
+.toast{max-width:min(88%,360px)}
+.ac-dropdown{max-width:100%}
+
+/* Плавність */
+@keyframes pageIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.page.active{animation:pageIn .22s cubic-bezier(.22,.8,.3,1)}
+.tabs,.sticky-summary{transform:translateZ(0);will-change:transform}
+body::before{transform:translateZ(0);will-change:transform}
+.ch-hero{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.card,.ch-card,.stat-tile{contain:layout paint}
+.tab-btn,.tab-icon,.car-card,.pay-opt,.progress-bar,.header-goal-fill{transition:transform .22s cubic-bezier(.2,1.1,.4,1),background-color .2s ease,color .2s ease,box-shadow .2s ease,opacity .2s ease,width .5s cubic-bezier(.3,.8,.3,1)}
+button,.btn-counter,.quick-coef-btn,.ch-act,.ch-chip,.pr-chip,.svc-ok{transition:transform .22s cubic-bezier(.2,1.1,.4,1),background-color .15s ease,opacity .15s ease}
+button:active,.btn-counter:active,.car-card:active,.tab-btn:active,.pay-opt:active,.quick-coef-btn:active,.ch-act:active,.ch-chip:active,.pr-chip:active,.svc-ok:active{transition-duration:.06s}
+input[type=range]::-webkit-slider-thumb{transition:transform .12s ease}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.18)}
+.modal-overlay{animation:overlayIn .2s ease}
+.sticky-summary{transition:transform .32s cubic-bezier(.2,.8,.3,1)}
+</style>
+
+<!-- ===== DriverHub v8: вибір тарифу — завжди видимий, без горизонтальної прокрутки ===== -->
+<style>
+html,body{touch-action:auto!important}  /* pan-y на body блокував горизонтальну прокрутку вкладених списків */
+.car-selector{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:5px;overflow:visible!important;padding:0 0 6px}
+.car-card{flex-direction:column!important;align-items:center;justify-content:center;gap:1px!important;padding:5px 3px!important;border-radius:14px!important;min-width:0;text-align:center}
+.car-card>div:last-child{min-width:0;max-width:100%}
+.car-name{max-width:100%!important;font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.car-price-info{font-size:10px}.car-price-info::before{content:""!important;margin:0!important}
+.car-card.active{transform:none!important}
+</style>
+<script>
+/* Страховка: якщо вибір тарифів чомусь порожній — перемальовуємо */
+(function(){try{['car-list-calc','car-list-strat'].forEach(id=>{const el=document.getElementById(id);if(el&&!el.children.length){renderCarSelector();renderSettings()}})}catch(e){}})();
+</script>
+
 </body>
 </html>
