@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>DriverHub</title>
+<meta name="theme-color" content="#0F1115">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root {
+  --bg: #0F1115;
+  --bg-elevated: rgba(255,255,255,0.055);
+  --card: rgba(255,255,255,0.07);
+  --card-hover: rgba(255,255,255,0.1);
+  --border: rgba(255,255,255,0.1);
+  --text: #F8F7F4;
+  --muted: #9AA0A6;
+  --accent: #34E0C8;
+  --accent-soft: rgba(52,224,200,0.15);
+  --on-accent: #0A0E12;
+  --danger: #FF6B6B;
+  --danger-soft: rgba(255,107,107,0.15);
+  --success: #4ADE80;
+  --glass: rgba(18,20,26,0.78);
+  --shadow: 0 8px 32px -8px rgba(0,0,0,0.45);
+  --radius: 18px;
+  --radius-sm: 12px;
+  --glow: 0.65;
+}
+html[data-theme=light] {
+  --bg: #F7F5F0;
+  --bg-elevated: rgba(255,255,255,0.8);
+  --card: rgba(255,255,255,0.92);
+  --card-hover: #fff;
+  --border: rgba(0,0,0,0.08);
+  --text: #1A1A1A;
+  --muted: #6B6B6B;
+  --accent: #0D9488;
+  --accent-soft: rgba(13,148,136,0.12);
+  --on-accent: #fff;
+  --glass: rgba(255,255,255,0.85);
+  --shadow: 0 8px 32px -12px rgba(0,0,0,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { overflow-x: clip; overscroll-behavior: none; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+  padding: 0 16px calc(96px + env(safe-area-inset-bottom));
+  min-height: 100dvh;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 30% at 15% 10%, color-mix(in srgb, var(--accent) 35%, transparent), transparent 65%),
+    radial-gradient(35% 25% at 90% 45%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 60%),
+    radial-gradient(30% 20% at 30% 95%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 55%);
+  opacity: var(--glow);
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0 16px;
+}
+h1 {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+.sub { font-size: 12px; color: var(--muted); font-weight: 600; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px);
+  transition: background .2s;
+}
+.card:active { background: var(--card-hover); }
+
+.t {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.r {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+.r:last-child { border: 0; }
+.r span:first-child { color: var(--muted); font-weight: 500; }
+.big {
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.pos { color: var(--accent); }
+.neg { color: var(--danger); }
+
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform .15s cubic-bezier(.2,1.2,.4,1), opacity .12s, background .15s;
+}
+button:active, [data-a]:active { transform: scale(.96); }
+.b {
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 75%, #000));
+  color: var(--on-accent);
+  font-weight: 800;
+  border-radius: 16px;
+  padding: 14px 16px;
+  width: 100%;
+  font-size: 15px;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.k {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 8px;
+  font-weight: 700;
+  font-size: 13px;
+  min-width: 0;
+  text-align: center;
+}
+.k small { font-size: 11px; color: var(--muted); font-weight: 600; display: block; margin-top: 2px; }
+.k.on {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: transparent;
+}
+.k.on small { color: var(--on-accent); }
+
+.chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(88px, 1fr)); gap: 8px; margin-bottom: 10px; }
+.f label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.st {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-elevated);
+  border-radius: 14px;
+  padding: 4px;
+  border: 1px solid var(--border);
+}
+.st button {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--card);
+  font-size: 18px;
+  font-weight: 700;
+  flex: 0 0 auto;
+}
+input, select {
+  font: inherit;
+  font-size: 16px;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+  font-weight: 700;
+}
+.st input { padding: 8px 4px; }
+input:focus, select:focus { outline: none; }
+
+nav {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  z-index: 50;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  padding: 6px;
+  border-radius: 28px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(28px) saturate(1.8);
+  box-shadow: 0 12px 40px -10px rgba(0,0,0,0.5), inset 0 1px 0 var(--border);
+}
+nav button {
+  background: none;
+  border-radius: 22px;
+  padding: 8px 0 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  position: relative;
+}
+nav button i { font-style: normal; font-size: 20px; }
+nav button.on {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.bd {
+  position: absolute;
+  top: 2px;
+  right: 8px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 9px;
+  font-weight: 800;
+  border-radius: 99px;
+  padding: 1px 5px;
+  min-width: 16px;
+}
+nav button.on .bd { background: var(--on-accent); color: var(--accent); }
+
+.pgb {
+  height: 10px;
+  background: var(--bg-elevated);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+.pgb div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #fff));
+  border-radius: 6px;
+  transition: width .4s cubic-bezier(.2,.8,.3,1);
+}
+#ov {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: flex-end;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+}
+.sh {
+  width: 100%;
+  background: var(--glass);
+  backdrop-filter: blur(32px);
+  border: 1px solid var(--border);
+  border-radius: 28px 28px 0 0;
+  padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
+  animation: sheetUp .28s cubic-bezier(.2,.9,.3,1);
+  max-height: 88vh;
+  overflow: auto;
+}
+@keyframes sheetUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+#ts { position: fixed; top: calc(12px + env(safe-area-inset-top)); left: 0; right: 0; z-index: 200; display: flex; justify-content: center; pointer-events: none; }
+.to {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 12px 18px;
+  font-weight: 700;
+  font-size: 14px;
+  max-width: 92%;
+  backdrop-filter: blur(20px);
+  animation: sheetUp .25s;
+  pointer-events: auto;
+  box-shadow: var(--shadow);
+}
+.vd {
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 13px;
+  margin: 8px 0;
+}
+.vd.vg { background: var(--accent-soft); color: var(--accent); }
+.vd.vm { background: var(--bg-elevated); }
+.vd.vx { background: var(--danger-soft); color: var(--danger); }
+.hi {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.hi:last-child { border: 0; }
+.hi > div { flex: 1; min-width: 0; }
+.hi small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+.x {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--bg-elevated);
+  color: var(--muted);
+  font-weight: 700;
+}
+details { border-top: 1px solid var(--border); padding: 4px 0; }
+summary { padding: 10px 0; font-weight: 700; cursor: pointer; font-size: 14px; }
+.page { animation: fadeIn .25s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.cd {
+  background: var(--bg-elevated);
+  border-radius: 12px;
+  padding: 8px 0;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.cd small { display: block; font-size: 10px; color: var(--muted); font-weight: 600; }
+.cd.off { background: var(--danger-soft); color: var(--danger); }
+.cd.td { outline: 2px solid var(--accent); }
+.bars { display: flex; align-items: flex-end; gap: 3px; height: 70px; }
+.bars div { flex: 1; background: var(--bg-elevated); border-radius: 4px 4px 0 0; min-height: 3px; }
+.bars div.top { background: var(--accent); }
+.warn { font-size: 12px; color: var(--muted); margin: 4px 0 8px; line-height: 1.4; }
+.pal { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.pal button { background: none; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--muted); padding: 6px 0; }
+.pal i { width: 36px; height: 36px; border-radius: 50%; border: 3px solid var(--border); }
+.pal button.on { color: var(--text); }
+.pal button.on i { border-color: var(--text); }
+.dc > summary { list-style: none; display: flex; justify-content: space-between; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding: 0; }
+.dc > summary::-webkit-details-marker { display: none; }
+.dc[open] > summary { margin-bottom: 14px; }
+body.kb nav { display: none; }
+body.kb { padding-bottom: 48vh !important; }
+#res { min-height: 280px; }
+#cmp { min-height: 120px; }
+.fl { animation: flash .5s ease; }
+@keyframes flash { 0% { transform: scale(1.06); filter: brightness(1.4); } 100% { transform: none; filter: none; } }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>DriverHub</h1>
+    <div class="sub" id="hs"></div>
+  </div>
+  <button class="x" data-a="theme" style="font-size:16px">🌗</button>
+</header>
+<main id="app"></main>
+<nav id="nav"></nav>
+<div id="ov"></div>
+<div id="ts"></div>
+<input type="file" id="imp" accept=".json" style="display:none">
+<script>
+// ==================== CORE LOGIC (збережено та очищено) ====================
+const tg = window.Telegram && Telegram.WebApp;
+tg && (tg.expand(), tg.ready());
+try { tg && tg.disableVerticalSwipes && tg.disableVerticalSwipes(); } catch(e) {}
+document.addEventListener('touchstart', () => { window.scrollY <= 0 && window.scrollTo(0, 1); }, { passive: true });
+
+const $ = s => document.querySelector(s);
+const m = n => Math.round(n || 0).toLocaleString('uk-UA').replace(/[\u00a0\u202f]/g, ' ');
+const ld = (k, f) => { try { return JSON.parse(localStorage.getItem(k)) || f; } catch(e) { return f; } };
+const sv = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+const hap = t => { try { const h = tg.HapticFeedback; t === 's' ? h.selectionChanged() : t === 'ok' ? h.notificationOccurred('success') : t === 'e' ? h.notificationOccurred('error') : h.impactOccurred(t === 'm' ? 'medium' : 'light'); } catch(e) {} };
+document.addEventListener('pointerdown', e => { const b = e.target.closest('button,[data-a]'); b && !b.disabled && hap(b.closest('nav') || b.classList.contains('k') ? 's' : b.classList.contains('b') ? 'm' : 'l'); }, { passive: true });
+
+const toast = (t, k, a) => {
+  hap(k === 'e' ? 'e' : 'ok');
+  $('#ts').innerHTML = `<div class="to">${t}${a ? `<button class="u" data-a="${a[0]}" data-v="${a[1]}">${a[2]}</button>` : ''}</div>`;
+  clearTimeout(toast.t);
+  toast.t = setTimeout(() => $('#ts').innerHTML = '', a ? 5000 : 2200);
+};
+
+const K = { e: 'taxi_expenses_v22', t: 'taxi_tariffs_v22', d: 'taxi_daily_cash_data_v22', a: 'taxi_shift_archive_v1', p: 'taxi_platforms_v2', c: 'taxi_calc_v2' };
+const T = (n, a, b, c, d, e, f) => ({ name: n, minPrice: a, minKm: b, perKmCity: c, perKmOut: d, perMin: e, stopPrice: f });
+const DT = { standard: T('Стандарт', 95, 1.8, 30, 45, 3.5, 10), comfort: T('Комфорт', 100, 1.8, 35, 45, 4, 15), business: T('Бізнес', 120, 1.5, 40, 45, 5, 15), intercity: T('За місто', 100, 1.5, 30, 40, 4, 15) };
+const DP = () => ({
+  uklon: { name: 'Uklon', comm: 17, t: JSON.parse(JSON.stringify(DT)) },
+  bolt: { name: 'Bolt', comm: 20, ph: 1, t: { econ: T('Економ', 90, 2, 22, 28, 3, 10), comf: T('Комфорт', 100, 2, 26, 32, 3.5, 10) } },
+  uber: { name: 'Uber', comm: 25, ph: 1, t: { x: T('UberX', 85, 2, 21, 27, 3, 10), comf: T('Comfort', 100, 2, 25, 31, 3.5, 10) } }
+});
+
+const E = Object.assign({ comm: 17, type: 'gas', cons: 14, price: 41.9, amort: 0, workMode: 'solo', rentVal: 0, splitPct: 10, taxRate: 5, fop: false, warRate: 1, esv: 1902.34, taxBase: 'afterComm', goalKm: 40, goalDay: 2000, planH: 10, accent: 'teal', autoReset: true, glow: 1, platNow: true, platOver: 23, taxType: 'none', taxYear: 2026, vat: false, vatRate: 20, vatLimit: 1000000, fixTax: 0 }, ld(K.e, {}));
+const P = ld(K.p, null) || (() => { const p = DP(); p.uklon.comm = E.comm; Object.assign(p.uklon.t, ld(K.t, {})); return p; })();
+const C = Object.assign({ km: 0, kmOut: 0, deliv: 0, empty: 0, wait: 0, stops: 0, coef: 1, tip: 0, offer: 0, pay: 'cash', pl: 'uklon', tr: 'standard' }, ld(K.c, {}));
+const S = { per: 30, po: false };
+let D, tab = 'trip';
+const B = Object.assign({ target: 700, adj: null, off: [], mon: '' }, ld('taxi_brand_v2', {}));
+
+const AC = {
+  teal: ['Бірюза', '#34E0C8', '#0B9A8B', '#0F1115', '#F7F5F0'],
+  sky: ['Небо', '#5DB9FF', '#1F7AD6', '#0F1115', '#F7F5F0'],
+  indigo: ['Індиго', '#9AA6FF', '#4A5BD4', '#0F1115', '#F7F5F0'],
+  violet: ['Фіолет', '#C792FF', '#8A3FD6', '#0F1115', '#F7F5F0'],
+  rose: ['Рожевий', '#FF8FB0', '#D6406A', '#0F1115', '#F7F5F0'],
+  coral: ['Корал', '#FF8570', '#D64A33', '#0F1115', '#F7F5F0'],
+  orange: ['Мандарин', '#FFA24D', '#D9700A', '#0F1115', '#F7F5F0'],
+  amber: ['Бурштин', '#FFC84A', '#D98E00', '#0F1115', '#F7F5F0'],
+  lime: ['Лайм', '#BDEB5C', '#6A9F12', '#0F1115', '#F7F5F0'],
+  mint: ['Мʼята', '#6BEBA6', '#0F9D5A', '#0F1115', '#F7F5F0']
+};
+
+if (E.glow === undefined) E.glow = 1;
+if (E.platNow === undefined) E.platNow = true;
+if (!E.platOver) E.platOver = 23;
+if (!E.taxType) E.taxType = E.fop ? 'g3' : 'none';
+if (!E.taxYear) E.taxYear = 2026;
+if (E.vat === undefined) E.vat = false;
+if (!E.vatRate) E.vatRate = 20;
+if (!E.vatLimit) E.vatLimit = 1000000;
+if (E.fixTax === undefined) E.fixTax = 0;
+
+function applyAccent() {
+  const d = document.documentElement.dataset.theme === 'dark' ? 0 : 1;
+  const a = AC[E.accent] || AC.teal;
+  const c = a[1 + d];
+  const n = parseInt(c.slice(1), 16);
+  const l = .299 * (n >> 16) + .587 * (n >> 8 & 255) + .114 * (n & 255);
+  const st = document.documentElement.style;
+  st.setProperty('--accent', c);
+  st.setProperty('--on-accent', l > 150 ? '#0A0E12' : '#fff');
+  st.setProperty('--bg', a[3 + d]);
+  st.setProperty('--glow', [0, .55, 1][E.glow] ?? .55);
+}
+
+const fixM = () => E.fop ? (+E.esv || 0) + (+E.fixTax || 0) : 0;
+const platYtd = () => {
+  const t = Date.now();
+  if (platYtd.c && t - platYtd.c[0] < 2000) return platYtd.c[1];
+  const y = new Date().getFullYear();
+  const v = ld(K.a, []).filter(x => new Date(x.timestamp).getFullYear() === y && x.date !== D.date).reduce((a, x) => a + x.gross - x.comm, 0) + D.gross - D.comm;
+  platYtd.c = [t, v];
+  return v;
+};
+const taxOf = (g, comm, fuel, park) => {
+  if (!E.fop) return 0;
+  if (E.taxType === 'plat') return (E.platNow || Date.now() >= new Date(2027, 0, 1).getTime()) ? Math.max(0, g - comm) * ((platYtd() >= 834 * (E.mzp || 8647) ? E.platOver : E.taxRate) / 100) : 0;
+  const v = E.vat ? 1 + (E.vatRate || 20) / 100 : 1;
+  const gv = g / v;
+  const base = E.taxBase === 'gross' ? gv : E.taxBase === 'profit' ? Math.max(0, gv - comm - fuel - park) : gv - comm;
+  return base * (E.taxRate + E.warRate) / 100 + (E.vat ? g - gv : 0);
+};
+function taxPreset() {
+  const y = E.taxYear === 2027;
+  const mz = y ? 9546 : 8647;
+  const t = E.taxType;
+  E.mzp = mz;
+  E.esv = +(mz * .22).toFixed(2);
+  E.vat = false;
+  if (t === 'g2') { E.taxRate = 0; E.warRate = 0; E.fixTax = +(mz * .3).toFixed(2); E.taxBase = 'gross'; }
+  else if (t === 'g3') { E.taxRate = 5; E.warRate = 1; E.fixTax = 0; E.taxBase = 'afterComm'; }
+  else if (t === 'plat') { E.taxRate = 10; E.warRate = 0; E.fixTax = 0; E.esv = 0; E.taxBase = 'afterComm'; }
+  else if (t === 'gen') { E.taxRate = 18; E.warRate = 1.5; E.fixTax = 0; E.taxBase = 'profit'; }
+  else { E.taxRate = 0; E.warRate = 0; E.fixTax = 0; E.esv = 0; }
+}
+function needG(pl, tot) {
+  let lo = 0, hi = 1e5;
+  for (let i = 0; i < 40; i++) {
+    const mid = (lo + hi) / 2;
+    fin(mid, pl, tot).eff >= E.goalKm ? hi = mid : lo = mid;
+  }
+  return hi;
+}
+const savePE = () => { sv(K.e, E); sv('taxi_brand_v2', B); sv(K.p, P); sv(K.t, P.uklon ? P.uklon.t : DT); };
+const fixSel = () => { if (!P[C.pl]) C.pl = Object.keys(P)[0]; if (!P[C.pl].t[C.tr]) C.tr = Object.keys(P[C.pl].t)[0]; };
+const root = { E, P, B };
+const gp = p => p.split('.').reduce((o, k) => o[k], root);
+const setPath = (p, v) => { const a = p.split('.'); const l = a.pop(); a.reduce((o, k) => o[k], root)[l] = v; };
+const today = () => new Date().toLocaleDateString();
+const hm = () => { const d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
+const newDay = () => ({ date: today(), orders: 0, gross: 0, comm: 0, fuel: 0, extra: 0, park: 0, tax: 0, kmDv: 0, totalKm: 0, totalCash: 0, totalCard: 0, tips: 0, actualFuel: 0, history: [], shiftActive: false, shiftStart: null, shiftAccMs: 0, pl: {} });
+const norm = d => { const n = Object.assign(newDay(), d); n.park = d.park ?? d.rent ?? 0; n.extra = d.extra ?? d.extraExp ?? 0; n.pl = d.pl || {}; return n; };
+function loadDay() {
+  const d = ld(K.d, null);
+  if (d && d.date === today()) { D = norm(d); return; }
+  if (d && d.orders) { D = norm(d); arc(); }
+  D = newDay();
+  sv(K.d, D);
+}
+const hrs = () => ((D.shiftAccMs || 0) + (D.shiftActive && D.shiftStart ? Date.now() - D.shiftStart : 0)) / 36e5;
+const dFuel = () => D.actualFuel > 0 ? D.actualFuel : D.fuel;
+const dRent = () => E.workMode === 'rent' && (D.orders > 0 || D.shiftActive) ? +E.rentVal : 0;
+const dNet = () => D.gross - D.comm - dFuel() - D.extra - D.park - D.tax - dRent();
+function arc() {
+  if (!D.orders) return;
+  const hr = Array(24).fill(0), tr = Array(24).fill(0);
+  D.history.forEach(t => { if (t.x || t.pay === 'expense') return; const h = parseInt(t.time); if (h >= 0 && h < 24) { hr[h] += t.net; tr[h]++; } });
+  const rec = { date: D.date, orders: D.orders, gross: D.gross, comm: D.comm, fuel: D.fuel, actualFuel: D.actualFuel, tips: D.tips, extraExp: D.extra, rent: D.park + dRent(), tax: D.tax, net: dNet(), totalKm: D.totalKm, totalCash: D.totalCash, totalCard: D.totalCard, shiftHours: hrs(), cancelPct: 0, orderMinutes: 0, timestamp: Date.now(), hr, tr, pl: D.pl };
+  const A = ld(K.a, []);
+  const i = A.findIndex(s => s.date === D.date);
+  i > -1 ? A[i] = rec : A.unshift(rec);
+  sv(K.a, A.slice(0, 400));
+}
+const save = () => { sv(K.d, D); clearTimeout(save.t); save.t = setTimeout(arc, 700); hdr(); };
+
+const fuelCost = km => km / 100 * E.cons * E.price + km * E.amort;
+function fin(g, pl, tot) {
+  const comm = g * pl.comm / 100;
+  const fuel = fuelCost(tot);
+  const park = E.workMode === 'split' ? (g - comm) * E.splitPct / 100 : 0;
+  const tax = taxOf(g, comm, fuel, park);
+  const net = g - comm - fuel - park - tax;
+  return { g, comm, fuel, park, tax, net, tot, eff: tot ? net / tot : 0 };
+}
+function calc(t, pl, c) {
+  let rem = t.minKm, xc = 0, xo = 0;
+  if (c.km >= rem) { xc = c.km - rem; rem = 0; } else rem -= c.km;
+  if (c.kmOut >= rem) xo = c.kmOut - rem;
+  const g = (t.minPrice + xc * t.perKmCity + xo * t.perKmOut + c.wait * t.perMin + c.stops * t.stopPrice) * c.coef + c.tip;
+  return fin(g, pl, c.km + c.kmOut + c.deliv + c.empty);
+}
+const kf = pl => {
+  const c = pl.comm / 100, s = E.workMode === 'split' ? E.splitPct / 100 : 0, tr = E.fop ? (E.taxRate + E.warRate) / 100 : 0;
+  return (1 - c) * (1 - s) - (E.taxBase === 'gross' ? tr : (1 - c) * tr);
+};
+function addTrip(r, plk, pay, tip, trip, dv) {
+  D.kmDv = (D.kmDv || 0) + (dv || 0);
+  D.orders++;
+  D.gross += r.g;
+  D.comm += r.comm;
+  D.fuel += r.fuel;
+  D.park += r.park;
+  D.tax += r.tax;
+  D.totalKm += r.tot;
+  D.tips += tip || 0;
+  pay === 'cash' ? D.totalCash += r.g : D.totalCard += r.g;
+  const p = D.pl[plk] || (D.pl[plk] = { n: 0, g: 0, net: 0 });
+  p.n++;
+  p.g += r.g;
+  p.net += r.net;
+  const id = Date.now() + Math.random();
+  D.history.unshift({ id, time: hm(), pay, pl: plk, g: r.g, net: r.net, km: r.tot, tip: tip || 0, trip: trip || 0, dv: dv || 0, r });
+  save();
+  return id;
+}
+function delItem(id) {
+  const i = D.history.findIndex(t => t.id === id);
+  if (i < 0) return;
+  const t = D.history[i];
+  if (t.x) { t.k === 'fuel' ? D.actualFuel = Math.max(0, D.actualFuel - t.amt) : D.extra -= t.amt; }
+  else if (t.r) {
+    const r = t.r;
+    D.orders--;
+    D.gross -= r.g;
+    D.comm -= r.comm;
+    D.fuel -= r.fuel;
+    D.park -= r.park;
+    D.tax -= r.tax;
+    D.totalKm = Math.max(0, D.totalKm - r.tot);
+    D.kmDv = Math.max(0, (D.kmDv || 0) - (t.dv || 0));
+    D.tips -= t.tip || 0;
+    t.pay === 'cash' ? D.totalCash -= r.g : D.totalCard -= r.g;
+    const p = D.pl[t.pl];
+    p && (p.n--, p.g -= r.g, p.net -= r.net);
+  }
+  D.history.splice(i, 1);
+  save();
+}
+
+function ask(title, fs, ok, sum) {
+  return new Promise(res => {
+    const o = $('#ov');
+    o.style.display = 'flex';
+    o.innerHTML = `<div class="sh"><div class="t">${title}</div>${fs.map((f, i) => `<div class="f" style="margin-bottom:10px"><label>${f.l}</label>${f.o ? `<select id="q${i}">${f.o.map(x => `<option value="${x[0]}">${x[1]}</option>`).join('')}</select>` : `<input id="q${i}" ${f.t === 's' ? '' : 'type="number" inputmode="decimal"'}>`}</div>`).join('')}${sum ? `<div class="r" style="margin-bottom:10px"><span>Разом пробіг</span><b id="qs">0.0 км</b></div>` : ''}<div class="g2"><button class="k" id="qn" style="padding:14px">Скасувати</button><button class="b" id="qy">${ok || 'Готово'}</button></div></div>`;
+    fs.forEach((f, i) => f.v !== undefined && ($('#q' + i).value = f.v));
+    sum && ($('#qs').textContent = sum(fs.map((f, i) => $('#q' + i).value)));
+    const done = v => { o.style.display = 'none'; o.innerHTML = ''; res(v); };
+    $('#qn').onclick = () => done(null);
+    $('#qy').onclick = () => done(fs.map((f, i) => $('#q' + i).value));
+    o.onclick = e => { e.target === o && done(null); };
+    sum && (o.oninput = () => { $('#qs').textContent = sum(fs.map((f, i) => $('#q' + i).value)); });
+    setTimeout(() => fs.length && $('#q0').focus(), 150);
+  });
+}
+
+// ==================== VIEWS ====================
+const F = (id, l, st) => `<div class="f"><label>${l}</label><div class="st"><button data-a="s" data-v="${id}:-${st}">−</button><input type="number" inputmode="decimal" data-c="${id}" value="${C[id]}"><button data-a="s" data-v="${id}:${st}">+</button></div></div>`;
+
+function vTrip() {
+  const pl = P[C.pl];
+  return `<div class="page">
+    <div class="chips">${Object.keys(pl.t).map(k => `<button class="k ${k === C.tr ? 'on' : ''}" data-a="tr" data-v="${k}">${pl.t[k].name}<br><small>від ${pl.t[k].minPrice} ₴</small></button>`).join('')}</div>
+    <div class="sub" style="display:flex;justify-content:space-between;align-items:center;margin:-4px 0 10px">
+      <span>${pl.name} · комісія ${pl.comm}%</span>
+      <button class="k" data-a="po" style="padding:6px 12px;font-size:12px">${S.po ? 'Сховати' : 'Змінити платформу'} ⌄</button>
+    </div>
+    ${S.po ? `<div class="chips">${Object.keys(P).map(k => `<button class="k ${k === C.pl ? 'on' : ''}" data-a="pl" data-v="${k}">${P[k].name}</button>`).join('')}</div>` : ''}
+    ${pl.ph ? '<div class="warn">⚠️ Тарифи орієнтовні — виправте в «Опціях».</div>' : ''}
+    <div class="card">
+      <div class="t"><span>Маршрут</span><button class="k" data-a="clr" style="padding:6px 12px;font-size:12px">Очистити</button></div>
+      <div class="g2">${F('km', 'Км місто', .1)}${F('kmOut', 'Км за містом', .1)}${F('deliv', 'Подача, км', .1)}${F('empty', 'Порожній, км', 1)}${F('wait', 'Очікування, хв', 1)}${F('stops', 'Дод. точки', 1)}</div>
+      <div class="r" style="margin-top:8px"><span>Разом пробіг</span><b id="tk">0 км</b></div>
+      <button class="k" data-a="mirror" style="width:100%;margin:6px 0;padding:10px">↔ Порожній = км маршруту</button>
+      <div class="chips" style="margin:10px 0;grid-template-columns:repeat(4,1fr)">${[1, 1.2, 1.5, 2].map(x => `<button class="k ${C.coef == x ? 'on' : ''}" data-a="cf" data-v="${x}">${x}x</button>`).join('')}</div>
+      <div class="g2">${F('coef', 'Коефіцієнт', .1)}${F('tip', 'Чайові, ₴', 5)}</div>
+      <div style="margin-top:10px">${F('offer', 'Ціна з додатку, ₴ (необовʼязково)', 10)}</div>
+    </div>
+    <div id="res"></div>
+    <div id="cmp"></div>
+  </div>`;
+}
+
+function upTrip() {
+  sv(K.c, C);
+  const pl = P[C.pl], t = pl.t[C.tr];
+  let r = calc(t, pl, C);
+  if (C.offer > 0) r = fin(+C.offer, pl, r.tot);
+  const tk = $('#tk');
+  tk && (tk.textContent = r.tot.toFixed(1) + ' км');
+  const need = r.tot > 0 ? needG(pl, r.tot) : 0;
+  const cl = r.eff >= E.goalKm ? 'vg' : r.eff >= E.goalKm * .7 ? 'vm' : 'vx';
+  const vt = cl === 'vg' ? `✅ Вигідно · запас ${m(r.g - need)} ₴` : cl === 'vm' ? `⚠️ На межі · бажано від ${m(need)} ₴` : `❌ Невигідно · треба від ${m(need)} ₴`;
+  $('#res').innerHTML = `<div class="card">
+    <div class="t"><span>${pl.name} · ${t.name}${C.offer > 0 ? ' · ціна замовлення' : ''}</span><b>${m(r.g)} ₴</b></div>
+    <div class="big ${r.net < 0 ? 'neg' : 'pos'}">${m(r.net)} ₴</div>
+    <div class="sub">чистими · ${r.eff.toFixed(1)} ₴/км · ${r.tot.toFixed(1)} км</div>
+    ${r.tot > 0 ? `<div class="vd ${cl}">${vt}</div>` : ''}
+    <div class="r"><span>Комісія ${pl.comm}%</span><span>−${m(r.comm)} ₴</span></div>
+    <div class="r"><span>Пальне й авто</span><span>−${m(r.fuel)} ₴</span></div>
+    ${r.park ? `<div class="r"><span>Парк ${E.splitPct}%</span><span>−${m(r.park)} ₴</span></div>` : ''}
+    ${r.tax ? `<div class="r"><span>${E.taxType === 'plat' ? 'ПДФО (платформа)' : 'Податки ФОП'}</span><span>−${m(r.tax)} ₴</span></div>` : ''}
+    ${E.workMode === 'rent' ? `<div class="r"><span>Оренда (на день)</span><span>${m(E.rentVal)} ₴</span></div>` : ''}
+    <div class="g3" style="grid-template-columns:1fr 1fr 1.6fr;margin-top:12px">
+      <button class="k ${C.pay === 'cash' ? 'on' : ''}" data-a="pay" data-v="cash">💵 Гот.</button>
+      <button class="k ${C.pay === 'card' ? 'on' : ''}" data-a="pay" data-v="card">💳 Карта</button>
+      <button class="b" data-a="add">Записати</button>
+    </div>
+  </div>`;
+  const nb = $('#res .big');
+  if (nb) { upTrip.l !== undefined && upTrip.l !== r.net && nb.classList.add('fl'); upTrip.l = r.net; }
+  const L = [];
+  Object.keys(P).forEach(pk => Object.keys(P[pk].t).forEach(tk => L.push({ pk, tk, r: calc(P[pk].t[tk], P[pk], C) })));
+  L.sort((a, b) => b.r.net - a.r.net);
+  $('#cmp').innerHTML = C.km + C.kmOut > 0 ? `<div class="card"><div class="t"><span>Усі тарифи для цього маршруту</span><span>чистими</span></div>${L.map((x, i) => `<div class="hi" data-a="pick" data-v="${x.pk}:${x.tk}"><div><b>${i ? '' : '🏆 '}${P[x.pk].name} · ${P[x.pk].t[x.tk].name}</b><small>чек ${m(x.r.g)} ₴ · ${x.r.eff.toFixed(1)} ₴/км</small></div><b class="${x.r.net < 0 ? 'neg' : i ? '' : 'pos'}">${m(x.r.net)} ₴</b></div>`).join('')}</div>` : '<div class="warn">Введіть кілометраж — і побачите порівняння всіх тарифів.</div>';
+}
+
+function heroH() {
+  const h = hrs(), n = dNet(), gl = E.goalDay, left = Math.max(0, gl - n);
+  let f;
+  if (left === 0) f = '✅ Ціль дня виконано';
+  else if (D.shiftActive && h >= .15) {
+    const hl = Math.max(0, E.planH - h);
+    f = `Прогноз ~${m(n + n / h * hl)} ₴` + (hl > 0 ? ` · треба ${m(left / hl)} ₴/год` : '');
+  } else f = `До цілі ${m(gl)} ₴ залишилось ${m(left)} ₴`;
+  const mm = Math.floor(h * 60);
+  return `<div class="t"><span>Чисті сьогодні</span><span>${D.shiftActive ? '● на лінії' : h > 0 ? 'пауза' : 'зміну не розпочато'}</span></div>
+    <div class="big ${n < 0 ? 'neg' : 'pos'}">${m(n)} ₴</div>
+    <div class="sub">${D.orders} поїздок · ${D.totalKm.toFixed(1)} км · ${h >= .05 ? m(n / h) + ' ₴/год' : '— ₴/год'} · ${String(Math.floor(mm / 60)).padStart(2, '0')}:${String(mm % 60).padStart(2, '0')}</div>
+    <div class="pgb"><div style="width:${Math.max(0, Math.min(100, n / gl * 100))}%"></div></div>
+    <div class="sub">${f}</div>`;
+}
+
+function vShift() {
+  const bal = D.totalCard - D.comm;
+  return `<div class="page">
+    <div class="card" id="hero">${heroH()}</div>
+    <div class="g2" style="margin-bottom:10px">
+      <button class="b" data-a="shift">${D.shiftActive ? '⏸ Пауза' : hrs() > 0 ? '▶ Продовжити' : '▶ Почати зміну'}</button>
+      <button class="k" data-a="manual" style="padding:14px">➕ Поїздка вручну</button>
+    </div>
+    <div class="g2" style="margin-bottom:10px">
+      <button class="k" data-a="fuel" style="padding:12px">⛽ Заправка</button>
+      <button class="k" data-a="exp" style="padding:12px">💸 Витрата</button>
+    </div>
+    <div class="card">
+      <div class="t">Підсумок</div>
+      <div class="r"><span>Оборот</span><span>${m(D.gross)} ₴</span></div>
+      <div class="r"><span>Пробіг: пасажир + подача</span><span>${(D.totalKm - (D.kmDv || 0)).toFixed(1)} + ${(D.kmDv || 0).toFixed(1)} км${D.kmDv > 0 && D.totalKm > 0 ? ' · ' + Math.round(D.kmDv / D.totalKm * 100) + '% порожній' : ''}</span></div>
+      <div class="r"><span>Комісія платформ</span><span>−${m(D.comm)} ₴</span></div>
+      <div class="r"><span>${D.actualFuel > 0 ? 'Пальне (факт)' : 'Пальне й авто (розрахунок)'}</span><span>−${m(dFuel())} ₴</span></div>
+      ${D.extra ? `<div class="r"><span>Витрати</span><span>−${m(D.extra)} ₴</span></div>` : ''}
+      ${D.park ? `<div class="r"><span>Парк</span><span>−${m(D.park)} ₴</span></div>` : ''}
+      ${dRent() ? `<div class="r"><span>Оренда</span><span>−${m(dRent())} ₴</span></div>` : ''}
+      ${D.tax ? `<div class="r"><span>Податки ФОП</span><span>−${m(D.tax)} ₴</span></div>` : ''}
+      <div class="r"><span><b>Чистий прибуток</b></span><b class="pos">${m(dNet())} ₴</b></div>
+      ${E.fop ? `<div class="r"><span>Фіксовані (ЄСВ${E.fixTax ? ' + ЄП/ВЗ' : ''}) — частка за день</span><span>−${m(fixM() / 30)} ₴</span></div><div class="r"><span><b>Чисто після фіксованих</b></span><b class="pos">${m(dNet() - fixM() / 30)} ₴</b></div>` : ''}
+      <div class="r"><span>💵 Готівка / 💳 Картка</span><span>${m(D.totalCash)} / ${m(D.totalCard)} ₴</span></div>
+      <div class="r"><span>${bal >= 0 ? 'Платформи винні вам' : 'Ви винні платформам'}</span><span>${m(Math.abs(bal))} ₴</span></div>
+    </div>
+    <div class="card">
+      <div class="t"><span>Історія</span><span>${D.orders}</span></div>
+      ${D.history.length ? D.history.map(t => t.x ? `<div class="hi"><div><b>${t.name}</b><small>${t.time}</small></div><b class="neg">−${m(t.amt)} ₴</b><button class="x" data-a="del" data-v="${t.id}">✕</button></div>` : t.r ? `<div class="hi"><div><b>${t.pay === 'cash' ? '💵' : '💳'} ${m(t.g)} ₴ · ${t.dv > 0 && t.trip != null ? t.trip.toFixed(1) + ' + ' + t.dv.toFixed(1) + ' = ' + t.km.toFixed(1) : t.km.toFixed(1)} км</b><small>${t.time} · ${P[t.pl] ? P[t.pl].name : t.pl}</small></div><b class="pos">+${m(t.net)} ₴</b><button class="x" data-a="del" data-v="${t.id}">✕</button></div>` : '').join('') : '<div class="warn">Поки порожньо — запишіть першу поїздку.</div>'}
+    </div>
+    <button class="k" style="width:100%;padding:14px;color:var(--danger)" data-a="end">Завершити зміну (в архів)</button>
+  </div>`;
+}
+
+const monKey = () => { const n = new Date(); return n.getFullYear() + '-' + n.getMonth(); };
+function bData() {
+  const n = new Date(), dim = new Date(n.getFullYear(), n.getMonth() + 1, 0).getDate(), td = n.getDate();
+  const A = ld(K.a, []).filter(s => { const d = new Date(s.timestamp); return d.getFullYear() === n.getFullYear() && d.getMonth() === n.getMonth() && s.date !== D.date && s.orders > 0; });
+  const man = B.man || (B.man = {}), manS = Object.values(man).reduce((a, v) => a + (+v || 0), 0);
+  const auto = A.reduce((a, s) => a + s.orders, 0) + D.orders + manS;
+  const hr = A.reduce((a, s) => a + (s.shiftHours || 0), 0) + hrs();
+  const left = [];
+  for (let d = td; d <= dim; d++) if (!B.off.includes(d)) left.push(d);
+  const dl = Math.max(1, left.length);
+  const done = Math.max(0, auto + (B.adj || 0));
+  const wd = new Set(A.map(s => new Date(s.timestamp).getDate()));
+  D.orders > 0 && wd.add(td);
+  Object.keys(man).forEach(k => man[k] > 0 && wd.add(+k));
+  const worked = wd.size;
+  return { n, dim, td, man, manS, auto, done, dl, hr, worked, remain: Math.max(0, B.target - done), pace: auto / Math.max(1, worked), oph: hr > .3 ? auto / hr : 0 };
+}
+function brandInit() {
+  if (B.mon === monKey()) return;
+  const first = B.mon === '';
+  const ob = ld('taxi_branding_v22', null);
+  B.mon = monKey();
+  B.off = first ? ld('taxi_offdays_v22', []) : [];
+  B.adj = 0;
+  B.man = {};
+  if (first && ob) { B.target = ob.target || 700; B.adj = (ob.done || 0) - bData().auto; }
+  savePE();
+}
+function bRes() {
+  const x = bData(), tod = D.orders + (x.man[x.td] || 0);
+  const pct = Math.min(100, x.done / B.target * 100);
+  const per = x.remain / x.dl;
+  const plan = Math.max(0, Math.ceil((B.target - (x.done - D.orders - (x.man[x.td] || 0))) / x.dl));
+  const proj = x.done + x.pace * Math.max(0, x.dl - (tod > 0 ? 1 : 0));
+  const ok = proj >= B.target;
+  const set = new Set(ld(K.a, []).filter(s => s.orders > 0).map(s => new Date(s.timestamp).toDateString()));
+  D.orders > 0 && set.add(new Date().toDateString());
+  let st = 0, d = new Date();
+  if (!set.has(d.toDateString())) d.setDate(d.getDate() - 1);
+  while (set.has(d.toDateString())) { st++; d.setDate(d.getDate() - 1); }
+  const tl = (a, b) => `<div class="card" style="margin:0;text-align:center;padding:10px 4px"><b>${a}</b><div class="sub">${b}</div></div>`;
+  return `<div class="card">
+    <div class="t"><span>Бренд-план місяця</span><span>${pct.toFixed(0)}%</span></div>
+    <div class="big pos">${x.done} <span class="sub" style="font-size:16px">/ ${B.target}</span></div>
+    <div class="pgb"><div style="width:${pct}%"></div></div>
+    <div class="g3" style="margin-top:8px">${tl(x.remain, 'залишилось')}${tl(x.remain ? per.toFixed(1) : '🎉', 'потрібно / день')}${tl(x.dl, 'робочих днів')}</div>
+  </div>
+  <div class="card">
+    <div class="t"><span>Сьогодні</span><span>план ${plan}</span></div>
+    <div class="big">${tod} <span class="sub" style="font-size:16px">/ ${plan}</span></div>
+    <div class="pgb"><div style="width:${plan ? Math.min(100, tod / plan * 100) : 100}%"></div></div>
+    <div class="sub">${x.oph > 0 ? '≈ ' + (Math.max(0, plan - tod) / x.oph).toFixed(1) + ' год на лінії ще — темп ' + x.oph.toFixed(1) + ' зам/год' : 'Темп зʼявиться після кількох змін'}</div>
+  </div>
+  <div class="card">
+    <div class="t">Прогноз</div>
+    <div class="vd ${ok ? 'vg' : 'vm'}">${ok ? '✅ За поточним темпом (' + x.pace.toFixed(1) + ' зам/день) встигнете ~' + Math.round(proj) : '⚠️ За поточним темпом ~' + Math.round(proj) + ', бракує ' + Math.ceil(B.target - proj)}</div>
+    <div class="r"><span>🔥 Серія робочих днів підряд</span><span>${st}</span></div>
+    <div class="r"><span>Відпрацьовано днів цього місяця</span><span>${x.worked}</span></div>
+  </div>`;
+}
+function vBrand() {
+  const n = new Date(), dim = new Date(n.getFullYear(), n.getMonth() + 1, 0).getDate();
+  const W = ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+  let c = '';
+  for (let d = n.getDate(); d <= dim; d++) c += `<div class="cd ${B.off.includes(d) ? 'off' : ''} ${d === n.getDate() ? 'td' : ''}" data-a="day" data-v="${d}"><small>${W[new Date(n.getFullYear(), n.getMonth(), d).getDay()]}</small>${d}</div>`;
+  return `<div class="page">
+    <div id="bres">${bRes()}</div>
+    <div class="card">
+      <div class="t">Робочі дні · тап = вихідний</div>
+      <div class="cal">${c}</div>
+    </div>
+    ${manHtml()}
+    ${daysHtml()}
+    <div class="card">
+      <div class="t">Налаштування плану</div>
+      <div class="g2">${SF('B.target', 'План замовлень на місяць')}<div class="f"><label>Виконано за місяць</label><input type="number" inputmode="decimal" data-b="done" value="${bData().done}"></div></div>
+    </div>
+  </div>`;
+}
+
+function vStats() {
+  const A = ld(K.a, []), now = Date.now();
+  const L = A.filter(s => !S.per || now - s.timestamp < S.per * 864e5);
+  const sm = f => L.reduce((a, s) => a + (f(s) || 0), 0);
+  const n = sm(s => s.net), g = sm(s => s.gross), km = sm(s => s.totalKm), h = sm(s => s.shiftHours), o = sm(s => s.orders), tax = sm(s => s.tax);
+  const span = S.per || (L.length ? Math.max(1, Math.ceil((now - Math.min(...L.map(s => s.timestamp))) / 864e5)) : 1);
+  const esv = E.fop ? fixM() * span / 30 : 0;
+  const pl = {}, hr = Array(24).fill(0), hc = Array(24).fill(0);
+  L.forEach(s => {
+    Object.keys(s.pl || {}).forEach(k => { const p = pl[k] || (pl[k] = { n: 0, g: 0, net: 0 }); p.n += s.pl[k].n; p.g += s.pl[k].g; p.net += s.pl[k].net; });
+    (s.hr || []).forEach((v, i) => { if (s.tr && s.tr[i] > 0) { hr[i] += v; hc[i]++; } });
+  });
+  const av = hr.map((v, i) => hc[i] ? v / hc[i] : 0);
+  const mx = Math.max(...av, 1);
+  const top = av.map((v, i) => [v, i]).filter(x => x[0] > 0).sort((a, b) => b[0] - a[0]).slice(0, 3);
+  const tp = top.map(x => x[1]);
+  return `<div class="page">
+    <div class="chips" style="grid-template-columns:repeat(3,1fr)">${[[7, '7 днів'], [30, '30 днів'], [0, 'Весь час']].map(x => `<button class="k ${S.per === x[0] ? 'on' : ''}" data-a="per" data-v="${x[0]}">${x[1]}</button>`).join('')}</div>
+    <div class="card">
+      <div class="t"><span>Чисті за період</span><span>${L.length} дн.</span></div>
+      <div class="big pos">${m(n)} ₴</div>
+      <div class="sub">оборот ${m(g)} ₴ · ${o} поїздок · ${km.toFixed(0)} км</div>
+      <div class="g3" style="margin-top:10px">${[[L.length ? m(n / L.length) : '—', '₴ / день'], [h > 0 ? m(n / h) : '—', '₴ / год'], [km > 0 ? (n / km).toFixed(1) : '—', '₴ / км']].map(x => `<div class="card" style="margin:0;text-align:center;padding:10px 4px"><b>${x[0]}</b><div class="sub">${x[1]}</div></div>`).join('')}</div>
+    </div>
+    ${Object.keys(pl).length ? `<div class="card"><div class="t">За платформами</div>${Object.keys(pl).map(k => `<div class="r"><span>${P[k] ? P[k].name : k} · ${pl[k].n} поїздок</span><span>${m(pl[k].g)} ₴ → <b class="pos">${m(pl[k].net)} ₴</b></span></div>`).join('')}</div>` : ''}
+    ${E.fop ? `<div class="card"><div class="t"><span>${E.taxType === 'plat' ? 'Податок через платформу' : 'ФОП · податки'}</span></div><div class="r"><span>${E.taxType === 'plat' ? 'ПДФО ' + E.taxRate + '% (утримує сервіс)' : 'ЄП ' + E.taxRate + '% + ВЗ ' + E.warRate + '%'}</span><span>${m(tax)} ₴</span></div><div class="r"><span>Фіксовані платежі за період</span><span>${m(esv)} ₴</span></div><div class="r"><span><b>Чисто після фіксованих</b></span><b class="pos">${m(n - esv)} ₴</b></div></div>` : ''}
+    ${(() => {
+      if (E.fop && E.taxType === 'plat') {
+        const lim = 834 * (E.mzp || 8647), yv = platYtd();
+        return `<div class="card"><div class="t"><span>Поріг 10% → ${E.platOver}% (${new Date().getFullYear()})</span><span>${(yv / lim * 100).toFixed(1)}%</span></div><div class="pgb"><div style="width:${Math.min(100, yv / lim * 100)}%"></div></div><div class="sub">${m(yv)} з ${m(lim)} ₴ виплат за рік</div></div>`;
+      }
+      if (!E.fop || E.taxType === 'gen') return '';
+      const yr = new Date().getFullYear(), mz = E.mzp || 8647, lim = (E.taxType === 'g2' ? 834 : 1167) * mz;
+      const ytd = A.filter(s => new Date(s.timestamp).getFullYear() === yr).reduce((a, s) => a + s.gross, 0);
+      const t12 = A.filter(s => now - s.timestamp < 365 * 864e5).reduce((a, s) => a + s.gross, 0);
+      return `<div class="card"><div class="t"><span>Ліміт доходу ${yr}</span><span>${(ytd / lim * 100).toFixed(1)}%</span></div><div class="pgb"><div style="width:${Math.min(100, ytd / lim * 100)}%"></div></div><div class="sub">${m(ytd)} з ${m(lim)} ₴</div>${E.taxYear === 2027 ? `<div class="sub" style="margin-top:6px">12 міс. до порога ПДВ ${m(E.vatLimit)} ₴: ${m(t12)} ₴ (${(t12 / E.vatLimit * 100).toFixed(0)}%)</div>` : ''}</div>`;
+    })()}
+    ${top.length ? `<div class="card"><div class="t">Найкращі години</div><div class="sub" style="margin-bottom:8px">🔥 ${top.map(x => String(x[1]).padStart(2, '0') + ':00 · ' + m(x[0]) + ' ₴').join('  ')}</div><div class="bars">${av.map((v, i) => `<div class="${tp.includes(i) ? 'top' : ''}" style="height:${Math.max(3, v / mx * 100)}%"></div>`).join('')}</div></div>` : ''}
+    <div class="g2">
+      <button class="k" style="padding:14px" data-a="exp2">📥 Резервна копія</button>
+      <button class="k" style="padding:14px" data-a="imp">📤 Відновити</button>
+    </div>
+    <button class="k" style="width:100%;padding:14px;margin-top:10px" data-a="share">📋 Копіювати звіт</button>
+  </div>`;
+}
+
+const SF = (p, l, ty) => `<div class="f"><label>${l}</label><input ${ty === 's' ? '' : 'type="number" inputmode="decimal"'} data-k="${p}" ${ty === 's' ? 'data-ty="s"' : ''} value="${gp(p)}"></div>`;
+const SG = (p, opts) => `<div class="chips" style="grid-template-columns:repeat(${opts.length},1fr)">${opts.map(o => `<button class="k ${String(gp(p)) === String(o[0]) ? 'on' : ''}" data-a="set" data-v="${p}:${o[0]}">${o[1]}</button>`).join('')}</div>`;
+
+function vSet() {
+  return `<div class="page">
+    <details class="card dc" ${S.dopen ? 'open' : ''} ontoggle="S.dopen=this.open">
+      <summary><span>🎨 Оформлення</span><span>${(AC[E.accent] || AC.teal)[0]} ▾</span></summary>
+      <div class="pal">${Object.keys(AC).map(k => `<button class="${E.accent === k ? 'on' : ''}" data-a="acc" data-v="${k}"><i style="background:${AC[k][1]}"></i>${AC[k][0]}</button>`).join('')}</div>
+      <div class="t" style="margin:14px 0 8px">Свічення фону</div>
+      ${SG('E.glow', [[0, 'Вимк'], [1, 'Мʼяко'], [2, 'Яскраво']])}
+    </details>
+    <div class="card">
+      <div class="t">Режим роботи</div>
+      ${SG('E.workMode', [['solo', 'Власне авто'], ['split', 'Парк %'], ['rent', 'Оренда']])}
+      ${E.workMode === 'split' ? SF('E.splitPct', 'Відсоток парку (після комісії), %') : ''}
+      ${E.workMode === 'rent' ? SF('E.rentVal', 'Оренда за день, ₴') : ''}
+    </div>
+    <details class="card dc" ${S.topen ? 'open' : ''} ontoggle="S.topen=this.open">
+      <summary><span>🧾 Податки</span><span>${({ none: 'вимкнено', plat: 'платформа', g2: 'ФОП 2', g3: 'ФОП 3', gen: 'загальна' })[E.taxType] || ''} ▾</span></summary>
+      <div class="chips" style="grid-template-columns:repeat(auto-fit,minmax(100px,1fr))">${[['none', 'Без податків'], ['plat', 'Фізособа · платформа'], ['g2', 'ФОП 2'], ['g3', 'ФОП 3'], ['gen', 'Загальна']].map(o => `<button class="k ${E.taxType === o[0] ? 'on' : ''}" data-a="tx" data-v="${o[0]}">${o[1]}</button>`).join('')}</div>
+      ${E.taxType === 'plat' ? platUI() : E.fop ? `
+        <div class="chips" style="grid-template-columns:1fr 1fr">${[[2026, 'Ставки 2026'], [2027, 'Сценарій 2027']].map(o => `<button class="k ${E.taxYear === o[0] ? 'on' : ''}" data-a="txy" data-v="${o[0]}">${o[1]}</button>`).join('')}</div>
+        <div class="g2">${E.taxType === 'g2' ? SF('E.fixTax', 'ЄП + ВЗ за місяць, ₴') : SF('E.taxRate', 'Ставка податку, %') + SF('E.warRate', 'Військовий збір, %')}${SF('E.esv', 'ЄСВ за місяць, ₴')}</div>
+        ${E.taxType === 'g3' ? `<div class="t" style="margin:10px 0 8px">ПДВ</div><div class="chips" style="grid-template-columns:1fr 1fr">${[[false, 'Не платник'], [true, 'Платник ПДВ']].map(o => `<button class="k ${E.vat === o[0] ? 'on' : ''}" data-a="vat" data-v="${o[0]}">${o[1]}</button>`).join('')}</div>` : ''}
+        ${E.taxType === 'gen' ? `<div class="t" style="margin:10px 0 8px">База нарахування</div>${SG('E.taxBase', [['profit', 'Прибуток'], ['afterComm', 'Після комісії']])}` : ''}
+        ${E.taxYear === 2027 ? `<div style="margin-top:10px">${SF('E.vatLimit', 'Поріг обовʼязкового ПДВ за 12 міс., ₴')}</div>` : ''}
+      ` : ''}
+      <div class="warn" style="margin:10px 0 0;line-height:1.5">${E.taxType === 'plat' ? PLATW : E.taxYear === 2027 ? 'Сценарій 2027 — за проєктом: МЗП 9 546 ₴, ЄСВ 2 100,12 ₴. Ліміти та ПДВ можуть змінитись.' : 'Ставки 2026: МЗП 8 647 ₴, ЄСВ 1 902,34 ₴/міс. Таксі (КВЕД 49.32) зазвичай на 2 або 3 групі. Це оціночний розрахунок.'}</div>
+    </details>
+    <div class="card">
+      <div class="t">Авто і пальне</div>
+      <div class="g2">
+        <div class="f"><label>Тип</label><select data-k="E.type" data-ty="s">${[['gas', 'Газ'], ['petrol', 'Бензин'], ['diesel', 'Дизель'], ['electro', 'Електро']].map(o => `<option value="${o[0]}" ${E.type === o[0] ? 'selected' : ''}>${o[1]}</option>`).join('')}</select></div>
+        ${SF('E.cons', 'Розхід на 100 км')}${SF('E.price', 'Ціна за л / кВт, ₴')}${SF('E.amort', 'ТО й знос, ₴/км')}
+      </div>
+    </div>
+    <div class="card">
+      <div class="t">Після запису поїздки</div>
+      ${SG('E.autoReset', [[true, 'Очищати поля'], [false, 'Лишати значення']])}
+    </div>
+    ${svcHtml()}${dataHtml()}
+    <div class="card">
+      <div class="t">Цілі</div>
+      <div class="g2">${SF('E.goalDay', 'Ціль на день, ₴')}${SF('E.goalKm', 'Мін. прибуток, ₴/км')}${SF('E.planH', 'Планова зміна, год')}</div>
+    </div>
+    ${Object.keys(P).map(k => {
+      const pl = P[k];
+      return `<div class="card"><div class="t"><span>${pl.name}</span><button class="x" data-a="delpl" data-v="${k}">✕</button></div>${pl.ph ? '<div class="warn">⚠️ Орієнтовні значення.</div>' : ''}<div class="g2">${SF(`P.${k}.name`, 'Назва', 's')}${SF(`P.${k}.comm`, 'Комісія, %')}</div>
+      ${Object.keys(pl.t).map(tk => { const t = pl.t[tk], b = `P.${k}.t.${tk}.`; return `<details><summary>${t.name} · від ${t.minPrice} ₴</summary><div class="g2">${SF(b + 'name', 'Назва', 's')}${SF(b + 'minPrice', 'Мінімалка, ₴')}${SF(b + 'minKm', 'Включено км')}${SF(b + 'perKmCity', '1 км місто, ₴')}${SF(b + 'perKmOut', '1 км за містом, ₴')}${SF(b + 'perMin', 'Хвилина очік., ₴')}${SF(b + 'stopPrice', 'Дод. точка, ₴')}</div><button class="k" style="width:100%;color:var(--danger)" data-a="deltr" data-v="${k}:${tk}">Видалити тариф</button></details>`; }).join('')}
+      <button class="k" style="width:100%;margin-top:8px;padding:12px" data-a="addtr" data-v="${k}">＋ Тариф</button></div>`;
+    }).join('')}
+    <div class="g2">
+      <button class="k" style="padding:14px" data-a="addpl">＋ Платформа</button>
+      <button class="k" style="padding:14px;color:var(--danger)" data-a="reset">Скинути тарифи</button>
+    </div>
+  </div>`;
+}
+
+// ==================== FRAMEWORK ====================
+const VIEW = { trip: vTrip, shift: vShift, brand: vBrand, stats: vStats, set: vSet };
+const NAV = [['trip', '🧮', 'Поїздка'], ['shift', '⏱', 'Зміна'], ['brand', '🎯', 'Цілі'], ['stats', '📊', 'Звіти'], ['set', '⚙️', 'Опції']];
+
+function show() {
+  if (D.date !== today()) loadDay();
+  fixSel();
+  const y0 = window.scrollY;
+  $('#app').innerHTML = VIEW[tab]();
+  window.scrollTo(0, y0);
+  tab === 'trip' && upTrip();
+  $('#nav').innerHTML = NAV.map(n => `<button class="${n[0] === tab ? 'on' : ''}" data-a="tab" data-v="${n[0]}"><i>${n[1]}</i>${n[2]}${n[0] === 'shift' && D.orders ? `<b class="bd">${D.orders}</b>` : ''}</button>`).join('');
+  hdr();
+}
+const hdr = () => { $('#hs').textContent = 'Сьогодні: ' + m(dNet()) + ' ₴ · ' + D.orders + ' поїздок'; };
+
+function setC(k, v) {
+  C[k] = k === 'coef' ? Math.max(1, Math.round(v * 10) / 10) : Math.max(0, Math.round(v * 10) / 10);
+  const i = document.querySelector('[data-c="' + k + '"]');
+  i && (i.value = C[k]);
+  if (k === 'coef') document.querySelectorAll('[data-a=cf]').forEach(b => b.classList.toggle('on', +b.dataset.v === C.coef));
+  upTrip();
+}
+
+const H = {
+  tab: v => { tab = v; show(); window.scrollTo(0, 0); },
+  theme: () => {
+    const n = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = n;
+    localStorage.setItem('taxi_theme', n);
+    applyAccent();
+    try { tg.setHeaderColor(getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()); } catch (e) {}
+  },
+  pl: v => { S.po = false; C.pl = v; C.tr = Object.keys(P[v].t)[0]; sv(K.c, C); show(); },
+  tr: v => { C.tr = v; sv(K.c, C); show(); },
+  cf: v => setC('coef', +v),
+  s: v => { const [k, s] = v.split(':'); setC(k, (+C[k] || 0) + +s); },
+  pay: v => { C.pay = v; upTrip(); },
+  pick: v => { const [a, b] = v.split(':'); C.pl = a; C.tr = b; sv(K.c, C); show(); window.scrollTo({ top: 0, behavior: 'smooth' }); },
+  add: () => {
+    const pl = P[C.pl];
+    let r = calc(pl.t[C.tr], pl, C);
+    if (C.offer > 0) r = fin(+C.offer, pl, r.tot);
+    const snap = { ...C };
+    const tid = addTrip(r, C.pl, C.pay, C.tip, C.km + C.kmOut, C.deliv + C.empty);
+    H._snap = snap;
+    if (E.autoReset !== false) { ['km', 'kmOut', 'deliv', 'empty', 'wait', 'stops', 'tip', 'offer'].forEach(k => C[k] = 0); C.coef = 1; sv(K.c, C); }
+    toast('Записано · ' + m(r.g) + ' ₴ → чистими ' + m(r.net) + ' ₴', 'ok', ['undo', tid, 'Скасувати']);
+    show();
+    const b = $('.bd');
+    b && b.classList.add('pop');
+  },
+  undo: v => { delItem(+v); H._snap && Object.assign(C, H._snap); sv(K.c, C); $('#ts').innerHTML = ''; hap('s'); show(); },
+  mirror: () => setC('empty', C.km + C.kmOut),
+  clr: () => { ['km', 'kmOut', 'deliv', 'empty', 'wait', 'stops', 'tip', 'offer'].forEach(k => C[k] = 0); C.coef = 1; sv(K.c, C); show(); },
+  po: () => { S.po = !S.po; show(); },
+  shift: () => {
+    if (D.shiftActive) { D.shiftAccMs += Date.now() - D.shiftStart; D.shiftStart = null; D.shiftActive = false; }
+    else { D.shiftActive = true; D.shiftStart = Date.now(); }
+    save();
+    show();
+  },
+  manual: async () => {
+    const a = await ask('Поїздка вручну', [{ l: 'Сума, ₴' }, { l: 'Км поїздки' }, { l: 'Подача, км' }, { l: 'Платформа', o: Object.keys(P).map(k => [k, P[k].name]), v: C.pl }, { l: 'Оплата', o: [['cash', 'Готівка'], ['card', 'Картка']], v: C.pay }], 'Додати', v => ((+v[1] || 0) + (+v[2] || 0)).toFixed(1) + ' км');
+    if (!a || !(+a[0] > 0)) return;
+    const tr = +a[1] || 0, dv = +a[2] || 0;
+    addTrip(fin(+a[0], P[a[3]], tr + dv), a[3], a[4], 0, tr, dv);
+    toast('Додано · пробіг ' + tr.toFixed(1) + (dv ? ' + ' + dv.toFixed(1) : '') + ' км');
+    show();
+  },
+  fuel: async () => {
+    const a = await ask('Заправка', [{ l: 'Скільки залили, ₴' }]);
+    if (!a || !(+a[0] > 0)) return;
+    D.actualFuel += +a[0];
+    D.history.unshift({ id: Date.now(), x: 1, k: 'fuel', name: '⛽ Заправка', amt: +a[0], time: hm() });
+    save();
+    show();
+  },
+  exp: async () => {
+    const a = await ask('Витрата', [{ l: 'Назва', t: 's' }, { l: 'Сума, ₴' }]);
+    if (!a || !(+a[1] > 0)) return;
+    D.extra += +a[1];
+    D.history.unshift({ id: Date.now(), x: 1, k: 'extra', name: '💸 ' + (a[0] || 'Витрата').replace(/[<>&]/g, ''), amt: +a[1], time: hm() });
+    save();
+    show();
+  },
+  del: async v => { if (await ask('Видалити запис?', [], 'Видалити')) { delItem(+v); show(); } },
+  end: async () => { if (!await ask('Зміну буде збережено в архів і обнулено.', [], 'Завершити')) return; arc(); D = newDay(); sv(K.d, D); toast('Зміну завершено'); show(); },
+  per: v => { S.per = +v; show(); },
+  set: v => { const i = v.lastIndexOf(':'), p = v.slice(0, i), x = v.slice(i + 1); setPath(p, x === 'true' ? true : x === 'false' ? false : x); savePE(); applyAccent(); show(); },
+  addtr: v => { P[v].t['t' + Date.now()] = T('Новий тариф', 90, 1.5, 25, 35, 3, 10); savePE(); show(); },
+  deltr: v => { const [a, b] = v.split(':'); if (Object.keys(P[a].t).length < 2) return toast('Лишіть хоча б один тариф', 'e'); delete P[a].t[b]; savePE(); show(); },
+  delpl: async v => { if (Object.keys(P).length < 2) return toast('Лишіть хоча б одну платформу', 'e'); if (!await ask('Видалити «' + P[v].name + '»?', [], 'Видалити')) return; delete P[v]; savePE(); show(); },
+  addpl: async () => {
+    const a = await ask('Нова платформа', [{ l: 'Назва', t: 's' }, { l: 'Комісія, %' }]);
+    if (!a || !a[0].trim()) return;
+    P['p' + Date.now()] = { name: a[0].trim().slice(0, 20).replace(/[<>&]/g, ''), comm: +a[1] || 20, t: { s: T('Стандарт', 90, 1.5, 25, 35, 3, 10) } };
+    savePE();
+    show();
+  },
+  reset: async () => { if (!await ask('Тарифи й платформи повернуться до стандартних.', [], 'Скинути')) return; Object.keys(P).forEach(k => delete P[k]); Object.assign(P, DP()); savePE(); show(); },
+  acc: v => { E.accent = v; savePE(); applyAccent(); document.querySelectorAll('.pal button').forEach(b => b.classList.toggle('on', b.dataset.v === v)); const sp = document.querySelector('.dc summary span:last-child'); sp && (sp.textContent = AC[v][0] + ' ▾'); },
+  tx: v => { E.taxType = v; E.fop = v !== 'none'; taxPreset(); savePE(); show(); },
+  txy: v => { E.taxYear = +v; taxPreset(); savePE(); show(); },
+  vat: v => { E.vat = v === 'true'; if (E.taxType === 'g3') E.taxRate = E.vat ? 3 : 5; savePE(); show(); },
+  day: v => { const d = +v, i = B.off.indexOf(d); i > -1 ? B.off.splice(i, 1) : B.off.push(d); savePE(); show(); },
+  exp2: () => {
+    const b = new Blob([JSON.stringify({ v: 4, E, P, A: ld(K.a, []), D })], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = 'DriverHub_' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    toast('Копію збережено');
+  },
+  imp: () => $('#imp').click(),
+  share: () => {
+    const A = ld(K.a, []), L = A.filter(s => !S.per || Date.now() - s.timestamp < S.per * 864e5);
+    const n = L.reduce((a, s) => a + s.net, 0), g = L.reduce((a, s) => a + s.gross, 0), km = L.reduce((a, s) => a + s.totalKm, 0), o = L.reduce((a, s) => a + s.orders, 0);
+    const t = `📊 DriverHub · ${S.per ? S.per + ' днів' : 'весь час'}\n✅ Поїздок: ${o}\n📍 Пробіг: ${km.toFixed(0)} км\n💵 Оборот: ${m(g)} ₴\n💰 Чисті: ${m(n)} ₴`;
+    navigator.clipboard ? navigator.clipboard.writeText(t).then(() => toast('Звіт скопійовано')) : toast('Копіювання недоступне', 'e');
+  }
+};
+
+document.addEventListener('click', e => { const b = e.target.closest('[data-a]'); b && H[b.dataset.a] && H[b.dataset.a](b.dataset.v, b); });
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.dataset.c) { C[t.dataset.c] = parseFloat(t.value) || 0; upTrip(); }
+  else if (t.dataset.b === 'done') { B.adj = (parseFloat(t.value) || 0) - bData().auto; savePE(); tab === 'brand' && $('#bres') && ($('#bres').innerHTML = bRes()); }
+  else if (t.dataset.k && t.tagName === 'INPUT') { setPath(t.dataset.k, t.dataset.ty === 's' ? t.value : (parseFloat(t.value) || 0)); savePE(); tab === 'brand' && $('#bres') && ($('#bres').innerHTML = bRes()); }
+});
+document.addEventListener('change', e => { const t = e.target; if (t.tagName === 'SELECT' && t.dataset.k) { setPath(t.dataset.k, t.value); savePE(); } });
+$('#imp').onchange = async e => {
+  try {
+    const o = JSON.parse(await e.target.files[0].text());
+    const ex = o.E || o.expenses, a = o.A || o.shiftArchive;
+    if (!ex && !a) throw 0;
+    ex && sv(K.e, ex);
+    if (o.P) sv(K.p, o.P);
+    else if (o.tariffs) { sv(K.t, o.tariffs); localStorage.removeItem(K.p); }
+    a && sv(K.a, a);
+    (o.D || o.dailyCashData) && sv(K.d, o.D || o.dailyCashData);
+    toast('Відновлено');
+    setTimeout(() => location.reload(), 600);
+  } catch (x) { toast('Не вдалось прочитати файл', 'e'); }
+};
+document.addEventListener('keydown', e => { e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.blur(); });
+document.addEventListener('focusin', e => {
+  const t = e.target;
+  if (t.tagName === 'INPUT' || t.tagName === 'SELECT') {
+    document.body.classList.add('kb');
+    t.closest('#ov') || setTimeout(() => t.scrollIntoView({ block: 'center', behavior: 'smooth' }), 320);
+  }
+});
+document.addEventListener('focusout', () => setTimeout(() => { const a = document.activeElement; (a && (a.tagName === 'INPUT' || a.tagName === 'SELECT')) || document.body.classList.remove('kb'); }, 200));
+if (window.visualViewport) {
+  const f = () => { const o = $('#ov'), v = visualViewport; o.style.top = v.offsetTop + 'px'; o.style.height = v.height + 'px'; };
+  visualViewport.addEventListener('resize', f);
+  visualViewport.addEventListener('scroll', f);
+}
+
+// ==================== ADVANCED FEATURES ====================
+const PLATW = 'Закон №4903-IX від 09.06.2026: з 01.01.2027 платформи утримують 10% ПДФО з виплат водіїв-фізосіб без ФОП. Військовий збір не стягується. Понад поріг — 23%. ФОП працюють за своїм режимом.';
+const platUI = () => `<div class="g2" style="margin-top:10px">${SF('E.taxRate', 'ПДФО в межах порога, %')}${SF('E.platOver', 'Понад поріг, %')}</div><div class="t" style="margin:10px 0 8px">Коли рахувати</div>${SG('E.platNow', [[true, 'Вже зараз'], [false, 'Лише з 01.01.2027']])}<div class="sub" style="margin-top:8px">Річний поріг: ${m(834 * (E.mzp || 8647))} ₴</div>`;
+
+const CS = tg && tg.CloudStorage;
+const CKEYS = [K.e, K.p, K.d, K.a, K.c, 'taxi_brand_v2', 'taxi_service_v2', 'taxi_presets_v2', 'taxi_km_v2'];
+const _set = Storage.prototype.setItem;
+let ct;
+function cSave(cb) {
+  if (!CS) { cb && cb(false); return; }
+  const T = [];
+  CKEYS.forEach((k, j) => {
+    const v = localStorage.getItem(k);
+    if (v == null) return;
+    const n = Math.max(1, Math.ceil(v.length / 3500));
+    for (let i = 0; i < n; i++) T.push(['dh' + j + '_' + i, v.slice(i * 3500, (i + 1) * 3500)]);
+    T.push(['dh' + j + '_n', String(n)]);
+  });
+  let l = T.length, ok = true;
+  if (!l) { cb && cb(true); return; }
+  T.forEach(([k, v]) => CS.setItem(k, v, e => { e && (ok = false); if (--l === 0) { ok && _set.call(localStorage, 'dh_last', String(Date.now())); cb && cb(ok); const el = $('#cinfo'); el && (el.textContent = cInfo()); } }));
+}
+function cRestore(cb) {
+  CS.getKeys((e, all) => {
+    const ns = (all || []).filter(k => /^dh\d+_n$/.test(k));
+    if (e || !ns.length) return cb(false);
+    CS.getItems(ns, (e2, r) => {
+      if (e2 || !r) return cb(false);
+      const need = [];
+      ns.forEach(k => { const j = k.slice(2, -2); for (let i = 0; i < (+r[k] || 0); i++) need.push('dh' + j + '_' + i); });
+      const out = {};
+      let ix = 0;
+      (function nx() {
+        if (ix >= need.length) {
+          ns.forEach(k => { const j = k.slice(2, -2); let v = ''; for (let i = 0; i < (+r[k] || 0); i++) v += out['dh' + j + '_' + i] || ''; CKEYS[+j] && _set.call(localStorage, CKEYS[+j], v); });
+          return cb(true);
+        }
+        const pt = need.slice(ix, ix + 40);
+        ix += 40;
+        CS.getItems(pt, (e3, r3) => { if (e3 || !r3) return cb(false); Object.assign(out, r3); nx(); });
+      })();
+    });
+  });
+}
+Storage.prototype.setItem = function (k, v) { _set.call(this, k, v); if (this === localStorage && CKEYS.includes(k) && localStorage.getItem('dh_init')) { clearTimeout(ct); ct = setTimeout(() => cSave(), 4000); } };
+if (CS && !localStorage.getItem('dh_init')) {
+  const empty = !ld(K.a, []).length && !D.orders;
+  if (empty) cRestore(ok => { _set.call(localStorage, 'dh_init', '1'); ok ? location.reload() : cSave(); });
+  else { _set.call(localStorage, 'dh_init', '1'); cSave(); }
+}
+const cInfo = () => { const t = +localStorage.getItem('dh_last') || 0; return !CS ? 'Доступно лише всередині Telegram' : t ? 'Остання копія: ' + new Date(t).toLocaleString('uk-UA') : 'Копія ще не створена'; };
+const dataHtml = () => `<details class="card dc"><summary><span>🛡 Хмарна копія Telegram</span><span>▾</span></summary><div class="g2"><button class="k" style="padding:12px" data-a="cs">☁️ Зберегти зараз</button><button class="k" style="padding:12px" data-a="cr">☁️ Відновити</button></div><div class="warn" id="cinfo" style="margin:10px 0 0">${cInfo()}</div></details>`;
+
+const SV = () => ld('taxi_service_v2', { odo: null, kmAt: 0, items: [] });
+const curOdo = (s, t) => s.odo === null ? null : s.odo + (t - s.kmAt);
+function trackKm() {
+  const k = ld('taxi_km_v2', { t: 0, s: 0, d: '' }), cur = D.totalKm || 0;
+  let ch = 0;
+  if (k.d !== D.date) { k.d = D.date; k.s = 0; ch = 1; }
+  if (cur < k.s) { k.s = cur; ch = 1; } else if (cur > k.s) { k.t += cur - k.s; k.s = cur; ch = 1; }
+  ch && sv('taxi_km_v2', k);
+  return k.t;
+}
+const svcHtml = () => {
+  const s = SV(), cur = curOdo(s, trackKm());
+  return `<details class="card dc"><summary><span>🔧 ТО й обслуговування</span><span>${s.items.length} ▾</span></summary><div class="f" style="margin-bottom:10px"><label>Пробіг авто, км</label><input type="number" inputmode="decimal" data-svc="odo" value="${cur === null ? '' : Math.round(cur)}"></div>${s.items.map(i => { const r = i.last + i.every - (cur || 0); return `<div class="hi"><div><b>${i.name}</b><small>${r <= 0 ? 'Прострочено на ' + m(-r) + ' км' : 'Залишилось ' + m(r) + ' км · кожні ' + m(i.every) + ' км'}</small></div><button class="x" data-a="sdone" data-v="${i.id}">✓</button><button class="x" data-a="sdel" data-v="${i.id}">✕</button></div>`; }).join('')}<button class="k" style="width:100%;margin-top:10px;padding:12px" data-a="sadd">＋ Додати пункт</button></details>`;
+};
+function svcBanner() {
+  if (tab === 'set') return;
+  const s = SV(), cur = curOdo(s, trackKm());
+  if (cur === null) return;
+  const due = s.items.filter(i => i.last + i.every - cur <= 300);
+  if (!due.length) return;
+  $('#app .page').insertAdjacentHTML('afterbegin', `<div data-a="tab" data-v="set" style="background:var(--danger-soft);color:var(--danger);padding:12px 14px;border-radius:16px;margin:0 0 12px;font-weight:700;font-size:13px;cursor:pointer">🔧 ${due.map(i => i.name + (i.last + i.every - cur <= 0 ? ' — прострочено' : ' — ще ' + m(i.last + i.every - cur) + ' км')).join('; ')}</div>`);
+}
+
+const PR = () => ld('taxi_presets_v2', []);
+const presetsHtml = () => {
+  const p = PR();
+  return `<button class="b" data-a="ocr" style="margin-bottom:10px;padding:12px;font-size:14px">📸 Розпізнати скрін замовлення</button><details class="pm"><summary><span>⚡ Швидкі маршрути</span><span class="sub">${p.length} ▾</span></summary><div class="chips">${p.map((x, i) => `<div class="k" style="display:flex;justify-content:space-between;gap:8px;padding:10px"><span data-a="papply" data-v="${i}" style="flex:1;text-align:left">${x.name}</span><span data-a="pdel" data-v="${i}" style="color:var(--muted)">✕</span></div>`).join('')}</div><div class="g2" style="margin-bottom:10px"><button class="k" style="padding:12px" data-a="psave">＋ Зберегти поточний</button><button class="k" style="padding:12px" data-a="ppaste">📋 З буфера</button></div></details>`;
+};
+function parseTxt(t) {
+  t = t.replace(/,/g, '.');
+  const pr = [...t.matchAll(/(\d{2,5}(?:\.\d{1,2})?)\s*(?:₴|грн|uah)/gi)].map(x => +x[1]);
+  const km = [...t.matchAll(/(\d{1,3}(?:\.\d{1,2})?)\s*(?:км|km)/gi)].map(x => +x[1]);
+  if (!pr.length && !km.length) return false;
+  if (pr.length) C.offer = Math.max(...pr);
+  if (km.length) { C.km = km[0]; C.kmOut = km[1] || 0; }
+  sv(K.c, C);
+  show();
+  toast('Підставлено: ' + (pr.length ? m(C.offer) + ' ₴ · ' : '') + (km.length ? km.join(' + ') + ' км' : ''));
+  return true;
+}
+function statsExtra() {
+  const A = ld(K.a, []), now = new Date();
+  const dow = (now.getDay() + 6) % 7;
+  const w0 = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dow).getTime();
+  const w1 = w0 - 7 * 864e5;
+  let tw = 0, lw = 0;
+  A.forEach(x => { x.timestamp >= w0 ? tw += x.net : x.timestamp >= w1 && (lw += x.net); });
+  const dim = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const mp = {};
+  A.forEach(x => { const d = new Date(x.timestamp); d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear() && (mp[d.getDate()] = x.net); });
+  const mx = Math.max(1, ...Object.values(mp));
+  let hm = '';
+  for (let d = 1; d <= dim; d++) {
+    const v = mp[d];
+    hm += `<div class="cd ${d === now.getDate() ? 'td' : ''}" style="${v > 0 ? `background:color-mix(in srgb,var(--accent) ${Math.round(20 + v / mx * 60)}%,transparent);color:var(--on-accent)` : ''}">${d}${v ? `<small style="color:inherit">${m(v)}</small>` : ''}</div>`;
+  }
+  const fc = A.reduce((a, x) => a + (x.actualFuel > 0 ? x.fuel : 0), 0);
+  const fa = A.reduce((a, x) => a + (x.actualFuel || 0), 0);
+  const df = tw - lw;
+  return `<div class="card"><div class="t"><span>Цей тиждень vs минулий</span><span class="${df >= 0 ? 'pos' : 'neg'}">${lw > 0 ? (df >= 0 ? '▲ +' : '▼ ') + Math.abs(df / lw * 100).toFixed(0) + '%' : '—'}</span></div><div class="r"><span>Цей тиждень</span><b>${m(tw)} ₴</b></div><div class="r"><span>Минулий</span><span>${m(lw)} ₴</span></div></div>
+  <div class="card"><div class="t">Прибуток по днях місяця</div><div class="cal">${hm}</div></div>
+  ${fa > 0 && fc > 0 ? `<div class="card"><div class="t">Точність пального</div><div class="r"><span>Розрахунок</span><span>${m(fc)} ₴</span></div><div class="r"><span>Факт заправок</span><span>${m(fa)} ₴</span></div><div class="sub">${Math.abs(fa / fc - 1) < .1 ? '✅ Розрахунок збігається' : fa > fc ? '⚠️ Витрачаєте більше — підніміть розхід' : 'ℹ️ Можна знизити розхід'}</div></div>` : ''}
+  <button class="k" style="width:100%;padding:14px" data-a="csv">📊 Експорт CSV</button>
+  <div class="g2" style="margin-top:10px"><button class="k" style="padding:14px" data-a="rarc">🧹 Скинути статистику</button><button class="k" style="padding:14px;color:var(--danger)" data-a="rall">⚠️ Скинути все</button></div>`;
+}
+
+Object.assign(H, {
+  cs: () => cSave(ok => toast(ok ? 'Збережено в хмару' : 'Не вдалось зберегти', ok ? 'ok' : 'e')),
+  cr: async () => { if (!CS) return toast('Доступно лише в Telegram', 'e'); if (!await ask('Дані буде замінено копією з хмари.', [], 'Відновити')) return; cRestore(ok => { if (ok) { toast('Відновлено'); setTimeout(() => location.reload(), 600); } else toast('У хмарі немає копії', 'e'); }); },
+  sadd: async () => { const s = SV(); if (s.odo === null) return toast('Спершу введіть пробіг', 'e'); const a = await ask('Новий пункт ТО', [{ l: 'Що обслуговуємо', t: 's' }, { l: 'Інтервал, км' }]); if (!a || !a[0].trim() || !(+a[1] > 0)) return; s.items.push({ id: Date.now(), name: a[0].trim().slice(0, 28).replace(/[<>&]/g, ''), every: +a[1], last: curOdo(s, trackKm()) }); sv('taxi_service_v2', s); show(); },
+  sdone: async v => { const s = SV(), i = s.items.find(x => x.id == v); if (!i || !await ask('Лічильник почнеться заново.', [], 'Виконано')) return; i.last = curOdo(s, trackKm()); sv('taxi_service_v2', s); show(); },
+  sdel: async v => { if (!await ask('Видалити пункт?', [], 'Видалити')) return; const s = SV(); s.items = s.items.filter(x => x.id != v); sv('taxi_service_v2', s); show(); },
+  psave: async () => { if (C.km + C.kmOut <= 0) return toast('Спершу вкажіть кілометраж', 'e'); const a = await ask('Назва маршруту', [{ l: 'Наприклад: Центр → вокзал', t: 's' }]); if (!a || !a[0].trim()) return; const p = PR(); p.push({ name: a[0].trim().slice(0, 24).replace(/[<>&]/g, ''), km: C.km, kmOut: C.kmOut, deliv: C.deliv, empty: C.empty, wait: C.wait, stops: C.stops, coef: C.coef, pl: C.pl, tr: C.tr }); sv('taxi_presets_v2', p.slice(-12)); show(); },
+  papply: v => { const x = PR()[v]; if (!x) return; Object.assign(C, { km: x.km, kmOut: x.kmOut, deliv: x.deliv, empty: x.empty, wait: x.wait, stops: x.stops, coef: x.coef }); P[x.pl] && P[x.pl].t[x.tr] && (C.pl = x.pl, C.tr = x.tr); sv(K.c, C); show(); toast('«' + x.name + '» застосовано'); },
+  pdel: v => { const p = PR(); p.splice(v, 1); sv('taxi_presets_v2', p); show(); },
+  ppaste: async () => { try { const t = await navigator.clipboard.readText(); if (parseTxt(t)) return; } catch (e) {} const a = await ask('Вставте текст', [{ l: 'Текст із додатку', t: 's' }], 'Розпізнати'); if (a && !parseTxt(a[0])) toast('Не знайдено суми чи км', 'e'); },
+  csv: () => {
+    const A = ld(K.a, []);
+    let c = 'Дата,Поїздок,Оборот,Комісія,Пальне(розр),Пальне(факт),Податки,Чисті,Км,Годин\n';
+    A.forEach(x => { c += `"${x.date}",${x.orders},${Math.round(x.gross)},${Math.round(x.comm)},${Math.round(x.fuel)},${Math.round(x.actualFuel || 0)},${Math.round(x.tax || 0)},${Math.round(x.net)},${(x.totalKm || 0).toFixed(1)},${(x.shiftHours || 0).toFixed(1)}\n`; });
+    try { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + c], { type: 'text/csv' })); a.download = 'DriverHub_' + new Date().toISOString().slice(0, 10) + '.csv'; document.body.appendChild(a); a.click(); a.remove(); toast('CSV збережено'); } catch (e) { navigator.clipboard && navigator.clipboard.writeText(c).then(() => toast('CSV скопійовано')); }
+  }
+});
+
+document.addEventListener('change', e => { const t = e.target; if (t.dataset.svc === 'odo') { const n = parseFloat(t.value); if (!(n >= 0)) return; const s = SV(), tot = trackKm(); if (s.odo === null) s.items.forEach(i => i.last = n); s.odo = n; s.kmAt = tot; sv('taxi_service_v2', s); show(); } });
+
+// OCR
+const OCRV = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+const OCRL = 'https://cdn.jsdelivr.net/gh/naptha/tessdata@gh-pages/4.0.0_fast';
+let ocrW = null, ocrBusy = false;
+const loadJs = u => new Promise((ok, no) => { if (window.Tesseract) return ok(); const e = document.createElement('script'); e.src = u; e.onload = ok; e.onerror = no; document.head.appendChild(e); });
+async function ocrWorker() { if (ocrW) return ocrW; await loadJs(OCRV); const w = await Tesseract.createWorker(['ukr', 'eng'], 1, { langPath: OCRL }); await w.setParameters({ tessedit_pageseg_mode: '11' }); return ocrW = w; }
+function ocrParse(words, cv) {
+  const t = words.map(w => ({ s: String(w.text).replace(/,/g, '.').replace(/[Oо]/g, c => c).trim(), x0: w.bbox.x0, x1: w.bbox.x1, y0: w.bbox.y0, y1: w.bbox.y1, cy: (w.bbox.y0 + w.bbox.y1) / 2 })).filter(w => w.s);
+  const H = cv.height;
+  const isN = s => /^\d{1,5}(\.\d{1,2})?$/.test(s);
+  const isKm = s => /^(км|km|кm|kм)\.?$/i.test(s);
+  const kms = [];
+  t.forEach(w => {
+    let mm = w.s.match(/^(\d{1,3}(?:\.\d{1,2})?)(?:км|km)$/i);
+    if (mm) return kms.push({ v: +mm[1], y: w.cy, x: w.x0 });
+    if (isN(w.s)) { const h = w.y1 - w.y0; const n = t.find(q => q !== w && isKm(q.s) && Math.abs(q.cy - w.cy) < h * .8 && q.x0 >= w.x1 - 6 && q.x0 - w.x1 < h * 2.2); n && kms.push({ v: +w.s, y: w.cy, x: w.x0 }); }
+  });
+  kms.sort((a, b) => a.y - b.y);
+  const km = kms[0] && kms[0].v, deliv = kms[1] && kms[1].v;
+  let price = 0, pw = null;
+  const top = t.filter(w => w.cy < H * .3);
+  for (const w of top) { let mm = w.s.match(/^(\d{2,4})(?:[₴Ђ€$&?]|грн)?$/); if (!mm || w.s.includes('.')) continue; const nx = t.find(q => q !== w && Math.abs(q.cy - w.cy) < (w.y1 - w.y0) * .8 && q.x0 >= w.x1 - 6 && q.x0 - w.x1 < (w.y1 - w.y0) * 1.6 && /^([₴Ђ€$&?]|грн|uah)$/i.test(q.s)); if (nx || /[₴Ђ€$&?]|грн/.test(w.s)) { price = +mm[1]; pw = w; break; } }
+  if (!price) { const c = top.filter(w => /^\d{2,4}$/.test(w.s) && (!kms[0] || w.x0 < kms[0].x)); c.sort((a, b) => (b.y1 - b.y0) - (a.y1 - a.y0)); c[0] && (price = +c[0].s, pw = c[0]); }
+  let pl = null, tr = null;
+  const low = t.map(w => w.s.toLowerCase());
+  outer: for (const pk of [C.pl, ...Object.keys(P).filter(k => k !== C.pl)]) for (const tk of Object.keys(P[pk].t)) if (low.includes(P[pk].t[tk].name.toLowerCase())) { pl = pk; tr = tk; break outer; }
+  let pay = 'cash';
+  try { if (pw) { const g = cv.getContext('2d'), x = Math.max(0, Math.round(pw.x0)), y = Math.max(0, Math.round(pw.y0 - 14)), d = g.getImageData(x, y, Math.max(2, Math.round(pw.x1 - pw.x0)), 8).data; let r = 0, gg = 0, b = 0, n = d.length / 4; for (let i = 0; i < d.length; i += 4) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; } r /= n; gg /= n; b /= n; if (b > 135 && gg > 105 && r < 110 && b >= gg * .95) pay = 'card'; } } catch (e) {}
+  return { price, km, deliv, pl, tr, pay };
+}
+async function ocrFile(f) {
+  if (ocrBusy) return;
+  ocrBusy = true;
+  try {
+    toast('⏳ Розпізнаю скрін…');
+    let cv;
+    try { const bm = await createImageBitmap(f); const k = Math.min(1, 1100 / bm.width); cv = document.createElement('canvas'); cv.width = Math.round(bm.width * k); cv.height = Math.round(bm.height * k); cv.getContext('2d').drawImage(bm, 0, 0, cv.width, cv.height); } catch (e) { return toast('Не вдалось відкрити зображення', 'e'); }
+    let words;
+    try { const w = await ocrWorker(); const r = await w.recognize(cv); words = r.data.words || []; } catch (e) { return toast('OCR недоступний. Спробуйте «З буфера»', 'e'); }
+    const o = ocrParse(words, cv);
+    if (!o.price && !o.km) return toast('Не вдалось знайти суму й км', 'e');
+    const opts = [];
+    Object.keys(P).forEach(pk => Object.keys(P[pk].t).forEach(tk => opts.push([pk + ':' + tk, P[pk].name + ' · ' + P[pk].t[tk].name])));
+    const a = await ask('Розпізнано — перевірте', [{ l: 'Ціна, ₴', v: o.price || '' }, { l: 'Км маршруту', v: o.km || '' }, { l: 'Подача, км', v: o.deliv || '' }, { l: 'Тариф', o: opts, v: (o.pl || C.pl) + ':' + (o.tr || C.tr) }, { l: 'Оплата', o: [['cash', 'Готівка'], ['card', 'Картка']], v: o.pay }], 'У калькулятор', v => ((+v[1] || 0) + (+v[2] || 0)).toFixed(2) + ' км');
+    if (!a) return;
+    const [pl, tr] = a[3].split(':');
+    Object.assign(C, { pl, tr, km: +a[1] || 0, kmOut: 0, deliv: +a[2] || 0, empty: 0, wait: 0, stops: 0, coef: 1, tip: 0, offer: +a[0] || 0, pay: a[4] });
+    sv(K.c, C);
+    H.tab('trip');
+    toast('Підставлено');
+  } finally { ocrBusy = false; }
+}
+{ const f = document.createElement('input'); f.type = 'file'; f.accept = 'image/*'; f.id = 'ocrf'; f.style.display = 'none'; f.onchange = e => { const x = e.target.files[0]; e.target.value = ''; x && ocrFile(x); }; document.body.appendChild(f); }
+H.ocr = () => $('#ocrf').click();
+
+// Manual orders in goals
+const manHtml = () => {
+  const x = bData(), tod = D.orders + (x.man[x.td] || 0);
+  const ks = Object.keys(x.man).filter(k => +x.man[k]).sort((a, b) => a - b);
+  return `<div class="card"><div class="t"><span>Додати замовлення вручну</span><span>сьогодні: ${tod}</span></div><div class="chips" style="grid-template-columns:repeat(5,1fr)">${[['-1', '−1'], ['1', '+1'], ['5', '+5'], ['10', '+10']].map(a => `<button class="k" data-a="bman" data-v="${a[0]}">${a[1]}</button>`).join('')}<button class="k" data-a="bman" data-v="ask">📅</button></div><div class="sub">${ks.length ? 'Вручну: ' + ks.map(k => `<span data-a="bmdel" data-v="${k}" style="display:inline-block;background:var(--bg-elevated);border-radius:8px;padding:4px 8px;margin:2px">${k}-го: ${x.man[k]} ✕</span>`).join('') : 'Для днів без застосунку'}</div></div>`;
+};
+const daysHtml = () => {
+  const x = bData(), n = new Date();
+  const cnt = Array(x.dim + 1).fill(0);
+  ld(K.a, []).forEach(a => { const d = new Date(a.timestamp); d.getFullYear() === n.getFullYear() && d.getMonth() === n.getMonth() && a.date !== D.date && (cnt[d.getDate()] += a.orders); });
+  cnt[x.td] += D.orders;
+  Object.keys(x.man).forEach(k => { cnt[+k] += +x.man[k] || 0; });
+  const mx = Math.max(1, ...cnt);
+  return `<div class="card"><div class="t"><span>Замовлень по днях</span><span>макс ${mx}</span></div><div class="bars">${cnt.slice(1).map((v, i) => `<div class="${i + 1 === x.td ? 'top' : ''}" style="height:${Math.max(3, v / mx * 100)}%"></div>`).join('')}</div><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:4px"><span>1</span><span>10</span><span>20</span><span>${x.dim}</span></div></div>`;
+};
+
+Object.assign(H, {
+  bman: async v => {
+    const x = bData();
+    if (v === 'ask') {
+      const a = await ask('Замовлення за день', [{ l: 'День місяця', v: x.td }, { l: 'Скільки додати' }], 'Додати');
+      if (!a) return;
+      const d = Math.round(+a[0]), c = Math.round(+a[1]);
+      if (!(d >= 1 && d <= x.dim) || !c) return toast('Вкажіть день і кількість', 'e');
+      B.man[d] = Math.max(0, (+B.man[d] || 0) + c);
+    } else B.man[x.td] = Math.max(0, (+B.man[x.td] || 0) + (+v));
+    savePE();
+    show();
+    toast('Лічильник оновлено');
+  },
+  bmdel: v => { delete bData().man[v]; savePE(); show(); },
+  rarc: async () => { if (!await ask('Вся історія днів буде видалена. Поточна зміна збережеться.', [], 'Скинути')) return; sv(K.a, []); toast('Статистику скинуто'); show(); },
+  rall: async () => { if (!await ask('⚠️ Буде видалено ВСІ дані. Скасувати не можна.', [], 'Далі')) return; if (!await ask('Точно видалити все?', [], 'Так, видалити')) return; Object.keys(localStorage).filter(k => k.startsWith('taxi_')).forEach(k => localStorage.removeItem(k)); toast('Дані видалено'); setTimeout(() => location.reload(), 500); }
+});
+
+const _show = show;
+show = function () { _show(); try { if (tab === 'trip') { const c = document.querySelector('#app .card'); c && c.insertAdjacentHTML('beforebegin', presetsHtml()); } if (tab === 'stats') $('#app .page').insertAdjacentHTML('beforeend', statsExtra()); svcBanner(); } catch (e) { console.error(e); } };
+
+// Input bar
+(() => {
+  const ib = document.createElement('div');
+  ib.id = 'ib';
+  document.body.appendChild(ib);
+  const st = document.createElement('style');
+  st.textContent = `#ib{position:fixed;left:12px;right:12px;top:10px;z-index:400;display:none;align-items:center;gap:12px;padding:10px 12px 10px 16px;border-radius:20px;background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(24px);box-shadow:var(--shadow)}#ib span{font-size:12px;font-weight:700;color:var(--muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#ib b{font-size:26px;letter-spacing:-.5px;font-variant-numeric:tabular-nums;color:var(--accent)}#ib button{background:var(--accent);color:var(--on-accent);font-weight:800;border-radius:14px;padding:10px 16px}`;
+  document.head.appendChild(st);
+  let cur = null;
+  const upd = () => { if (cur) ib.querySelector('b').textContent = cur.value === '' ? '0' : cur.value; };
+  const pos = () => { const v = window.visualViewport; ib.style.top = ((v ? v.offsetTop : 0) + 10) + 'px'; };
+  document.addEventListener('focusin', e => { const t = e.target; if (t.tagName !== 'INPUT' || t.type === 'file') return; cur = t; const l = t.closest('.f') && t.closest('.f').querySelector('label'); ib.innerHTML = '<span>' + (l ? l.textContent : 'Значення') + '</span><b></b><button data-a="done">Готово</button>'; upd(); pos(); ib.style.display = 'flex'; });
+  document.addEventListener('input', e => { e.target === cur && upd(); });
+  document.addEventListener('focusout', () => setTimeout(() => { const a = document.activeElement; if (!a || a.tagName !== 'INPUT') { ib.style.display = 'none'; cur = null; } }, 200));
+  window.visualViewport && ['resize', 'scroll'].forEach(n => visualViewport.addEventListener(n, pos));
+  H.done = () => document.activeElement && document.activeElement.blur();
+})();
+
+setInterval(() => { if (tab === 'shift' && $('#hero') && D.shiftActive) $('#hero').innerHTML = heroH(); }, 30000);
+
+document.documentElement.dataset.theme = localStorage.getItem('taxi_theme') || 'dark';
+applyAccent();
+loadDay();
+brandInit();
+fixSel();
+show();
+</script>
+</body>
+</html>
