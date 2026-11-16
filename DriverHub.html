@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>DriverHub</title>
+<meta name="theme-color" content="#0E1014">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root {
+  --bg: #0E1014;
+  --elev: rgba(255,255,255,0.06);
+  --card: rgba(255,255,255,0.075);
+  --border: rgba(255,255,255,0.11);
+  --text: #F5F3EE;
+  --muted: #9CA3AF;
+  --accent: #2EE6C7;
+  --accent-soft: rgba(46,230,199,0.16);
+  --on: #0A0C10;
+  --danger: #FF6B6B;
+  --danger-soft: rgba(255,107,107,0.14);
+  --glass: rgba(16,18,24,0.82);
+  --shadow: 0 10px 36px -10px rgba(0,0,0,0.5);
+  --r: 16px;
+  --rs: 12px;
+}
+html[data-theme=light] {
+  --bg: #F6F4EF;
+  --elev: rgba(255,255,255,0.75);
+  --card: rgba(255,255,255,0.94);
+  --border: rgba(0,0,0,0.07);
+  --text: #1C1C1C;
+  --muted: #6B7280;
+  --accent: #0F766E;
+  --accent-soft: rgba(15,118,110,0.12);
+  --on: #fff;
+  --glass: rgba(255,255,255,0.88);
+  --shadow: 0 8px 28px -12px rgba(0,0,0,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { overflow-x: clip; overscroll-behavior: none; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  padding: 0 14px calc(92px + env(safe-area-inset-bottom));
+  min-height: 100dvh;
+}
+body::before {
+  content: "";
+  position: fixed; inset: -15%; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(38% 28% at 12% 8%, color-mix(in srgb, var(--accent) 32%, transparent), transparent 62%),
+    radial-gradient(32% 24% at 92% 42%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 58%);
+  opacity: .7;
+}
+header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 14px; }
+h1 { font-size: 21px; font-weight: 800; letter-spacing: -.5px; }
+.sub { font-size: 12px; color: var(--muted); font-weight: 600; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+}
+.t { font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; }
+.r { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; font-size: 14px; font-weight: 600; border-bottom: 1px solid var(--border); }
+.r:last-child { border: 0; }
+.r span:first-child { color: var(--muted); font-weight: 500; }
+.big { font-size: 40px; font-weight: 800; letter-spacing: -1.4px; font-variant-numeric: tabular-nums; line-height: 1; }
+.pos { color: var(--accent); }
+.neg { color: var(--danger); }
+
+button { font: inherit; color: inherit; border: 0; cursor: pointer; touch-action: manipulation; transition: transform .12s, opacity .1s; }
+button:active { transform: scale(.96); }
+.b { background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #000)); color: var(--on); font-weight: 800; border-radius: 14px; padding: 13px; width: 100%; font-size: 15px; box-shadow: 0 4px 14px color-mix(in srgb, var(--accent) 28%, transparent); }
+.k { background: var(--elev); border: 1px solid var(--border); border-radius: 10px; padding: 7px 5px; font-weight: 700; font-size: 12px; text-align: center; line-height: 1.2; }
+.k small { font-size: 9.5px; color: var(--muted); font-weight: 600; display: block; margin-top: 1px; }
+.k.on { background: var(--accent); color: var(--on); border-color: transparent; }
+.k.on small { color: var(--on); }
+
+.chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(64px, 1fr)); gap: 5px; margin-bottom: 8px; }
+.tariffs { grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); }
+.f label { display: block; font-size: 11.5px; color: var(--muted); font-weight: 700; margin-bottom: 4px; }
+.st { display: flex; align-items: center; gap: 4px; background: var(--elev); border-radius: 12px; padding: 3px; border: 1px solid var(--border); }
+.st button { width: 32px; height: 32px; border-radius: 8px; background: var(--card); font-size: 16px; font-weight: 700; }
+input, select { font: inherit; font-size: 16px; color: var(--text); background: transparent; border: 0; padding: 8px 4px; width: 100%; text-align: center; font-weight: 700; }
+input:focus, select:focus { outline: none; }
+
+nav {
+  position: fixed; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 50;
+  display: grid; grid-template-columns: repeat(5,1fr); gap: 3px; padding: 5px;
+  border-radius: 26px; background: var(--glass); border: 1px solid var(--border);
+  backdrop-filter: blur(24px) saturate(1.6); box-shadow: 0 12px 36px -8px rgba(0,0,0,0.45);
+}
+nav button { background: none; border-radius: 20px; padding: 7px 0 5px; font-size: 9.5px; font-weight: 700; color: var(--muted); display: flex; flex-direction: column; gap: 1px; align-items: center; position: relative; }
+nav button i { font-style: normal; font-size: 19px; }
+nav button.on { background: var(--accent); color: var(--on); }
+.bd { position: absolute; top: 1px; right: 6px; background: var(--accent); color: var(--on); font-size: 9px; font-weight: 800; border-radius: 99px; padding: 1px 4px; min-width: 15px; }
+nav button.on .bd { background: var(--on); color: var(--accent); }
+
+.pgb { height: 8px; background: var(--elev); border-radius: 5px; overflow: hidden; margin: 6px 0; }
+.pgb div { height: 100%; background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 65%, #fff)); border-radius: 5px; transition: width .35s; }
+#ov { position: fixed; inset: 0; z-index: 100; display: none; align-items: flex-end; background: rgba(0,0,0,.5); }
+.sh { width: 100%; background: var(--glass); backdrop-filter: blur(28px); border: 1px solid var(--border); border-radius: 24px 24px 0 0; padding: 16px 14px calc(16px + env(safe-area-inset-bottom)); max-height: 86vh; overflow: auto; animation: up .22s cubic-bezier(.2,.8,.3,1); }
+@keyframes up { from { transform: translateY(28px); opacity: 0; } to { transform: none; opacity: 1; } }
+#ts { position: fixed; top: calc(8px + env(safe-area-inset-top)); left: 0; right: 0; z-index: 200; display: flex; justify-content: center; pointer-events: none; }
+.to { background: var(--glass); border: 1px solid var(--border); border-radius: 99px; padding: 10px 16px; font-weight: 700; font-size: 13px; max-width: 90%; backdrop-filter: blur(18px); pointer-events: auto; }
+.vd { padding: 8px 10px; border-radius: 12px; font-weight: 800; font-size: 12.5px; margin: 6px 0; }
+.vd.vg { background: var(--accent-soft); color: var(--accent); }
+.vd.vm { background: var(--elev); }
+.vd.vx { background: var(--danger-soft); color: var(--danger); }
+.hi { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.hi:last-child { border: 0; }
+.hi > div { flex: 1; min-width: 0; }
+.hi small { display: block; color: var(--muted); font-size: 11.5px; }
+.x { width: 28px; height: 28px; border-radius: 8px; background: var(--elev); color: var(--muted); font-weight: 700; font-size: 14px; }
+.warn { font-size: 11.5px; color: var(--muted); margin: 2px 0 6px; line-height: 1.35; }
+.page { animation: fin .18s ease; }
+@keyframes fin { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+body.kb nav { display: none; }
+body.kb { padding-bottom: 46vh !important; }
+</style>
+</head>
+<body>
+<header>
+  <div><h1>DriverHub</h1><div class="sub" id="hs"></div></div>
+  <button class="x" data-a="theme" style="font-size:15px;width:34px;height:34px">🌗</button>
+</header>
+<main id="app"></main>
+<nav id="nav"></nav>
+<div id="ov"></div>
+<div id="ts"></div>
+<input type="file" id="imp" accept=".json" style="display:none">
+<script>
+const tg = window.Telegram && Telegram.WebApp;
+tg && (tg.expand(), tg.ready());
+try { tg && tg.disableVerticalSwipes && tg.disableVerticalSwipes(); } catch(e) {}
+
+const $ = s => document.querySelector(s);
+const m = n => Math.round(n || 0).toLocaleString('uk-UA').replace(/[\u00a0\u202f]/g, ' ');
+const ld = (k, f) => { try { return JSON.parse(localStorage.getItem(k)) || f; } catch(e) { return f; } };
+const sv = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+const hap = t => { try { const h = tg.HapticFeedback; t === 's' ? h.selectionChanged() : t === 'ok' ? h.notificationOccurred('success') : t === 'e' ? h.notificationOccurred('error') : h.impactOccurred(t === 'm' ? 'medium' : 'light'); } catch(e) {} };
+
+const toast = (t, k, a) => {
+  hap(k === 'e' ? 'e' : 'ok');
+  $('#ts').innerHTML = `<div class="to">${t}${a ? `<button class="u" style="margin-left:8px;background:none;color:var(--accent);font-weight:800" data-a="${a[0]}" data-v="${a[1]}">${a[2]}</button>` : ''}</div>`;
+  clearTimeout(toast.t);
+  toast.t = setTimeout(() => $('#ts').innerHTML = '', a ? 4800 : 2000);
+};
+
+const K = { e: 'taxi_expenses_v22', t: 'taxi_tariffs_v22', d: 'taxi_daily_cash_data_v22', a: 'taxi_shift_archive_v1', p: 'taxi_platforms_v2', c: 'taxi_calc_v2' };
+const T = (n, a, b, c, d, e, f) => ({ name: n, minPrice: a, minKm: b, perKmCity: c, perKmOut: d, perMin: e, stopPrice: f });
+const DT = { standard: T('Стандарт', 95, 1.8, 30, 45, 3.5, 10), comfort: T('Комфорт', 100, 1.8, 35, 45, 4, 15), business: T('Бізнес', 120, 1.5, 40, 45, 5, 15), intercity: T('За місто', 100, 1.5, 30, 40, 4, 15) };
+const DP = () => ({
+  uklon: { name: 'Uklon', comm: 17, t: JSON.parse(JSON.stringify(DT)) },
+  bolt: { name: 'Bolt', comm: 20, ph: 1, t: { econ: T('Економ', 90, 2, 22, 28, 3, 10), comf: T('Комфорт', 100, 2, 26, 32, 3.5, 10) } },
+  uber: { name: 'Uber', comm: 25, ph: 1, t: { x: T('UberX', 85, 2, 21, 27, 3, 10), comf: T('Comfort', 100, 2, 25, 31, 3.5, 10) } }
+});
+
+const E = Object.assign({ comm: 17, type: 'gas', cons: 14, price: 41.9, amort: 0, workMode: 'solo', rentVal: 0, splitPct: 10, taxRate: 5, fop: false, warRate: 1, esv: 1902.34, taxBase: 'afterComm', goalKm: 40, goalDay: 2000, planH: 10, accent: 'teal', autoReset: true, glow: 1, platNow: true, platOver: 23, taxType: 'none', taxYear: 2026, vat: false, vatRate: 20, vatLimit: 1000000, fixTax: 0 }, ld(K.e, {}));
+const P = ld(K.p, null) || (() => { const p = DP(); p.uklon.comm = E.comm; Object.assign(p.uklon.t, ld(K.t, {})); return p; })();
+const C = Object.assign({ km: 0, kmOut: 0, deliv: 0, empty: 0, wait: 0, stops: 0, coef: 1, tip: 0, offer: 0, pay: 'cash', pl: 'uklon', tr: 'standard' }, ld(K.c, {}));
+const S = { per: 30, po: false };
+let D, tab = 'trip';
+const B = Object.assign({ target: 700, adj: null, off: [], mon: '' }, ld('taxi_brand_v2', {}));
+
+function applyAccent() {
+  const st = document.documentElement.style;
+  st.setProperty('--accent', E.accent === 'teal' ? (document.documentElement.dataset.theme === 'dark' ? '#2EE6C7' : '#0F766E') : '#5DB9FF');
+}
+
+const fixM = () => E.fop ? (+E.esv || 0) + (+E.fixTax || 0) : 0;
+const taxOf = (g, comm, fuel, park) => {
+  if (!E.fop) return 0;
+  if (E.taxType === 'plat') return Math.max(0, g - comm) * (E.taxRate / 100);
+  const base = E.taxBase === 'gross' ? g : E.taxBase === 'profit' ? Math.max(0, g - comm - fuel - park) : g - comm;
+  return base * (E.taxRate + E.warRate) / 100;
+};
+function taxPreset() {
+  const mz = E.taxYear === 2027 ? 9546 : 8647;
+  E.mzp = mz; E.esv = +(mz * .22).toFixed(2);
+  if (E.taxType === 'g2') { E.taxRate = 0; E.warRate = 0; E.fixTax = +(mz * .3).toFixed(2); E.taxBase = 'gross'; }
+  else if (E.taxType === 'g3') { E.taxRate = E.vat ? 3 : 5; E.warRate = 1; E.fixTax = 0; E.taxBase = 'afterComm'; }
+  else if (E.taxType === 'plat') { E.taxRate = 10; E.warRate = 0; E.fixTax = 0; E.esv = 0; }
+  else if (E.taxType === 'gen') { E.taxRate = 18; E.warRate = 1.5; E.fixTax = 0; E.taxBase = 'profit'; }
+  else { E.taxRate = 0; E.warRate = 0; E.fixTax = 0; E.esv = 0; }
+}
+const savePE = () => { sv(K.e, E); sv('taxi_brand_v2', B); sv(K.p, P); };
+const fixSel = () => { if (!P[C.pl]) C.pl = Object.keys(P)[0]; if (!P[C.pl].t[C.tr]) C.tr = Object.keys(P[C.pl].t)[0]; };
+const today = () => new Date().toLocaleDateString();
+const hm = () => { const d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
+const newDay = () => ({ date: today(), orders: 0, gross: 0, comm: 0, fuel: 0, extra: 0, park: 0, tax: 0, kmDv: 0, totalKm: 0, totalCash: 0, totalCard: 0, tips: 0, actualFuel: 0, history: [], shiftActive: false, shiftStart: null, shiftAccMs: 0, pl: {} });
+function loadDay() {
+  const d = ld(K.d, null);
+  if (d && d.date === today()) { D = Object.assign(newDay(), d); return; }
+  if (d && d.orders) { D = Object.assign(newDay(), d); arc(); }
+  D = newDay();
+  sv(K.d, D);
+}
+const hrs = () => ((D.shiftAccMs || 0) + (D.shiftActive && D.shiftStart ? Date.now() - D.shiftStart : 0)) / 36e5;
+const dFuel = () => D.actualFuel > 0 ? D.actualFuel : D.fuel;
+const dRent = () => E.workMode === 'rent' && (D.orders > 0 || D.shiftActive) ? +E.rentVal : 0;
+const dNet = () => D.gross - D.comm - dFuel() - D.extra - D.park - D.tax - dRent();
+function arc() {
+  if (!D.orders) return;
+  const rec = { date: D.date, orders: D.orders, gross: D.gross, comm: D.comm, fuel: D.fuel, actualFuel: D.actualFuel, tips: D.tips, extraExp: D.extra, rent: D.park + dRent(), tax: D.tax, net: dNet(), totalKm: D.totalKm, totalCash: D.totalCash, totalCard: D.totalCard, shiftHours: hrs(), timestamp: Date.now(), pl: D.pl };
+  const A = ld(K.a, []);
+  const i = A.findIndex(s => s.date === D.date);
+  i > -1 ? A[i] = rec : A.unshift(rec);
+  sv(K.a, A.slice(0, 400));
+}
+const save = () => { sv(K.d, D); clearTimeout(save.t); save.t = setTimeout(arc, 600); hdr(); };
+
+const fuelCost = km => km / 100 * E.cons * E.price + km * E.amort;
+function fin(g, pl, tot) {
+  const comm = g * pl.comm / 100;
+  const fuel = fuelCost(tot);
+  const park = E.workMode === 'split' ? (g - comm) * E.splitPct / 100 : 0;
+  const tax = taxOf(g, comm, fuel, park);
+  const net = g - comm - fuel - park - tax;
+  return { g, comm, fuel, park, tax, net, tot, eff: tot ? net / tot : 0 };
+}
+function calc(t, pl, c) {
+  let rem = t.minKm, xc = 0, xo = 0;
+  if (c.km >= rem) { xc = c.km - rem; rem = 0; } else rem -= c.km;
+  if (c.kmOut >= rem) xo = c.kmOut - rem;
+  const g = (t.minPrice + xc * t.perKmCity + xo * t.perKmOut + c.wait * t.perMin + c.stops * t.stopPrice) * c.coef + c.tip;
+  return fin(g, pl, c.km + c.kmOut + c.deliv + c.empty);
+}
+function addTrip(r, plk, pay, tip, trip, dv) {
+  D.kmDv = (D.kmDv || 0) + (dv || 0);
+  D.orders++; D.gross += r.g; D.comm += r.comm; D.fuel += r.fuel; D.park += r.park; D.tax += r.tax; D.totalKm += r.tot; D.tips += tip || 0;
+  pay === 'cash' ? D.totalCash += r.g : D.totalCard += r.g;
+  const p = D.pl[plk] || (D.pl[plk] = { n: 0, g: 0, net: 0 });
+  p.n++; p.g += r.g; p.net += r.net;
+  const id = Date.now() + Math.random();
+  D.history.unshift({ id, time: hm(), pay, pl: plk, g: r.g, net: r.net, km: r.tot, tip: tip || 0, trip: trip || 0, dv: dv || 0, r });
+  save();
+  return id;
+}
+function delItem(id) {
+  const i = D.history.findIndex(t => t.id === id);
+  if (i < 0) return;
+  const t = D.history[i];
+  if (t.x) { t.k === 'fuel' ? D.actualFuel = Math.max(0, D.actualFuel - t.amt) : D.extra -= t.amt; }
+  else if (t.r) {
+    const r = t.r;
+    D.orders--; D.gross -= r.g; D.comm -= r.comm; D.fuel -= r.fuel; D.park -= r.park; D.tax -= r.tax;
+    D.totalKm = Math.max(0, D.totalKm - r.tot); D.kmDv = Math.max(0, (D.kmDv || 0) - (t.dv || 0)); D.tips -= t.tip || 0;
+    t.pay === 'cash' ? D.totalCash -= r.g : D.totalCard -= r.g;
+    const p = D.pl[t.pl]; p && (p.n--, p.g -= r.g, p.net -= r.net);
+  }
+  D.history.splice(i, 1); save();
+}
+
+function ask(title, fs, ok, sum) {
+  return new Promise(res => {
+    const o = $('#ov');
+    o.style.display = 'flex';
+    o.innerHTML = `<div class="sh"><div class="t">${title}</div>${fs.map((f, i) => `<div class="f" style="margin-bottom:8px"><label>${f.l}</label>${f.o ? `<select id="q${i}">${f.o.map(x => `<option value="${x[0]}">${x[1]}</option>`).join('')}</select>` : `<input id="q${i}" ${f.t === 's' ? '' : 'type="number" inputmode="decimal"'}>`}</div>`).join('')}${sum ? `<div class="r"><span>Разом</span><b id="qs">0</b></div>` : ''}<div class="g2" style="margin-top:8px"><button class="k" id="qn" style="padding:12px">Скасувати</button><button class="b" id="qy">${ok || 'Готово'}</button></div></div>`;
+    fs.forEach((f, i) => f.v !== undefined && ($('#q' + i).value = f.v));
+    const done = v => { o.style.display = 'none'; o.innerHTML = ''; res(v); };
+    $('#qn').onclick = () => done(null);
+    $('#qy').onclick = () => done(fs.map((f, i) => $('#q' + i).value));
+    o.onclick = e => e.target === o && done(null);
+    setTimeout(() => fs.length && $('#q0').focus(), 120);
+  });
+}
+
+const F = (id, l, st) => `<div class="f"><label>${l}</label><div class="st"><button data-a="s" data-v="${id}:-${st}">−</button><input type="number" inputmode="decimal" data-c="${id}" value="${C[id]}"><button data-a="s" data-v="${id}:${st}">+</button></div></div>`;
+
+function vTrip() {
+  const pl = P[C.pl];
+  return `<div class="page">
+    <div class="chips tariffs">${Object.keys(pl.t).map(k => `<button class="k ${k === C.tr ? 'on' : ''}" data-a="tr" data-v="${k}">${pl.t[k].name}<small>від ${pl.t[k].minPrice}</small></button>`).join('')}</div>
+    <div class="sub" style="display:flex;justify-content:space-between;align-items:center;margin:-2px 0 8px">
+      <span>${pl.name} · ${pl.comm}%</span>
+      <button class="k" data-a="po" style="padding:5px 10px;font-size:11px">${S.po ? 'Сховати' : 'Платформи'} ⌄</button>
+    </div>
+    ${S.po ? `<div class="chips">${Object.keys(P).map(k => `<button class="k ${k === C.pl ? 'on' : ''}" data-a="pl" data-v="${k}">${P[k].name}</button>`).join('')}</div>` : ''}
+    <div class="card">
+      <div class="t"><span>Маршрут</span><button class="k" data-a="clr" style="padding:5px 10px;font-size:11px">Очистити</button></div>
+      <div class="g2">${F('km','Км місто',.1)}${F('kmOut','Км за містом',.1)}${F('deliv','Подача',.1)}${F('empty','Порожній',1)}${F('wait','Очік., хв',1)}${F('stops','Точки',1)}</div>
+      <div class="r" style="margin-top:6px"><span>Разом пробіг</span><b id="tk">0 км</b></div>
+      <button class="k" data-a="mirror" style="width:100%;margin:4px 0;padding:8px">↔ Порожній = км маршруту</button>
+      <div class="chips" style="grid-template-columns:repeat(4,1fr);margin:6px 0">${[1,1.2,1.5,2].map(x => `<button class="k ${C.coef==x?'on':''}" data-a="cf" data-v="${x}">${x}x</button>`).join('')}</div>
+      <div class="g2">${F('coef','Коеф.',.1)}${F('tip','Чайові',5)}</div>
+      <div style="margin-top:6px">${F('offer','Ціна з додатку (необовʼязково)',10)}</div>
+    </div>
+    <div id="res"></div>
+    <div id="cmp"></div>
+  </div>`;
+}
+
+function upTrip() {
+  sv(K.c, C);
+  const pl = P[C.pl], t = pl.t[C.tr];
+  let r = calc(t, pl, C);
+  if (C.offer > 0) r = fin(+C.offer, pl, r.tot);
+  const tk = $('#tk'); tk && (tk.textContent = r.tot.toFixed(1) + ' км');
+  const need = r.tot > 0 ? (() => { let lo=0,hi=1e5; for(let i=0;i<32;i++){const mid=(lo+hi)/2; fin(mid,pl,r.tot).eff>=E.goalKm?hi=mid:lo=mid} return hi; })() : 0;
+  const cl = r.eff >= E.goalKm ? 'vg' : r.eff >= E.goalKm*.7 ? 'vm' : 'vx';
+  const vt = cl==='vg' ? `✅ Вигідно · запас ${m(r.g-need)} ₴` : cl==='vm' ? `⚠️ На межі · від ${m(need)} ₴` : `❌ Невигідно · треба від ${m(need)} ₴`;
+  $('#res').innerHTML = `<div class="card">
+    <div class="t"><span>${pl.name} · ${t.name}${C.offer>0?' · з додатку':''}</span><b>${m(r.g)} ₴</b></div>
+    <div class="big ${r.net<0?'neg':'pos'}">${m(r.net)} ₴</div>
+    <div class="sub">чистими · ${r.eff.toFixed(1)} ₴/км · ${r.tot.toFixed(1)} км</div>
+    ${r.tot>0?`<div class="vd ${cl}">${vt}</div>`:''}
+    <div class="r"><span>Комісія ${pl.comm}%</span><span>−${m(r.comm)}</span></div>
+    <div class="r"><span>Пальне й авто</span><span>−${m(r.fuel)}</span></div>
+    ${r.park?`<div class="r"><span>Парк</span><span>−${m(r.park)}</span></div>`:''}
+    ${r.tax?`<div class="r"><span>Податки</span><span>−${m(r.tax)}</span></div>`:''}
+    <div class="g3" style="grid-template-columns:1fr 1fr 1.5fr;margin-top:10px">
+      <button class="k ${C.pay==='cash'?'on':''}" data-a="pay" data-v="cash">💵 Гот.</button>
+      <button class="k ${C.pay==='card'?'on':''}" data-a="pay" data-v="card">💳 Карта</button>
+      <button class="b" data-a="add">Записати</button>
+    </div>
+  </div>`;
+  const L = [];
+  Object.keys(P).forEach(pk => Object.keys(P[pk].t).forEach(tk => L.push({pk,tk,r:calc(P[pk].t[tk],P[pk],C)})));
+  L.sort((a,b)=>b.r.net-a.r.net);
+  $('#cmp').innerHTML = C.km+C.kmOut>0 ? `<div class="card"><div class="t"><span>Порівняння тарифів</span><span>чистими</span></div>${L.slice(0,8).map((x,i)=>`<div class="hi" data-a="pick" data-v="${x.pk}:${x.tk}"><div><b>${i?'':'🏆 '}${P[x.pk].name} · ${P[x.pk].t[x.tk].name}</b><small>${m(x.r.g)} ₴ · ${x.r.eff.toFixed(1)} ₴/км</small></div><b class="${x.r.net<0?'neg':i?'':'pos'}">${m(x.r.net)}</b></div>`).join('')}</div>` : '<div class="warn">Введіть кілометраж для порівняння.</div>';
+}
+
+function heroH() {
+  const h = hrs(), n = dNet(), gl = E.goalDay, left = Math.max(0, gl-n);
+  let f = left===0 ? '✅ Ціль виконано' : D.shiftActive && h>=.1 ? `Прогноз ~${m(n + n/h*Math.max(0,E.planH-h))} ₴` : `До цілі залишилось ${m(left)} ₴`;
+  const mm = Math.floor(h*60);
+  return `<div class="t"><span>Чисті сьогодні</span><span>${D.shiftActive?'● на лінії':h>0?'пауза':'не розпочато'}</span></div>
+    <div class="big ${n<0?'neg':'pos'}">${m(n)} ₴</div>
+    <div class="sub">${D.orders} поїздок · ${D.totalKm.toFixed(1)} км · ${h>=.05?m(n/h)+' ₴/год':'—'}</div>
+    <div class="pgb"><div style="width:${Math.max(0,Math.min(100,n/gl*100))}%"></div></div>
+    <div class="sub">${f}</div>`;
+}
+
+function vShift() {
+  return `<div class="page">
+    <div class="card" id="hero">${heroH()}</div>
+    <div class="g2" style="margin-bottom:8px">
+      <button class="b" data-a="shift">${D.shiftActive?'⏸ Пауза':hrs()>0?'▶ Продовжити':'▶ Почати'}</button>
+      <button class="k" data-a="manual" style="padding:12px">➕ Вручну</button>
+    </div>
+    <div class="g2" style="margin-bottom:8px">
+      <button class="k" data-a="fuel" style="padding:11px">⛽ Заправка</button>
+      <button class="k" data-a="exp" style="padding:11px">💸 Витрата</button>
+    </div>
+    <div class="card">
+      <div class="t">Підсумок</div>
+      <div class="r"><span>Оборот</span><span>${m(D.gross)}</span></div>
+      <div class="r"><span>Комісія</span><span>−${m(D.comm)}</span></div>
+      <div class="r"><span>Пальне</span><span>−${m(dFuel())}</span></div>
+      ${D.extra?`<div class="r"><span>Витрати</span><span>−${m(D.extra)}</span></div>`:''}
+      ${D.park?`<div class="r"><span>Парк</span><span>−${m(D.park)}</span></div>`:''}
+      ${dRent()?`<div class="r"><span>Оренда</span><span>−${m(dRent())}</span></div>`:''}
+      ${D.tax?`<div class="r"><span>Податки</span><span>−${m(D.tax)}</span></div>`:''}
+      <div class="r"><span><b>Чисті</b></span><b class="pos">${m(dNet())}</b></div>
+      <div class="r"><span>💵 / 💳</span><span>${m(D.totalCash)} / ${m(D.totalCard)}</span></div>
+    </div>
+    <div class="card">
+      <div class="t"><span>Історія</span><span>${D.orders}</span></div>
+      ${D.history.length ? D.history.map(t => t.x ? `<div class="hi"><div><b>${t.name}</b><small>${t.time}</small></div><b class="neg">−${m(t.amt)}</b><button class="x" data-a="del" data-v="${t.id}">✕</button></div>` : `<div class="hi"><div><b>${t.pay==='cash'?'💵':'💳'} ${m(t.g)} · ${t.km.toFixed(1)} км</b><small>${t.time}</small></div><b class="pos">+${m(t.net)}</b><button class="x" data-a="del" data-v="${t.id}">✕</button></div>`).join('') : '<div class="warn">Поки порожньо</div>'}
+    </div>
+    <button class="k" style="width:100%;padding:12px;color:var(--danger)" data-a="end">Завершити зміну</button>
+  </div>`;
+}
+
+function vBrand() {
+  return `<div class="page">
+    <div class="card">
+      <div class="t">Бренд-план місяця</div>
+      <div class="big pos">${(bData().done||0)} <span class="sub" style="font-size:15px">/ ${B.target}</span></div>
+      <div class="pgb"><div style="width:${Math.min(100,(bData().done||0)/B.target*100)}%"></div></div>
+      <div class="sub">Залишилось ${Math.max(0,B.target-(bData().done||0))} замовлень</div>
+    </div>
+    <div class="card">
+      <div class="t">Налаштування</div>
+      <div class="f"><label>План замовлень</label><input type="number" data-k="B.target" value="${B.target}"></div>
+    </div>
+  </div>`;
+}
+function bData() {
+  const A = ld(K.a, []).filter(s => new Date(s.timestamp).getMonth() === new Date().getMonth());
+  return { done: A.reduce((a,s)=>a+s.orders,0) + D.orders };
+}
+
+function vStats() {
+  const A = ld(K.a, []), now = Date.now();
+  const L = A.filter(s => !S.per || now - s.timestamp < S.per * 864e5);
+  const n = L.reduce((a,s)=>a+s.net,0), g = L.reduce((a,s)=>a+s.gross,0), o = L.reduce((a,s)=>a+s.orders,0);
+  return `<div class="page">
+    <div class="chips" style="grid-template-columns:repeat(3,1fr)">${[[7,'7 днів'],[30,'30 днів'],[0,'Все']].map(x=>`<button class="k ${S.per===x[0]?'on':''}" data-a="per" data-v="${x[0]}">${x[1]}</button>`).join('')}</div>
+    <div class="card">
+      <div class="t"><span>Чисті</span><span>${L.length} дн.</span></div>
+      <div class="big pos">${m(n)} ₴</div>
+      <div class="sub">оборот ${m(g)} · ${o} поїздок</div>
+    </div>
+    <div class="g2">
+      <button class="k" style="padding:12px" data-a="exp2">📥 Копія</button>
+      <button class="k" style="padding:12px" data-a="imp">📤 Відновити</button>
+    </div>
+  </div>`;
+}
+
+function vSet() {
+  return `<div class="page">
+    <div class="card">
+      <div class="t">Режим роботи</div>
+      <div class="chips" style="grid-template-columns:repeat(3,1fr)">${[['solo','Власне'],['split','Парк %'],['rent','Оренда']].map(o=>`<button class="k ${E.workMode===o[0]?'on':''}" data-a="set" data-v="E.workMode:${o[0]}">${o[1]}</button>`).join('')}</div>
+      ${E.workMode==='split'?`<div class="f"><label>Парк, %</label><input type="number" data-k="E.splitPct" value="${E.splitPct}"></div>`:''}
+      ${E.workMode==='rent'?`<div class="f"><label>Оренда / день</label><input type="number" data-k="E.rentVal" value="${E.rentVal}"></div>`:''}
+    </div>
+    <div class="card">
+      <div class="t">Авто</div>
+      <div class="g2">
+        <div class="f"><label>Тип</label><select data-k="E.type">${[['gas','Газ'],['petrol','Бензин'],['diesel','Дизель'],['electro','Електро']].map(o=>`<option value="${o[0]}" ${E.type===o[0]?'selected':''}>${o[1]}</option>`).join('')}</select></div>
+        <div class="f"><label>Розхід /100</label><input type="number" data-k="E.cons" value="${E.cons}"></div>
+        <div class="f"><label>Ціна</label><input type="number" data-k="E.price" value="${E.price}"></div>
+        <div class="f"><label>Знос /км</label><input type="number" data-k="E.amort" value="${E.amort}"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="t">Цілі</div>
+      <div class="g2">
+        <div class="f"><label>Ціль дня</label><input type="number" data-k="E.goalDay" value="${E.goalDay}"></div>
+        <div class="f"><label>₴/км</label><input type="number" data-k="E.goalKm" value="${E.goalKm}"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="t">Податки</div>
+      <div class="chips" style="grid-template-columns:repeat(auto-fit,minmax(90px,1fr))">${[['none','Без'],['plat','Платформа'],['g2','ФОП 2'],['g3','ФОП 3']].map(o=>`<button class="k ${E.taxType===o[0]?'on':''}" data-a="tx" data-v="${o[0]}">${o[1]}</button>`).join('')}</div>
+    </div>
+    <button class="k" style="width:100%;padding:12px;color:var(--danger)" data-a="reset">Скинути тарифи</button>
+  </div>`;
+}
+
+const VIEW = { trip: vTrip, shift: vShift, brand: vBrand, stats: vStats, set: vSet };
+const NAV = [['trip','🧮','Поїздка'],['shift','⏱','Зміна'],['brand','🎯','Цілі'],['stats','📊','Звіти'],['set','⚙️','Опції']];
+
+function show() {
+  if (D.date !== today()) loadDay();
+  fixSel();
+  const y = window.scrollY;
+  $('#app').innerHTML = VIEW[tab]();
+  window.scrollTo(0, y);
+  if (tab === 'trip') upTrip();
+  $('#nav').innerHTML = NAV.map(n => `<button class="${n[0]===tab?'on':''}" data-a="tab" data-v="${n[0]}"><i>${n[1]}</i>${n[2]}${n[0]==='shift'&&D.orders?`<b class="bd">${D.orders}</b>`:''}</button>`).join('');
+  hdr();
+}
+const hdr = () => { $('#hs').textContent = 'Сьогодні: ' + m(dNet()) + ' ₴ · ' + D.orders; };
+
+function setC(k, v) {
+  C[k] = k === 'coef' ? Math.max(1, Math.round(v*10)/10) : Math.max(0, Math.round(v*10)/10);
+  const i = document.querySelector(`[data-c="${k}"]`);
+  if (i) i.value = C[k];
+  upTrip();
+}
+
+const H = {
+  tab: v => { tab = v; show(); window.scrollTo(0,0); },
+  theme: () => {
+    const n = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = n;
+    localStorage.setItem('taxi_theme', n);
+    applyAccent();
+  },
+  pl: v => { S.po = false; C.pl = v; C.tr = Object.keys(P[v].t)[0]; sv(K.c, C); show(); },
+  tr: v => { C.tr = v; sv(K.c, C); show(); },
+  cf: v => setC('coef', +v),
+  s: v => { const [k,s] = v.split(':'); setC(k, (+C[k]||0)+ +s); },
+  pay: v => { C.pay = v; upTrip(); },
+  pick: v => { const [a,b] = v.split(':'); C.pl = a; C.tr = b; sv(K.c, C); show(); },
+  add: () => {
+    const pl = P[C.pl];
+    let r = calc(pl.t[C.tr], pl, C);
+    if (C.offer > 0) r = fin(+C.offer, pl, r.tot);
+    const snap = {...C};
+    const tid = addTrip(r, C.pl, C.pay, C.tip, C.km+C.kmOut, C.deliv+C.empty);
+    H._snap = snap;
+    if (E.autoReset !== false) { ['km','kmOut','deliv','empty','wait','stops','tip','offer'].forEach(k => C[k]=0); C.coef=1; sv(K.c,C); }
+    toast('Записано · чистими ' + m(r.net) + ' ₴', 'ok', ['undo', tid, 'Скасувати']);
+    show();
+  },
+  undo: v => { delItem(+v); H._snap && Object.assign(C, H._snap); sv(K.c, C); $('#ts').innerHTML=''; show(); },
+  mirror: () => setC('empty', C.km + C.kmOut),
+  clr: () => { ['km','kmOut','deliv','empty','wait','stops','tip','offer'].forEach(k=>C[k]=0); C.coef=1; sv(K.c,C); show(); },
+  po: () => { S.po = !S.po; show(); },
+  shift: () => {
+    if (D.shiftActive) { D.shiftAccMs += Date.now() - D.shiftStart; D.shiftStart = null; D.shiftActive = false; }
+    else { D.shiftActive = true; D.shiftStart = Date.now(); }
+    save(); show();
+  },
+  manual: async () => {
+    const a = await ask('Поїздка вручну', [{l:'Сума, ₴'},{l:'Км'},{l:'Подача'},{l:'Платформа',o:Object.keys(P).map(k=>[k,P[k].name]),v:C.pl},{l:'Оплата',o:[['cash','Готівка'],['card','Картка']],v:C.pay}], 'Додати');
+    if (!a || !(+a[0]>0)) return;
+    addTrip(fin(+a[0], P[a[3]], (+a[1]||0)+(+a[2]||0)), a[3], a[4], 0, +a[1]||0, +a[2]||0);
+    toast('Додано'); show();
+  },
+  fuel: async () => {
+    const a = await ask('Заправка', [{l:'Сума, ₴'}]);
+    if (!a || !(+a[0]>0)) return;
+    D.actualFuel += +a[0];
+    D.history.unshift({id:Date.now(),x:1,k:'fuel',name:'⛽ Заправка',amt:+a[0],time:hm()});
+    save(); show();
+  },
+  exp: async () => {
+    const a = await ask('Витрата', [{l:'Назва',t:'s'},{l:'Сума'}]);
+    if (!a || !(+a[1]>0)) return;
+    D.extra += +a[1];
+    D.history.unshift({id:Date.now(),x:1,k:'extra',name:'💸 '+(a[0]||'Витрата'),amt:+a[1],time:hm()});
+    save(); show();
+  },
+  del: async v => { if (await ask('Видалити?', [], 'Видалити')) { delItem(+v); show(); } },
+  end: async () => { if (!await ask('Завершити зміну?', [], 'Так')) return; arc(); D = newDay(); sv(K.d, D); toast('Зміну завершено'); show(); },
+  per: v => { S.per = +v; show(); },
+  set: v => { const i = v.lastIndexOf(':'), p = v.slice(0,i), x = v.slice(i+1); const a = p.split('.'); let o = {E,P,B}; a.slice(0,-1).forEach(k=>o=o[k]); o[a[a.length-1]] = x==='true'?true:x==='false'?false:isNaN(x)?x:+x; savePE(); show(); },
+  tx: v => { E.taxType = v; E.fop = v !== 'none'; taxPreset(); savePE(); show(); },
+  reset: async () => { if (!await ask('Скинути тарифи?', [], 'Скинути')) return; Object.keys(P).forEach(k=>delete P[k]); Object.assign(P, DP()); savePE(); show(); },
+  exp2: () => {
+    const b = new Blob([JSON.stringify({v:5,E,P,A:ld(K.a,[]),D})], {type:'application/json'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'DriverHub.json'; document.body.appendChild(a); a.click(); a.remove(); toast('Збережено');
+  },
+  imp: () => $('#imp').click()
+};
+
+document.addEventListener('click', e => { const b = e.target.closest('[data-a]'); b && H[b.dataset.a] && H[b.dataset.a](b.dataset.v); });
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.dataset.c) { C[t.dataset.c] = parseFloat(t.value)||0; upTrip(); }
+  else if (t.dataset.k) {
+    const a = t.dataset.k.split('.');
+    let o = {E,P,B};
+    a.slice(0,-1).forEach(k=>o=o[k]);
+    o[a[a.length-1]] = parseFloat(t.value)||0;
+    savePE();
+  }
+});
+document.addEventListener('change', e => { if (e.target.dataset.k && e.target.tagName==='SELECT') { const a = e.target.dataset.k.split('.'); let o={E,P,B}; a.slice(0,-1).forEach(k=>o=o[k]); o[a[a.length-1]] = e.target.value; savePE(); } });
+
+$('#imp').onchange = async e => {
+  try {
+    const o = JSON.parse(await e.target.files[0].text());
+    if (o.E) sv(K.e, o.E);
+    if (o.P) sv(K.p, o.P);
+    if (o.A) sv(K.a, o.A);
+    if (o.D) sv(K.d, o.D);
+    toast('Відновлено'); setTimeout(()=>location.reload(), 500);
+  } catch(x) { toast('Помилка файлу', 'e'); }
+};
+
+// Select all on focus
+document.addEventListener('focusin', e => {
+  const t = e.target;
+  if (t.tagName === 'INPUT' && (t.type === 'number' || t.inputMode === 'decimal')) setTimeout(() => t.select(), 40);
+  if (t.tagName === 'INPUT' || t.tagName === 'SELECT') document.body.classList.add('kb');
+});
+document.addEventListener('focusout', () => setTimeout(() => { if (!document.activeElement || !['INPUT','SELECT'].includes(document.activeElement.tagName)) document.body.classList.remove('kb'); }, 150));
+
+// Swipe between tabs
+(function(){
+  const tabs = ['trip','shift','brand','stats','set'];
+  let sx=0, sy=0, ok=false;
+  document.addEventListener('touchstart', e => {
+    if (e.target.closest('input,select,button,.st,.chips,nav,#ov')) return;
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY; ok = true;
+  }, {passive:true});
+  document.addEventListener('touchend', e => {
+    if (!ok) return; ok = false;
+    const dx = e.changedTouches[0].clientX - sx;
+    const dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) < 55 || Math.abs(dx) < Math.abs(dy) * 1.3) return;
+    const i = tabs.indexOf(tab);
+    if (i < 0) return;
+    const next = dx < 0 ? Math.min(tabs.length-1, i+1) : Math.max(0, i-1);
+    if (next !== i) { tab = tabs[next]; show(); window.scrollTo(0,0); hap('s'); }
+  }, {passive:true});
+})();
+
+// Simple OCR placeholder (improved flow)
+const ocrInput = document.createElement('input');
+ocrInput.type = 'file'; ocrInput.accept = 'image/*'; ocrInput.style.display = 'none';
+ocrInput.onchange = async e => {
+  const f = e.target.files[0]; e.target.value = '';
+  if (!f) return;
+  toast('OCR: завантажую…');
+  try {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+    await new Promise((ok, no) => { script.onload = ok; script.onerror = no; document.head.appendChild(script); });
+    const worker = await Tesseract.createWorker('ukr+eng');
+    const { data: { text } } = await worker.recognize(f);
+    await worker.terminate();
+    const nums = text.match(/\d{2,4}/g) || [];
+    const km = text.match(/(\d{1,3}(?:[.,]\d{1,2})?)\s*(?:км|km)/i);
+    if (nums.length) C.offer = Math.max(...nums.map(Number));
+    if (km) C.km = parseFloat(km[1].replace(',','.'));
+    sv(K.c, C);
+    show();
+    toast('Підставлено зі скріна');
+  } catch(err) { toast('OCR не вдався', 'e'); }
+};
+document.body.appendChild(ocrInput);
+H.ocr = () => ocrInput.click();
+
+// Add OCR button on trip page
+const _show = show;
+show = function() {
+  _show();
+  if (tab === 'trip') {
+    const c = document.querySelector('#app .card');
+    if (c) c.insertAdjacentHTML('beforebegin', '<button class="k" data-a="ocr" style="width:100%;margin-bottom:8px;padding:10px">📸 Розпізнати скрін</button>');
+  }
+};
+
+document.documentElement.dataset.theme = localStorage.getItem('taxi_theme') || 'dark';
+applyAccent();
+loadDay();
+fixSel();
+show();
+setInterval(() => { if (tab==='shift' && D.shiftActive && $('#hero')) $('#hero').innerHTML = heroH(); }, 25000);
+</script>
+</body>
+</html>
